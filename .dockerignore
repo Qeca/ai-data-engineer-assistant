@@ -1,0 +1,23 @@
+.git
+.gitignore
+.env
+.env.*
+.sandbox-runs
+uploads
+AI Data Engineer.html
+
+**/__pycache__
+**/.pytest_cache
+**/.ruff_cache
+**/.mypy_cache
+**/.venv
+**/venv
+**/node_modules
+**/.next
+**/dist
+**/build
+
+backend/dev.db
+backend/*.db
+infra/.git
+infra/users

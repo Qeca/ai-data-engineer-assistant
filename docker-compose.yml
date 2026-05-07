@@ -1,0 +1,170 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ai_de
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d ai_de"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+    environment:
+      DATABASE_URL: postgresql+asyncpg://postgres:postgres@postgres:5432/ai_de
+      JWT_SECRET: local-dev-secret
+      CORS_ORIGINS: '["http://localhost:${FRONTEND_PORT:-3000}","http://127.0.0.1:${FRONTEND_PORT:-3000}","http://localhost:3000","http://127.0.0.1:3000","http://localhost:3002","http://127.0.0.1:3002"]'
+      AIRFLOW_BASE_URL: http://airflow-webserver:8080
+      SPARK_MASTER_URL: spark://spark-master:7077
+      SPARK_STATUS_URL: http://spark-master:8080
+      LLM_PROVIDER: ${LLM_PROVIDER:-openai}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_MODEL: ${OPENAI_MODEL:-gpt-5.5}
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
+      OPENROUTER_MODEL: ${OPENROUTER_MODEL:-openai/gpt-5.5}
+      LANGFUSE_PUBLIC_KEY: ${LANGFUSE_PUBLIC_KEY:-}
+      LANGFUSE_SECRET_KEY: ${LANGFUSE_SECRET_KEY:-}
+      LANGFUSE_HOST: ${LANGFUSE_HOST:-http://langfuse:3000}
+      ARTIFACT_ROOT: /workspace/infra
+      ARTIFACT_GIT_ENABLED: ${ARTIFACT_GIT_ENABLED:-true}
+      ARTIFACT_GIT_ROOT: /workspace/infra
+      AGENT_DEBUGGER_URL: http://agent-debugger:8090
+      MCP_ENABLED: ${MCP_ENABLED:-true}
+      MCP_NPX_COMMAND: ${MCP_NPX_COMMAND:-npx}
+      MCP_UVX_COMMAND: ${MCP_UVX_COMMAND:-uvx}
+      MCP_DATABASE_URL: ${MCP_DATABASE_URL:-postgresql://postgres:postgres@postgres:5432/ai_de}
+      MCP_SPARK_MASTER: ${MCP_SPARK_MASTER:-local[*]}
+    ports:
+      - "${BACKEND_PORT:-8000}:8000"
+    volumes:
+      - ./infra:/workspace/infra
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-/api/backend}
+        BACKEND_INTERNAL_URL: ${BACKEND_INTERNAL_URL:-http://backend:8000}
+    environment:
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-/api/backend}
+      BACKEND_INTERNAL_URL: ${BACKEND_INTERNAL_URL:-http://backend:8000}
+    ports:
+      - "${FRONTEND_PORT:-3000}:3000"
+    depends_on:
+      - backend
+
+  airflow-postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: airflow
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+    volumes:
+      - airflow-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U airflow -d airflow"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  airflow-init:
+    image: apache/airflow:2.10.4
+    depends_on:
+      airflow-postgres:
+        condition: service_healthy
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@airflow-postgres:5432/airflow
+      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+      _AIRFLOW_DB_MIGRATE: "true"
+      _AIRFLOW_WWW_USER_CREATE: "true"
+      _AIRFLOW_WWW_USER_USERNAME: airflow
+      _AIRFLOW_WWW_USER_PASSWORD: airflow
+    command: version
+
+  airflow-webserver:
+    image: apache/airflow:2.10.4
+    depends_on:
+      airflow-init:
+        condition: service_completed_successfully
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@airflow-postgres:5432/airflow
+      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+      AIRFLOW__WEBSERVER__EXPOSE_CONFIG: "true"
+    volumes:
+      - ./infra/airflow/dags:/opt/airflow/dags
+      - ./infra/spark/jobs:/opt/airflow/jobs
+    ports:
+      - "${AIRFLOW_WEBSERVER_PORT:-8080}:8080"
+    command: webserver
+
+  airflow-scheduler:
+    image: apache/airflow:2.10.4
+    depends_on:
+      airflow-init:
+        condition: service_completed_successfully
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@airflow-postgres:5432/airflow
+      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+    volumes:
+      - ./infra/airflow/dags:/opt/airflow/dags
+      - ./infra/spark/jobs:/opt/airflow/jobs
+    command: scheduler
+
+  spark-master:
+    image: bitnami/spark:3.5.4
+    environment:
+      SPARK_MODE: master
+    ports:
+      - "${SPARK_MASTER_PORT:-7077}:7077"
+      - "${SPARK_MASTER_UI_PORT:-8081}:8080"
+    volumes:
+      - ./infra/spark/jobs:/opt/spark/jobs
+
+  spark-worker:
+    image: bitnami/spark:3.5.4
+    environment:
+      SPARK_MODE: worker
+      SPARK_MASTER_URL: spark://spark-master:7077
+      SPARK_WORKER_MEMORY: 2G
+      SPARK_WORKER_CORES: 2
+    depends_on:
+      - spark-master
+    volumes:
+      - ./infra/spark/jobs:/opt/spark/jobs
+
+  agent-debugger:
+    build:
+      context: ./infra/debugger
+    profiles:
+      - debug
+    environment:
+      SANDBOX_CONTAINER_RUNS_DIR: /sandbox-runs
+      SANDBOX_HOST_RUNS_DIR: ${SANDBOX_HOST_RUNS_DIR:-/tmp/ai-de-sandbox-runs}
+      SANDBOX_PYTHON_IMAGE: python:3.12-slim
+      SANDBOX_AIRFLOW_IMAGE: apache/airflow:2.10.4
+      SANDBOX_SPARK_IMAGE: bitnami/spark:3.5.4
+    ports:
+      - "${AGENT_DEBUGGER_PORT:-8090}:8090"
+    volumes:
+      - ./infra:/workspace/infra:ro
+      - ${SANDBOX_HOST_RUNS_DIR:-/tmp/ai-de-sandbox-runs}:/sandbox-runs
+      - /var/run/docker.sock:/var/run/docker.sock
+
+volumes:
+  postgres-data:
+  airflow-postgres-data:

@@ -1,0 +1,166 @@
+/* ============================================
+   AI Data Engineer Assistant — Design Tokens
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Geist:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  /* === COLORS === */
+
+  /* Backgrounds */
+  --bg-base:        #080C12;
+  --bg-surface:     #0D1117;
+  --bg-elevated:    #161B22;
+  --bg-overlay:     #1C2330;
+  --bg-hover:       #21293A;
+  --bg-active:      #263044;
+
+  /* Brand / Primary */
+  --blue-50:        #EBF3FF;
+  --blue-100:       #BFDBFF;
+  --blue-200:       #93C4FF;
+  --blue-300:       #60A5FA;
+  --blue-400:       #3B82F6;
+  --blue-500:       #2D7EF8;
+  --blue-600:       #1D6CE8;
+  --blue-700:       #1558C0;
+  --blue-800:       #0F439A;
+  --blue-900:       #0A2E70;
+
+  /* Accents */
+  --emerald-400:    #34D399;
+  --emerald-500:    #10B981;
+  --emerald-600:    #059669;
+
+  --amber-300:      #FCD34D;
+  --amber-400:      #FBBF24;
+  --amber-500:      #F59E0B;
+
+  --rose-400:       #FB7185;
+  --rose-500:       #F43F5E;
+  --rose-600:       #E11D48;
+
+  --violet-400:     #A78BFA;
+  --violet-500:     #8B5CF6;
+  --violet-600:     #7C3AED;
+
+  --cyan-400:       #22D3EE;
+  --cyan-500:       #06B6D4;
+
+  --orange-400:     #FB923C;
+  --orange-500:     #F97316;
+
+  /* Neutrals */
+  --neutral-50:     #F8FAFC;
+  --neutral-100:    #F1F5F9;
+  --neutral-200:    #E2E8F0;
+  --neutral-300:    #CBD5E1;
+  --neutral-400:    #94A3B8;
+  --neutral-500:    #64748B;
+  --neutral-600:    #475569;
+  --neutral-700:    #334155;
+  --neutral-800:    #1E293B;
+  --neutral-900:    #0F172A;
+
+  /* Text */
+  --text-primary:   #E6EDF3;
+  --text-secondary: #8B949E;
+  --text-tertiary:  #484F58;
+  --text-disabled:  #30363D;
+  --text-inverse:   #080C12;
+  --text-link:      #58A6FF;
+  --text-code:      #79C0FF;
+
+  /* Borders */
+  --border-subtle:  rgba(255,255,255,0.06);
+  --border-default: rgba(255,255,255,0.10);
+  --border-strong:  rgba(255,255,255,0.18);
+  --border-focus:   var(--blue-500);
+
+  /* Semantic */
+  --color-success:  var(--emerald-500);
+  --color-warning:  var(--amber-400);
+  --color-error:    var(--rose-500);
+  --color-info:     var(--blue-400);
+  --color-ai:       var(--violet-500);
+  --color-neutral:  var(--neutral-500);
+
+  /* Status colors bg */
+  --status-success-bg:  rgba(16, 185, 129, 0.12);
+  --status-warning-bg:  rgba(251, 191, 36, 0.12);
+  --status-error-bg:    rgba(244, 63, 94, 0.12);
+  --status-info-bg:     rgba(45, 126, 248, 0.12);
+  --status-ai-bg:       rgba(139, 92, 246, 0.12);
+  --status-neutral-bg:  rgba(100, 116, 139, 0.12);
+
+  /* === TYPOGRAPHY === */
+  --font-ui:      'Geist', 'SF Pro Display', system-ui, sans-serif;
+  --font-mono:    'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+
+  --text-xs:      11px;
+  --text-sm:      12px;
+  --text-base:    13px;
+  --text-md:      14px;
+  --text-lg:      16px;
+  --text-xl:      18px;
+  --text-2xl:     22px;
+  --text-3xl:     28px;
+  --text-4xl:     36px;
+
+  --weight-regular: 400;
+  --weight-medium:  500;
+  --weight-semibold:600;
+  --weight-bold:    700;
+
+  --leading-tight:  1.2;
+  --leading-snug:   1.375;
+  --leading-normal: 1.5;
+  --leading-relaxed:1.625;
+
+  --tracking-tight: -0.025em;
+  --tracking-normal: 0;
+  --tracking-wide:  0.04em;
+  --tracking-wider: 0.08em;
+
+  /* === SPACING === */
+  --space-1:    4px;
+  --space-2:    8px;
+  --space-3:    12px;
+  --space-4:    16px;
+  --space-5:    20px;
+  --space-6:    24px;
+  --space-8:    32px;
+  --space-10:   40px;
+  --space-12:   48px;
+  --space-16:   64px;
+
+  /* === RADII === */
+  --radius-sm:   3px;
+  --radius-md:   6px;
+  --radius-lg:   8px;
+  --radius-xl:   12px;
+  --radius-2xl:  16px;
+  --radius-full: 9999px;
+
+  /* === SHADOWS === */
+  --shadow-sm:   0 1px 2px rgba(0,0,0,0.4);
+  --shadow-md:   0 4px 12px rgba(0,0,0,0.5), 0 1px 3px rgba(0,0,0,0.3);
+  --shadow-lg:   0 8px 24px rgba(0,0,0,0.6), 0 2px 8px rgba(0,0,0,0.4);
+  --shadow-xl:   0 16px 48px rgba(0,0,0,0.7), 0 4px 16px rgba(0,0,0,0.5);
+  --shadow-glow-blue:   0 0 20px rgba(45,126,248,0.25);
+  --shadow-glow-violet: 0 0 20px rgba(139,92,246,0.25);
+  --shadow-glow-green:  0 0 20px rgba(16,185,129,0.2);
+
+  /* === TRANSITIONS === */
+  --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-fast:   120ms;
+  --duration-base:   200ms;
+  --duration-slow:   350ms;
+
+  /* === LAYOUT === */
+  --sidebar-width:     220px;
+  --sidebar-collapsed: 56px;
+  --header-height:     48px;
+  --panel-width:       320px;
+}
