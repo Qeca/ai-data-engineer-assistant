@@ -29,6 +29,20 @@ def test_agent_intent_routing():
     assert agent.classify("какие MCP продукты доступны") == "mcp"
 
 
+def test_agent_instructions_train_model_for_mcp_tool_loop():
+    instructions = AgentOrchestrator()._instructions()
+
+    assert "MCP PLAYBOOK" in instructions
+    assert "discovery -> call -> validate" in instructions
+    assert "сначала вызови list_mcp_tools" in instructions
+    assert "не вызывай call_mcp_tool без discovery" in instructions
+    assert "database: use for PostgreSQL" in instructions
+    assert "airflow: use for Airflow" in instructions
+    assert "spark: use for Spark" in instructions
+    assert "artifacts_git: use for Git status" in instructions
+    assert "filesystem MCP используй только" in instructions
+
+
 class FakeOpenAIClient:
     enabled = True
 

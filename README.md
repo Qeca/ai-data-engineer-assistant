@@ -169,6 +169,8 @@ Function/tool calling включается через env:
 
 MCP-compatible tool schema также доступна из общего registry и разложена по продуктам: `site`, `database`, `airflow`, `spark`, `external_mcp`, `artifacts`.
 
+Модель обучается работать с MCP через отдельный prompt playbook в `MCPInstructionBook`: сначала `list_mcp_products` при неизвестном продукте, затем `list_mcp_tools(product)`, затем `call_mcp_tool(product, exact_tool_name, arguments)` строго по найденной input schema. Если внешний MCP недоступен или не имеет нужного tool, агент использует локальный fallback tool и сообщает об этом в ответе. Для записи пользовательских DAG/Spark-скриптов модель предпочитает локальные artifact tools, потому что они enforce user scope, sandbox validation и Git versioning; filesystem MCP оставлен для явного чтения, поиска и низкоуровневых операций в `ARTIFACT_ROOT`.
+
 Артефакты сохраняются по пользователям в `infra/users/<user_id>/...`; обычный пользователь видит и отлаживает только свои версии. Admin видит все версии в истории. Git-репозиторий артефактов инициализируется строго в `ARTIFACT_GIT_ROOT`, чтобы не смешивать с git-репозиторием исходного кода.
 
 ## Безопасность

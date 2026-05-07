@@ -91,13 +91,13 @@ class AgentToolRegistry:
             self._spec("list_catalog", "List database tables and columns.", {}, []),
             self._spec(
                 "list_mcp_products",
-                "List configured ready-made external MCP servers for product integrations.",
+                "List configured ready-made external MCP servers for product integrations. Use this to discover available MCP products.",
                 {},
                 [],
             ),
             self._spec(
                 "list_mcp_tools",
-                "Discover tools exposed by a ready-made external MCP server. Use before call_mcp_tool when using external MCP.",
+                "Discover tools exposed by a ready-made external MCP server. Always use this before call_mcp_tool for a product unless the user supplied an exact tool name.",
                 {
                     "product": {
                         "type": "string",
@@ -109,7 +109,7 @@ class AgentToolRegistry:
             ),
             self._spec(
                 "call_mcp_tool",
-                "Call a tool exposed by a ready-made external MCP server.",
+                "Call a tool exposed by a ready-made external MCP server. tool_name must be an exact name discovered from list_mcp_tools, and arguments must match that discovered input schema.",
                 {
                     "product": {
                         "type": "string",

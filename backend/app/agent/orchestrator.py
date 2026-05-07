@@ -7,6 +7,7 @@ from typing import Any, Literal, TypedDict
 from langgraph.graph import END, START, StateGraph
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.agent.mcp_instruction_book import MCPInstructionBook
 from app.agent.tool_registry import AgentToolRegistry
 from app.core.config import settings
 from app.models import User
@@ -46,6 +47,7 @@ class AgentOrchestrator:
         self.openai = OpenAIResponsesClient()
         self.openrouter = OpenRouterToolClient()
         self.sql_helper = SQLTool()
+        self.mcp_instruction_book = MCPInstructionBook()
         self.graph = self._build_graph()
 
     async def run(
@@ -304,7 +306,11 @@ class AgentOrchestrator:
         elif intent == "site":
             tool_calls.append(await registry.execute("list_site_status", {}))
         elif intent == "mcp":
-            tool_calls.append(await registry.execute("list_mcp_products", {}))
+            product = self._extract_mcp_product(query)
+            if product and self._wants_mcp_tool_discovery(query):
+                tool_calls.append(await registry.execute("list_mcp_tools", {"product": product}))
+            else:
+                tool_calls.append(await registry.execute("list_mcp_products", {}))
         elif intent.startswith("navigate:"):
             screen = intent.split(":", 1)[1]
             tool_calls.append(await registry.execute("navigate_site", {"screen": screen}))
@@ -339,8 +345,7 @@ class AgentOrchestrator:
             ui_actions=self._collect_ui_actions(tool_calls),
         )
 
-    @staticmethod
-    def _instructions() -> str:
+    def _instructions(self) -> str:
         return (
             "Ты AI Data Engineer Assistant внутри рабочей платформы. "
             "Используй OpenAI function calling для любых данных и действий. "
@@ -357,7 +362,8 @@ class AgentOrchestrator:
             "Для истории и версий артефактов вызывай list_artifact_versions; версии ведутся в Git. "
             "Для управления интерфейсом вызывай navigate_site. "
             "Перед SQL учитывай description инструмента execute_sql: там указан текущий SQL dialect. "
-            "Отвечай на русском, кратко, указывая какие действия выполнены."
+            "Отвечай на русском, кратко, указывая какие действия выполнены. "
+            f"{self.mcp_instruction_book.render()}"
         )
 
     @staticmethod
@@ -587,6 +593,13 @@ class AgentOrchestrator:
             )
 
         if intent == "mcp":
+            if latest.tool_name == "ExternalMCPTool":
+                content = latest.output.get("structured_content") or latest.output.get("content") or []
+                return (
+                    "Выполнил готовый внешний MCP tool через function call: "
+                    f"`{latest.output.get('product')}.{latest.output.get('tool_name')}`. "
+                    f"Результат: {str(content)[:500]}"
+                )
             if "products" in latest.output:
                 products = latest.output.get("products", [])
                 names = ", ".join(product.get("product", "") for product in products)
@@ -616,6 +629,26 @@ class AgentOrchestrator:
         if any(word in q for word in ["аномал", "час", "orders", "заказ"]):
             return self.sql_helper.anomaly_query()
         return self.sql_helper.revenue_query()
+
+    @staticmethod
+    def _extract_mcp_product(query: str) -> str | None:
+        q = query.lower()
+        if any(word in q for word in ["postgres", "database", "бд", "баз", "sql"]):
+            return "database"
+        if any(word in q for word in ["airflow", "dag", "даг", "пайплайн", "pipeline"]):
+            return "airflow"
+        if "spark" in q or "pyspark" in q:
+            return "spark"
+        if any(word in q for word in ["git", "commit", "diff", "верс", "история"]):
+            return "artifacts_git"
+        if any(word in q for word in ["filesystem", "file system", "файл", "директор", "папк"]):
+            return "artifacts_filesystem"
+        return None
+
+    @staticmethod
+    def _wants_mcp_tool_discovery(query: str) -> bool:
+        q = query.lower()
+        return any(word in q for word in ["tool", "tools", "тул", "тулы", "инструмент", "умеет", "доступ"])
 
     @staticmethod
     def _wants_run(query: str) -> bool:
