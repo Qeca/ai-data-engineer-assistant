@@ -370,7 +370,14 @@ async def test_agent_api_persists_de_runbook_messages_tool_runs_and_spark_result
 
     assert messages.status_code == 200
     persisted_messages = messages.json()
-    assert [message["role"] for message in persisted_messages[-2:]] == ["user", "assistant"]
+    assert [message["role"] for message in persisted_messages[-5:]] == [
+        "user",
+        "tool",
+        "tool",
+        "tool",
+        "assistant",
+    ]
+    assert persisted_messages[-2]["metadata_json"]["tool_call"]["tool_name"] == "SparkTool"
     assert persisted_messages[-1]["content"] == payload["answer"]
 
     async with AsyncSessionLocal() as session:

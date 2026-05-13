@@ -71,7 +71,8 @@ class OpenAILikeParser:
 
 
 @pytest.mark.asyncio
-async def test_openai_function_calling_can_control_site():
+async def test_openai_function_calling_can_control_site(monkeypatch):
+    monkeypatch.setattr(settings, "llm_provider", "openai")
     await init_db()
     agent = AgentOrchestrator()
     agent.openai = FakeOpenAIClient()
@@ -110,6 +111,10 @@ async def test_agent_stream_emits_intermediate_tool_events(monkeypatch):
         ) as response:
             assert response.status_code == 200
             events = [json.loads(line) async for line in response.aiter_lines() if line]
+        messages = await client.get(
+            f"/sessions/{events[0]['session_id']}/messages",
+            headers={"Authorization": f"Bearer {token}"},
+        )
 
     assert [event["type"] for event in events] == [
         "session",
@@ -120,6 +125,10 @@ async def test_agent_stream_emits_intermediate_tool_events(monkeypatch):
     assert events[1]["tool_name"] == "navigate_site"
     assert events[2]["tool_call"]["tool_name"] == "SiteControlTool"
     assert events[3]["response"]["answer"] == "Открыл Spark экран через function call."
+    assert messages.status_code == 200
+    persisted = messages.json()
+    assert [message["role"] for message in persisted[-3:]] == ["user", "tool", "assistant"]
+    assert persisted[-2]["metadata_json"]["tool_call"]["tool_name"] == "SiteControlTool"
 
 
 @pytest.mark.asyncio

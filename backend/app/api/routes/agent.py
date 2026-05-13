@@ -65,6 +65,7 @@ async def prepare_session(
             "metadata": message.metadata_json or {},
         }
         for message in reversed(previous_messages)
+        if message.role in {"user", "assistant"}
     ]
     app_state = dict(payload.app_state or {})
     app_state["conversation_history"] = conversation_history
@@ -81,11 +82,33 @@ async def persist_agent_result(
     result: AgentResult,
     trace,
 ) -> Message:
+    tool_responses = [tool_call_response(call) for call in result.tool_calls]
+    for tool_response in tool_responses:
+        db.add(
+            Message(
+                session_id=session.id,
+                role="tool",
+                content=(
+                    f"`{tool_response.tool_name}` {tool_response.status} "
+                    f"за {tool_response.latency_ms}ms"
+                ),
+                metadata_json={
+                    "intent": "tool-result",
+                    "tool_call": jsonable_encoder(tool_response),
+                },
+            )
+        )
+    await db.flush()
+
     assistant_message = Message(
         session_id=session.id,
         role="assistant",
         content=result.answer,
-        metadata_json={"intent": result.intent},
+        metadata_json={
+            "intent": result.intent,
+            "tool_calls": jsonable_encoder(tool_responses),
+            "ui_actions": jsonable_encoder(result.ui_actions),
+        },
     )
     db.add(assistant_message)
     await db.flush()

@@ -263,13 +263,33 @@ export function AgentScreen() {
 }
 
 function toChatMessage(message: AgentMessage): ChatMessage {
-  const role = message.role === "user" ? "user" : "assistant";
-  const intent = typeof message.metadata_json?.intent === "string" ? message.metadata_json.intent : undefined;
+  const role = message.role === "user" || message.role === "tool" ? message.role : "assistant";
+  const metadata = message.metadata_json ?? {};
+  const intent = typeof metadata.intent === "string" ? metadata.intent : undefined;
+  const toolCall = isToolCall(metadata.tool_call) ? metadata.tool_call : undefined;
+  const toolCalls = Array.isArray(metadata.tool_calls) ? metadata.tool_calls.filter(isToolCall) : undefined;
+  const uiActions = Array.isArray(metadata.ui_actions) ? (metadata.ui_actions as UiAction[]) : undefined;
+
   return {
     role,
     content: message.content,
     intent,
+    tools: toolCall ? [toolCall] : toolCalls,
+    uiActions,
+    toolOutput: role === "tool" ? toolCall?.output : undefined,
   };
+}
+
+function isToolCall(value: unknown): value is ToolCall {
+  if (!value || typeof value !== "object") return false;
+  const candidate = value as Partial<ToolCall>;
+  return (
+    typeof candidate.tool_name === "string" &&
+    typeof candidate.status === "string" &&
+    typeof candidate.latency_ms === "number" &&
+    typeof candidate.input === "object" &&
+    typeof candidate.output === "object"
+  );
 }
 
 function summarizeToolCall(toolCall: ToolCall): string {

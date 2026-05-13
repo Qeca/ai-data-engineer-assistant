@@ -18,6 +18,7 @@ from app.services.git_versioning import GitArtifactVersioner
 @pytest.mark.asyncio
 async def test_artifact_service_writes_dag_version(monkeypatch, tmp_path):
     monkeypatch.setattr(settings, "artifact_root", str(tmp_path))
+    monkeypatch.setattr(settings, "artifact_git_root", str(tmp_path))
     await init_db()
 
     dag_id = f"unit_test_dag_{uuid4().hex}"

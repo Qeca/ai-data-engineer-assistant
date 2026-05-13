@@ -462,6 +462,10 @@ async def test_agent_query_api_returns_tool_calls_ui_actions_and_persists_tool_r
             headers={"Authorization": f"Bearer {token}"},
             json={"query": "открой Spark", "app_state": {"screen": "ai-agent"}},
         )
+        messages = await client.get(
+            f"/sessions/{response.json()['session_id']}/messages",
+            headers={"Authorization": f"Bearer {token}"},
+        )
 
     assert response.status_code == 200
     payload = response.json()
@@ -470,6 +474,9 @@ async def test_agent_query_api_returns_tool_calls_ui_actions_and_persists_tool_r
     assert payload["tool_calls"][0]["tool_name"] == "SiteControlTool"
     assert payload["tool_calls"][0]["status"] == "success"
     assert payload["ui_actions"][0] == {"type": "navigate", "screen": "spark"}
+    assert messages.status_code == 200
+    assert [message["role"] for message in messages.json()[-3:]] == ["user", "tool", "assistant"]
+    assert messages.json()[-2]["metadata_json"]["tool_call"]["tool_name"] == "SiteControlTool"
 
     async with AsyncSessionLocal() as session:
         persisted = await session.scalar(
