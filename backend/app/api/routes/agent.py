@@ -69,6 +69,10 @@ async def prepare_session(
     ]
     app_state = dict(payload.app_state or {})
     app_state["conversation_history"] = conversation_history
+    app_state["conversation_messages"] = [
+        {"role": item["role"], "content": item["content"]}
+        for item in conversation_history
+    ]
 
     user_message = Message(session_id=session.id, role="user", content=payload.query, metadata_json={})
     db.add(user_message)

@@ -34,6 +34,26 @@ def test_agent_instructions_train_model_for_mcp_tool_loop():
     assert "filesystem MCP используй только" in instructions
 
 
+def test_agent_initial_messages_use_standard_chat_history():
+    messages = AgentOrchestrator._initial_messages(
+        "новый вопрос",
+        {
+            "screen": "ai-agent",
+            "conversation_messages": [
+                {"role": "user", "content": "прошлый вопрос"},
+                {"role": "tool", "content": "tool output must not be sent as chat history"},
+                {"role": "assistant", "content": "прошлый ответ"},
+            ],
+        },
+    )
+
+    assert [message["role"] for message in messages] == ["user", "assistant", "user"]
+    assert messages[0]["content"] == "прошлый вопрос"
+    assert messages[1]["content"] == "прошлый ответ"
+    assert "новый вопрос" in messages[2]["content"]
+    assert "tool output must not be sent" not in str(messages)
+
+
 class FakeOpenAIClient:
     enabled = True
 

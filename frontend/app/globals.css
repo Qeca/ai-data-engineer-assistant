@@ -676,6 +676,19 @@ body {
   text-transform: uppercase;
 }
 
+.assistant-composite {
+  width: min(760px, 78vw);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.assistant-composite .activity-card,
+.assistant-composite .assistant-answer {
+  width: 100%;
+  max-width: none;
+}
+
 .activity-card {
   width: min(760px, 78vw);
   padding: 12px 14px;
@@ -691,10 +704,24 @@ body {
   gap: 7px;
   color: var(--text-primary);
   font-weight: 650;
+  cursor: pointer;
+  list-style: none;
+}
+
+.activity-header::-webkit-details-marker {
+  display: none;
 }
 
 .activity-header svg {
   color: var(--text-secondary);
+}
+
+.activity-chevron {
+  transition: transform var(--duration-fast);
+}
+
+.activity-card[open] .activity-chevron {
+  transform: rotate(90deg);
 }
 
 .activity-time {
@@ -772,30 +799,6 @@ body {
   color: var(--text-tertiary);
   font-family: var(--font-mono);
   font-size: 10px;
-}
-
-.activity-details {
-  margin-top: 8px;
-}
-
-.activity-details summary {
-  cursor: pointer;
-  color: var(--text-tertiary);
-  font-size: 11px;
-}
-
-.activity-details pre {
-  max-height: 220px;
-  overflow: auto;
-  margin: 7px 0 0;
-  padding: 9px 10px;
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  background: var(--bg-base);
-  color: var(--text-code);
-  font-family: var(--font-mono);
-  font-size: 11px;
-  line-height: 1.45;
 }
 
 .spin {

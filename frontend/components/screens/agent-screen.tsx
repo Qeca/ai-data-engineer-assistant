@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { CheckCircle2, Circle, Loader2, MessageSquare, Plus, SendHorizonal } from "lucide-react";
+import { CheckCircle2, ChevronRight, Circle, Loader2, MessageSquare, Plus, SendHorizonal } from "lucide-react";
 import { FormEvent, useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -21,7 +21,8 @@ type ChatMessage = {
 
 type RenderItem =
   | { type: "message"; message: ChatMessage; key: string }
-  | { type: "activity"; messages: ChatMessage[]; key: string };
+  | { type: "activity"; messages: ChatMessage[]; key: string }
+  | { type: "assistant_with_activity"; message: ChatMessage; activityMessages: ChatMessage[]; key: string };
 
 const starter: ChatMessage[] = [
   {
@@ -206,6 +207,8 @@ export function AgentScreen() {
           {groupMessages(messages).map((item) =>
             item.type === "activity" ? (
               <ActivityMessage key={item.key} messages={item.messages} />
+            ) : item.type === "assistant_with_activity" ? (
+              <AssistantMessage key={item.key} message={item.message} activityMessages={item.activityMessages} />
             ) : (
               <div className={`chat-msg ${item.message.role === "user" ? "user" : ""}`} key={item.key}>
                 <div className={`avatar ${item.message.role === "assistant" ? "ai" : ""}`}>
@@ -264,33 +267,74 @@ export function AgentScreen() {
 
 }
 
-function ActivityMessage({ messages }: { messages: ChatMessage[] }) {
-  const toolCalls = messages.flatMap((message) => message.tools ?? []);
-  const totalLatency = toolCalls.reduce((sum, tool) => sum + tool.latency_ms, 0);
-  const hasPending = messages.some((message) => message.intent === "tool-start");
-
+function AssistantMessage({
+  message,
+  activityMessages = [],
+}: {
+  message: ChatMessage;
+  activityMessages?: ChatMessage[];
+}) {
   return (
-    <div className="chat-msg activity">
+    <div className="chat-msg">
       <div className="avatar ai">AI</div>
-      <div className="activity-card">
-        <div className="activity-header">
-          {hasPending ? <Loader2 size={15} className="spin" /> : <CheckCircle2 size={15} />}
-          <span>Активность</span>
-          {totalLatency > 0 && <span className="activity-time">· {formatLatency(totalLatency)}</span>}
-        </div>
-        <div className="activity-timeline">
-          {messages.map((message, index) => (
-            <ActivityStep key={`${message.content}-${index}`} message={message} />
-          ))}
+      <div className="assistant-composite">
+        {activityMessages.length > 0 && <ActivityPanel messages={activityMessages} />}
+        <div className="bubble assistant-answer">
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>{message.content}</ReactMarkdown>
+          {message.intent && activityMessages.length === 0 && (
+            <div style={{ marginTop: 10, display: "flex", gap: 8, flexWrap: "wrap" }}>
+              <Badge status="ai">{message.intent}</Badge>
+              {message.tools?.map((tool) => (
+                <Badge key={`${tool.tool_name}-${tool.latency_ms}`} status={tool.status}>
+                  {tool.tool_name} · {tool.latency_ms}ms
+                </Badge>
+              ))}
+              {message.uiActions?.map((action, actionIndex) => (
+                <span className="tag" key={`${action.type}-${actionIndex}`}>
+                  ui:{action.type}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>
   );
 }
 
+function ActivityMessage({ messages }: { messages: ChatMessage[] }) {
+  return (
+    <div className="chat-msg activity">
+      <div className="avatar ai">AI</div>
+      <ActivityPanel messages={messages} />
+    </div>
+  );
+}
+
+function ActivityPanel({ messages }: { messages: ChatMessage[] }) {
+  const toolCalls = messages.flatMap((message) => message.tools ?? []);
+  const totalLatency = toolCalls.reduce((sum, tool) => sum + tool.latency_ms, 0);
+  const hasPending = messages.some((message) => message.intent === "tool-start");
+
+  return (
+    <details className="activity-card">
+      <summary className="activity-header">
+        <ChevronRight size={14} className="activity-chevron" />
+        {hasPending ? <Loader2 size={15} className="spin" /> : <CheckCircle2 size={15} />}
+        <span>Активность</span>
+        {totalLatency > 0 && <span className="activity-time">· {formatLatency(totalLatency)}</span>}
+      </summary>
+      <div className="activity-timeline">
+        {messages.map((message, index) => (
+          <ActivityStep key={`${message.content}-${index}`} message={message} />
+        ))}
+      </div>
+    </details>
+  );
+}
+
 function ActivityStep({ message }: { message: ChatMessage }) {
   const tool = message.tools?.[0];
-  const output = tool?.output ?? message.toolOutput;
   const isPending = message.intent === "tool-start";
 
   return (
@@ -306,12 +350,6 @@ function ActivityStep({ message }: { message: ChatMessage }) {
           {tool && <span>{formatLatency(tool.latency_ms)}</span>}
           {tool?.status && <span>{tool.status}</span>}
         </div>
-        {output && (
-          <details className="activity-details">
-            <summary>Детали</summary>
-            <pre>{formatToolOutput(output)}</pre>
-          </details>
-        )}
       </div>
     </div>
   );
@@ -334,6 +372,16 @@ function groupMessages(items: ChatMessage[]): RenderItem[] {
     while (items[index]?.role === "tool") {
       activityMessages.push(items[index]);
       index += 1;
+    }
+    if (items[index]?.role === "assistant") {
+      grouped.push({
+        type: "assistant_with_activity",
+        message: items[index],
+        activityMessages,
+        key: `assistant-activity-${startIndex}`,
+      });
+      index += 1;
+      continue;
     }
     grouped.push({ type: "activity", messages: activityMessages, key: `activity-${startIndex}` });
   }

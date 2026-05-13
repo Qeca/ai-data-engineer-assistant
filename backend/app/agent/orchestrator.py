@@ -103,12 +103,12 @@ class AgentOrchestrator:
         if settings.llm_provider == "magnitgpt" and self.magnitgpt.enabled:
             return {
                 "provider": "magnitgpt",
-                "messages": [{"role": "user", "content": self._user_prompt(state["query"], registry.app_state)}],
+                "messages": self._initial_messages(state["query"], registry.app_state),
             }
         if settings.llm_provider == "openrouter" and self.openrouter.enabled:
             return {
                 "provider": "openrouter",
-                "messages": [{"role": "user", "content": self._user_prompt(state["query"], registry.app_state)}],
+                "messages": self._initial_messages(state["query"], registry.app_state),
             }
         if settings.llm_provider == "openai" and self.openai.enabled:
             return {"provider": "openai"}
@@ -153,7 +153,7 @@ class AgentOrchestrator:
         response = state.get("response")
         if not response:
             return await self.openai.create(
-                input_payload=self._user_prompt(state["query"], registry.app_state),
+                input_payload=self._initial_messages(state["query"], registry.app_state),
                 tools=registry.specs(),
                 instructions=self._instructions(),
             )
@@ -286,22 +286,28 @@ class AgentOrchestrator:
         )
 
     @staticmethod
-    def _user_prompt(query: str, app_state: dict[str, Any]) -> str:
-        history = app_state.get("conversation_history")
-        history_lines: list[str] = []
+    def _initial_messages(query: str, app_state: dict[str, Any]) -> list[dict[str, str]]:
+        messages: list[dict[str, str]] = []
+        history = app_state.get("conversation_messages")
         if isinstance(history, list):
             for item in history[-8:]:
                 if not isinstance(item, dict):
                     continue
-                role = str(item.get("role") or "message")
-                content = str(item.get("content") or "").strip()
-                if content:
-                    history_lines.append(f"{role}: {content[:1200]}")
+                role = item.get("role")
+                content = item.get("content")
+                if role in {"user", "assistant"} and isinstance(content, str) and content.strip():
+                    messages.append({"role": role, "content": content[:4000]})
+        messages.append({"role": "user", "content": AgentOrchestrator._user_prompt(query, app_state)})
+        return messages
 
-        visible_state = {key: value for key, value in app_state.items() if key != "conversation_history"}
-        history_text = "\n".join(history_lines) if history_lines else "Нет предыдущих сообщений."
+    @staticmethod
+    def _user_prompt(query: str, app_state: dict[str, Any]) -> str:
+        visible_state = {
+            key: value
+            for key, value in app_state.items()
+            if key not in {"conversation_history", "conversation_messages"}
+        }
         return (
-            f"Предыдущие сообщения текущего чата:\n{history_text}\n\n"
             f"Запрос пользователя: {query}\n\n"
             f"Текущее состояние frontend-приложения: {visible_state}\n"
             "Если нужно управлять сайтом, вызови соответствующий function tool."
