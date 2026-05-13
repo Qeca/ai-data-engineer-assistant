@@ -193,6 +193,43 @@ body {
   height: 15px;
 }
 
+.nav-label {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nav-status {
+  margin-left: auto;
+  display: inline-flex;
+  flex-shrink: 0;
+  gap: 5px;
+  align-items: center;
+}
+
+.nav-count {
+  min-width: 22px;
+  height: 22px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: var(--radius-md);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.nav-count-good {
+  background: var(--status-success-bg);
+  color: var(--emerald-400);
+}
+
+.nav-count-bad {
+  background: var(--status-error-bg);
+  color: var(--rose-400);
+}
+
 .main {
   min-width: 0;
   flex: 1;

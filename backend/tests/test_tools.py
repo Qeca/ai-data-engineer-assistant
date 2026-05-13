@@ -154,11 +154,13 @@ async def test_airflow_and_spark_tools_persist_metadata():
             "local:///opt/spark/jobs/sample_job.py",
             {"partitions": 4},
         )
+        spark_jobs = await SparkTool().list_jobs(session)
 
     assert airflow_run.dag_id == "orders_sync"
     assert airflow_run.status in {"queued", "running", "success"}
     assert spark_job.status == "running"
     assert spark_job.result_sample
+    assert any(job.job_id == spark_job.job_id for job in spark_jobs)
 
 
 @pytest.mark.asyncio

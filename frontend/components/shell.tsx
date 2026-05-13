@@ -1,5 +1,6 @@
 "use client";
 
+import { useQuery, useQueryClient, type QueryClient } from "@tanstack/react-query";
 import {
   Bot,
   Boxes,
@@ -16,10 +17,19 @@ import {
   Table2,
   UserCircle,
 } from "lucide-react";
-import { PointerEvent, useEffect, useState } from "react";
+import { PointerEvent, useEffect, useMemo, useRef, useState, type MutableRefObject } from "react";
+import { api } from "@/lib/api";
 import { useAppStore, type Screen } from "@/lib/store";
+import type { DatabaseConnection, Pipeline, SparkJob } from "@/types";
 
-const sections: { label: string; items: { screen: Screen; label: string; icon: React.ElementType; badge?: string }[] }[] =
+type NavStatusKey = "pipelines" | "airflow" | "spark" | "connections" | "catalog";
+
+type NavStatusCounts = {
+  working: number;
+  broken: number;
+};
+
+const sections: { label: string; items: { screen: Screen; label: string; icon: React.ElementType; badge?: string; statusKey?: NavStatusKey }[] }[] =
   [
     {
       label: "Workspace",
@@ -32,33 +42,98 @@ const sections: { label: string; items: { screen: Screen; label: string; icon: R
     {
       label: "Pipelines",
       items: [
-        { screen: "pipelines", label: "Pipelines", icon: GitBranch },
-        { screen: "airflow", label: "Airflow DAGs", icon: Network, badge: "2" },
-        { screen: "spark", label: "Spark Jobs", icon: Sparkles },
+        { screen: "pipelines", label: "Pipelines", icon: GitBranch, statusKey: "pipelines" },
+        { screen: "airflow", label: "Airflow DAGs", icon: Network, statusKey: "airflow" },
+        { screen: "spark", label: "Spark Jobs", icon: Sparkles, statusKey: "spark" },
       ],
     },
     {
       label: "Infrastructure",
       items: [
-        { screen: "connections", label: "Connections", icon: Boxes },
-        { screen: "catalog", label: "Data Catalog", icon: Database },
+        { screen: "connections", label: "Connections", icon: Boxes, statusKey: "connections" },
+        { screen: "catalog", label: "Data Catalog", icon: Database, statusKey: "catalog" },
       ],
     },
   ];
 
 export function Shell({ children }: { children: React.ReactNode }) {
+  const token = useAppStore((state) => state.accessToken);
   const screen = useAppStore((state) => state.screen);
   const setScreen = useAppStore((state) => state.setScreen);
   const theme = useAppStore((state) => state.theme);
   const toggleTheme = useAppStore((state) => state.toggleTheme);
   const logout = useAppStore((state) => state.logout);
   const user = useAppStore((state) => state.user);
+  const queryClient = useQueryClient();
+  const connectionsRef = useRef<DatabaseConnection[]>([]);
+  const checkingConnections = useRef(false);
+  const lastHealthCheckAt = useRef(0);
   const [sidebarWidth, setSidebarWidth] = useState(250);
+
+  const pipelines = useQuery({
+    queryKey: ["pipelines", token],
+    queryFn: () => api.pipelines(token ?? ""),
+    enabled: Boolean(token),
+    refetchInterval: 30_000,
+  });
+
+  const sparkJobs = useQuery({
+    queryKey: ["spark-jobs", token],
+    queryFn: () => api.sparkJobs(token ?? ""),
+    enabled: Boolean(token),
+    refetchInterval: 30_000,
+  });
+
+  const connections = useQuery({
+    queryKey: ["database-connections", token],
+    queryFn: () => api.connections(token ?? ""),
+    enabled: Boolean(token),
+    refetchInterval: 30_000,
+  });
+
+  const catalog = useQuery({
+    queryKey: ["catalog", token],
+    queryFn: () => api.catalogTables(token ?? ""),
+    enabled: Boolean(token),
+    refetchInterval: 60_000,
+  });
+
+  const navStatuses = useMemo(
+    () => ({
+      pipelines: pipelines.error ? { working: 0, broken: 1 } : countStatuses(pipelines.data ?? []),
+      airflow: pipelines.error ? { working: 0, broken: 1 } : countStatuses(pipelines.data ?? []),
+      spark: sparkJobs.error ? { working: 0, broken: 1 } : countStatuses(sparkJobs.data ?? []),
+      connections: connections.error ? { working: 0, broken: 1 } : countStatuses(connections.data ?? []),
+      catalog: catalog.error ? { working: 0, broken: 1 } : { working: catalog.data?.length ?? 0, broken: 0 },
+    }),
+    [catalog.data, catalog.error, connections.data, connections.error, pipelines.data, pipelines.error, sparkJobs.data, sparkJobs.error],
+  );
 
   useEffect(() => {
     const saved = window.localStorage.getItem("main-sidebar-width");
     if (saved) setSidebarWidth(clamp(Number(saved), 210, 420));
   }, []);
+
+  useEffect(() => {
+    connectionsRef.current = connections.data ?? [];
+  }, [connections.data]);
+
+  useEffect(() => {
+    if (!token || !connections.data?.length) return;
+    const now = Date.now();
+    if (now - lastHealthCheckAt.current < 55_000) return;
+    lastHealthCheckAt.current = now;
+    void testVisibleConnections(token, connections.data, queryClient, checkingConnections);
+  }, [connections.data, queryClient, token]);
+
+  useEffect(() => {
+    if (!token) return;
+    const interval = window.setInterval(() => {
+      lastHealthCheckAt.current = Date.now();
+      void testVisibleConnections(token, connectionsRef.current, queryClient, checkingConnections);
+    }, 60_000);
+    return () => window.clearInterval(interval);
+  }, [queryClient, token]);
 
   function resizeSidebar(event: PointerEvent<HTMLDivElement>) {
     const startX = event.clientX;
@@ -104,8 +179,8 @@ export function Shell({ children }: { children: React.ReactNode }) {
                     onClick={() => setScreen(item.screen)}
                   >
                     <Icon />
-                    <span>{item.label}</span>
-                    {item.badge && <span className="tag" style={{ marginLeft: "auto" }}>{item.badge}</span>}
+                    <span className="nav-label">{item.label}</span>
+                    <NavStatus badge={item.badge} counts={item.statusKey ? navStatuses[item.statusKey] : undefined} />
                   </button>
                 );
               })}
@@ -143,6 +218,57 @@ export function Shell({ children }: { children: React.ReactNode }) {
       </main>
     </div>
   );
+}
+
+function NavStatus({ badge, counts }: { badge?: string; counts?: NavStatusCounts }) {
+  if (!badge && !counts) return null;
+
+  return (
+    <span className="nav-status">
+      {badge && <span className="tag">{badge}</span>}
+      {counts && (
+        <>
+          <span className="nav-count nav-count-good" title="Рабочие">
+            {counts.working}
+          </span>
+          <span className="nav-count nav-count-bad" title="Нерабочие">
+            {counts.broken}
+          </span>
+        </>
+      )}
+    </span>
+  );
+}
+
+async function testVisibleConnections(
+  token: string,
+  rows: DatabaseConnection[],
+  queryClient: QueryClient,
+  checkingConnections: MutableRefObject<boolean>,
+) {
+  if (checkingConnections.current || rows.length === 0) return;
+  checkingConnections.current = true;
+  await Promise.allSettled(rows.map((connection) => api.testConnection(token, connection.id)));
+  checkingConnections.current = false;
+  await queryClient.invalidateQueries({ queryKey: ["database-connections", token] });
+}
+
+function countStatuses(rows: Array<Pipeline | SparkJob | DatabaseConnection>): NavStatusCounts {
+  return rows.reduce(
+    (counts, row) => {
+      if (isWorkingStatus(row.status)) {
+        counts.working += 1;
+      } else {
+        counts.broken += 1;
+      }
+      return counts;
+    },
+    { working: 0, broken: 0 },
+  );
+}
+
+function isWorkingStatus(status: string) {
+  return ["active", "online", "queued", "running", "submitted", "success"].includes(status.toLowerCase());
 }
 
 function clamp(value: number, min: number, max: number) {

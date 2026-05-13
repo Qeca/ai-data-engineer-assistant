@@ -60,6 +60,10 @@ class SparkTool:
             await db.refresh(job)
         return self._read(job)
 
+    async def list_jobs(self, db: AsyncSession, limit: int = 50) -> list[SparkJobRead]:
+        rows = await db.scalars(select(SparkJob).order_by(SparkJob.created_at.desc()).limit(limit))
+        return [self._read(job) for job in rows]
+
     async def execute(self, db: AsyncSession, name: str, app_resource: str, params: dict | None = None) -> ToolExecution:
         started = time.perf_counter()
         job = await self.submit_job(db, name, app_resource, params)

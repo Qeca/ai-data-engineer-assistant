@@ -20,6 +20,14 @@ async def submit_job(
     return await tool.submit_job(db, payload.name, payload.app_resource, payload.params)
 
 
+@router.get("/jobs", response_model=list[SparkJobRead])
+async def list_jobs(
+    _: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+) -> list[SparkJobRead]:
+    return await tool.list_jobs(db)
+
+
 @router.get("/jobs/{job_id}", response_model=SparkJobRead)
 async def get_job(
     job_id: str,

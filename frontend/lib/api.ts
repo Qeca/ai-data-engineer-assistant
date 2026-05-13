@@ -220,6 +220,7 @@ export const api = {
       token,
       body: JSON.stringify(payload),
     }),
+  sparkJobs: (token: string) => request<SparkJob[]>("/spark/jobs", { token }),
   getSpark: (token: string, jobId: string) =>
     request<SparkJob>(`/spark/jobs/${encodeURIComponent(jobId)}`, { token }),
 };
