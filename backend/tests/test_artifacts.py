@@ -70,6 +70,7 @@ async def test_registry_exposes_artifact_function_tools(monkeypatch, tmp_path):
             "run_spark_script_sandbox",
             "run_python_script_sandbox",
             "list_artifact_versions",
+            "run_git_command",
         }.issubset(names)
         mcp_specs = registry.mcp_specs()
         mcp_names = {spec["name"] for spec in mcp_specs}
@@ -80,6 +81,7 @@ async def test_registry_exposes_artifact_function_tools(monkeypatch, tmp_path):
         assert any(tool["name"] == "call_mcp_tool" for tool in product_specs["external_mcp"]["tools"])
         assert any(tool["name"] == "manage_airflow_dags" for tool in product_specs["airflow"]["tools"])
         assert any(tool["name"] == "inspect_database" for tool in product_specs["database"]["tools"])
+        assert any(tool["name"] == "run_git_command" for tool in product_specs["artifacts"]["tools"])
 
         debug = await registry.execute(
             "run_python_script_sandbox",
@@ -128,6 +130,26 @@ with DAG(
     assert read_back.tool_name == "AirflowDAGSourceTool"
     assert read_back.output["code"] == dag_code
     assert read_back.output["path"] == str(runtime_path)
+
+
+@pytest.mark.asyncio
+async def test_registry_runs_scoped_git_command(monkeypatch, tmp_path):
+    monkeypatch.setattr(settings, "artifact_root", str(tmp_path))
+    monkeypatch.setattr(settings, "artifact_git_root", str(tmp_path))
+    await init_db()
+
+    async with AsyncSessionLocal() as session:
+        user = await session.scalar(select(User).where(User.email == "admin@local.dev"))
+        registry = AgentToolRegistry(session, user, {"screen": "ai-agent"})
+        status = await registry.execute("run_git_command", {"command": "git status --short"})
+        outside_scope = await registry.execute("run_git_command", {"command": "git -C / status"})
+
+    assert status.tool_name == "GitTool"
+    assert status.status == "success"
+    assert status.output["repository"] == str(tmp_path.resolve())
+    assert status.output["returncode"] == 0
+    assert outside_scope.status == "error"
+    assert "-C" in outside_scope.output["error"]
 
 
 @pytest.mark.asyncio

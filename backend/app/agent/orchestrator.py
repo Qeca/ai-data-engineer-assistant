@@ -279,6 +279,7 @@ class AgentOrchestrator:
             "После записи DAG запускай check_airflow_dag_sandbox, после записи Spark-скрипта run_spark_script_sandbox. "
             "Для отладки существующих DAG/скриптов используй sandbox tools, а не просто текстовый совет. "
             "Для истории и версий артефактов вызывай list_artifact_versions; версии ведутся в Git. "
+            "Для прямой работы с Git вызывай run_git_command и передавай полную команду вида git status --short, git diff или git log --oneline -n 5. "
             "Пользователь не имеет прямого доступа к внутреннему workspace и путям вида /workspace/...; показывай код, логи и результаты в ответе или UI, а не отправляй пользователя открывать такие файлы самому. "
             "Для управления интерфейсом вызывай navigate_site. "
             "Перед SQL учитывай description инструмента execute_sql: там указан текущий SQL dialect. "

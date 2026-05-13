@@ -310,7 +310,7 @@ export function AgentScreen() {
         </div>
         <div className="card-body" style={{ borderTop: "1px solid var(--border-subtle)" }}>
           <div className="stat-label" style={{ marginBottom: 8 }}>Tools</div>
-          {["SiteStatusTool", "SiteControlTool", "SQLTool", "CatalogTool", "DatabaseConnectionTool", "AirflowTool", "SparkTool"].map((tool) => (
+          {["SiteStatusTool", "SiteControlTool", "SQLTool", "CatalogTool", "DatabaseConnectionTool", "AirflowTool", "SparkTool", "GitTool"].map((tool) => (
             <div key={tool} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 7 }}>
               <Badge status="success">ready</Badge>
               <span className="mono">{tool}</span>
@@ -665,6 +665,9 @@ function activitySummary(message: ChatMessage, tool?: ToolCall): string {
   }
   if (typeof output.status === "string") {
     return `Статус: ${output.status}.`;
+  }
+  if (typeof output.command === "string" && typeof output.returncode === "number") {
+    return `Git command: ${output.command}, код ${output.returncode}.`;
   }
   return "Результат получен и передан модели.";
 }

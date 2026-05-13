@@ -1,5 +1,9 @@
+import asyncio
 import json
+import shlex
+import subprocess
 import time
+from pathlib import Path
 from typing import Any
 
 from sqlalchemy import select
@@ -49,6 +53,7 @@ class AgentToolRegistry:
             "run_spark_script_sandbox",
             "run_python_script_sandbox",
             "list_artifact_versions",
+            "run_git_command",
         ],
     }
 
@@ -373,6 +378,17 @@ class AgentToolRegistry:
                 },
                 ["artifact_type", "artifact_name"],
             ),
+            self._spec(
+                "run_git_command",
+                "Run a Git command in the artifact Git workspace. Pass a command starting with git, for example: git status --short, git diff, git log --oneline -n 5, git show <sha>. The backend scopes execution to the artifact Git repository and does not use a shell.",
+                {
+                    "command": {
+                        "type": "string",
+                        "description": "Full Git command to run in the artifact Git workspace.",
+                    }
+                },
+                ["command"],
+            ),
         ]
 
     async def execute(self, name: str, args: dict[str, Any]) -> ToolExecution:
@@ -509,6 +525,8 @@ class AgentToolRegistry:
             if artifact_type == "all":
                 artifact_type = None
             return await self.list_artifact_versions(artifact_type, args["artifact_name"] or None)
+        if name == "run_git_command":
+            return await self.run_git_command(args["command"])
 
         return ToolExecution(
             tool_name=name,
@@ -576,6 +594,7 @@ class AgentToolRegistry:
                 "run_spark_script_sandbox",
                 "run_python_script_sandbox",
                 "list_artifact_versions",
+                "run_git_command",
             ],
             "versioning": {
                 "git_enabled": settings.artifact_git_enabled,
@@ -993,6 +1012,48 @@ class AgentToolRegistry:
                 exc,
             )
 
+    async def run_git_command(self, command: str) -> ToolExecution:
+        started = time.perf_counter()
+        root = Path(settings.artifact_git_root or settings.artifact_root).resolve()
+        try:
+            argv = self._git_argv(command)
+            run_argv = self._git_run_argv(argv)
+            root.mkdir(parents=True, exist_ok=True)
+            if not (root / ".git").exists():
+                await asyncio.to_thread(
+                    subprocess.run,
+                    ["git", "-C", str(root), "init"],
+                    text=True,
+                    capture_output=True,
+                    timeout=15,
+                    check=False,
+                )
+
+            result = await asyncio.to_thread(
+                subprocess.run,
+                ["git", "-C", str(root), *run_argv],
+                text=True,
+                capture_output=True,
+                timeout=30,
+                check=False,
+            )
+            return ToolExecution(
+                tool_name="GitTool",
+                status="success" if result.returncode == 0 else "error",
+                input={"command": command, "repository": str(root)},
+                output={
+                    "repository": str(root),
+                    "command": command,
+                    "returncode": result.returncode,
+                    "stdout": self._truncate_text(result.stdout),
+                    "stderr": self._truncate_text(result.stderr),
+                },
+                latency_ms=self._elapsed_ms(started),
+                error=self._truncate_text(result.stderr) if result.returncode != 0 else None,
+            )
+        except Exception as exc:
+            return self.error_execution("GitTool", {"command": command, "repository": str(root)}, started, exc)
+
     def tool_output_for_model(self, execution: ToolExecution) -> str:
         return json.dumps(
             {
@@ -1044,6 +1105,70 @@ class AgentToolRegistry:
             },
             "strict": True,
         }
+
+    @staticmethod
+    def _git_argv(command: str) -> list[str]:
+        parts = shlex.split(command)
+        if not parts or parts[0] != "git":
+            raise ValueError("Git command must start with git")
+        args = parts[1:]
+        if not args:
+            raise ValueError("Git command must include a subcommand")
+        if "-C" in args or any(arg.startswith("--git-dir") or arg.startswith("--work-tree") for arg in args):
+            raise ValueError("Git command is scoped by the backend; do not pass -C, --git-dir, or --work-tree")
+
+        subcommand = AgentToolRegistry._git_subcommand(args)
+        safe_subcommands = {
+            "add",
+            "branch",
+            "commit",
+            "diff",
+            "init",
+            "log",
+            "ls-files",
+            "rev-parse",
+            "show",
+            "status",
+            "tag",
+        }
+        if subcommand not in safe_subcommands:
+            raise ValueError(f"Unsupported git subcommand for agent tool: {subcommand}")
+        return args
+
+    @staticmethod
+    def _git_run_argv(args: list[str]) -> list[str]:
+        if AgentToolRegistry._git_subcommand(args) != "commit":
+            return args
+        return [
+            "-c",
+            "user.name=AI Data Engineer Agent",
+            "-c",
+            "user.email=agent@local.dev",
+            *args,
+        ]
+
+    @staticmethod
+    def _git_subcommand(args: list[str]) -> str:
+        index = 0
+        while index < len(args):
+            arg = args[index]
+            if arg in {"--no-pager", "--paginate"}:
+                index += 1
+                continue
+            if arg == "-c":
+                index += 2
+                continue
+            if arg.startswith("-"):
+                index += 1
+                continue
+            return arg
+        raise ValueError("Git command must include a subcommand")
+
+    @staticmethod
+    def _truncate_text(value: str, limit: int = 12000) -> str:
+        if len(value) <= limit:
+            return value
+        return f"{value[:limit]}\n... truncated"
 
     def error_execution(
         self,
