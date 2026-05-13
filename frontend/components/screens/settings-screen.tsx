@@ -4,6 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { FormEvent, useState } from "react";
 import { api } from "@/lib/api";
 import { useAppStore } from "@/lib/store";
+import { DatabaseConnectionsPanel } from "@/components/database-connections-panel";
 import { Badge, Card } from "@/components/ui";
 
 export function SettingsScreen() {
@@ -98,6 +99,9 @@ export function SettingsScreen() {
             </div>
           </div>
         </Card>
+      </div>
+      <div style={{ marginTop: 14 }}>
+        <DatabaseConnectionsPanel />
       </div>
     </div>
   );

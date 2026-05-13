@@ -425,6 +425,50 @@ body {
   overflow: auto;
 }
 
+.connection-form {
+  display: grid;
+  grid-template-columns: minmax(150px, 1.5fr) 130px minmax(140px, 1.2fr) 90px minmax(120px, 1fr) minmax(110px, 1fr) minmax(110px, 1fr) 110px auto;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.connection-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.connection-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 11px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--bg-elevated);
+}
+
+.connection-main {
+  min-width: 0;
+  flex: 1;
+}
+
+.connection-title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-wrap: wrap;
+  font-weight: 650;
+}
+
+.connection-meta {
+  margin-top: 4px;
+  color: var(--text-tertiary);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  overflow-wrap: anywhere;
+}
+
 .data-table {
   width: 100%;
   border-collapse: collapse;
@@ -535,6 +579,16 @@ body {
   flex-direction: row-reverse;
 }
 
+.chat-msg.tool .avatar {
+  background: var(--bg-active);
+  color: var(--text-code);
+}
+
+.chat-msg.tool .bubble {
+  max-width: min(680px, 72vw);
+  background: var(--bg-surface);
+}
+
 .avatar {
   width: 28px;
   height: 28px;
@@ -614,6 +668,31 @@ body {
   font-size: 10px;
   font-weight: 750;
   text-transform: uppercase;
+}
+
+.tool-output {
+  margin-top: 9px;
+}
+
+.tool-output summary {
+  cursor: pointer;
+  color: var(--text-tertiary);
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.tool-output pre {
+  max-height: 260px;
+  overflow: auto;
+  margin: 7px 0 0;
+  padding: 9px 10px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--bg-base);
+  color: var(--text-code);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.45;
 }
 
 .chat-msg.user .bubble {
@@ -713,6 +792,10 @@ body {
   .grid-4,
   .grid-3,
   .grid-2 {
+    grid-template-columns: 1fr;
+  }
+
+  .connection-form {
     grid-template-columns: 1fr;
   }
 

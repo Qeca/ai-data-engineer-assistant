@@ -1,9 +1,14 @@
+import json
+
+from httpx import ASGITransport, AsyncClient
 import pytest
 from sqlalchemy import select
 
 from app.agent.orchestrator import AgentOrchestrator
+from app.api.routes import agent as agent_route
 from app.core.config import settings
 from app.db.session import AsyncSessionLocal, init_db
+from app.main import app
 from app.models import User
 
 
@@ -82,6 +87,39 @@ async def test_openai_function_calling_can_control_site():
         {"type": "navigate", "screen": "spark"},
         {"type": "toast", "message": "Открываю экран spark"},
     ]
+
+
+@pytest.mark.asyncio
+async def test_agent_stream_emits_intermediate_tool_events(monkeypatch):
+    monkeypatch.setattr(settings, "llm_provider", "openai")
+    monkeypatch.setattr(agent_route.orchestrator, "openai", FakeOpenAIClient())
+    await init_db()
+    transport = ASGITransport(app=app)
+
+    async with AsyncClient(transport=transport, base_url="http://test") as client:
+        login = await client.post(
+            "/auth/login",
+            json={"email": "admin@local.dev", "password": "admin"},
+        )
+        token = login.json()["access_token"]
+        async with client.stream(
+            "POST",
+            "/agent/query/stream",
+            headers={"Authorization": f"Bearer {token}"},
+            json={"query": "Открой Spark", "app_state": {"screen": "ai-agent"}},
+        ) as response:
+            assert response.status_code == 200
+            events = [json.loads(line) async for line in response.aiter_lines() if line]
+
+    assert [event["type"] for event in events] == [
+        "session",
+        "tool_call_start",
+        "tool_call_result",
+        "final",
+    ]
+    assert events[1]["tool_name"] == "navigate_site"
+    assert events[2]["tool_call"]["tool_name"] == "SiteControlTool"
+    assert events[3]["response"]["answer"] == "Открыл Spark экран через function call."
 
 
 @pytest.mark.asyncio

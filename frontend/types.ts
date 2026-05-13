@@ -30,6 +30,13 @@ export type AgentResponse = {
   ui_actions: UiAction[];
 };
 
+export type AgentStreamEvent =
+  | { type: "session"; session_id: string }
+  | { type: "tool_call_start"; tool_name: string; arguments: Record<string, unknown> }
+  | { type: "tool_call_result"; tool_call: ToolCall & { ui_actions?: UiAction[] } }
+  | { type: "final"; response: AgentResponse }
+  | { type: "error"; error: string };
+
 export type AgentSession = {
   id: string;
   title: string;
@@ -62,6 +69,46 @@ export type CatalogTable = {
   name: string;
   type: string;
   columns: { name: string; type: string; nullable: boolean }[];
+};
+
+export type DatabaseEngine = "postgresql" | "mysql" | "clickhouse" | "mongodb" | "redis";
+
+export type DatabaseConnection = {
+  id: string;
+  name: string;
+  engine: DatabaseEngine;
+  host: string;
+  port: number;
+  database?: string | null;
+  username?: string | null;
+  options_json?: Record<string, unknown> | null;
+  visibility: "private" | "shared";
+  owner_user_id?: string | null;
+  status: "unknown" | "online" | "offline";
+  last_error?: string | null;
+  last_tested_at?: string | null;
+  created_at: string;
+  updated_at: string;
+  has_password: boolean;
+};
+
+export type DatabaseConnectionPayload = {
+  name: string;
+  engine: DatabaseEngine;
+  host: string;
+  port: number;
+  database?: string | null;
+  username?: string | null;
+  password?: string | null;
+  options?: Record<string, unknown>;
+  visibility: "private" | "shared";
+};
+
+export type DatabaseConnectionTest = {
+  connection_id: string;
+  status: "online" | "offline";
+  latency_ms: number;
+  error?: string | null;
 };
 
 export type Pipeline = {

@@ -15,6 +15,104 @@ services:
       timeout: 5s
       retries: 5
 
+  demo-postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: analytics
+      POSTGRES_USER: demo
+      POSTGRES_PASSWORD: demo
+    ports:
+      - "${DEMO_POSTGRES_PORT:-15433}:5432"
+    volumes:
+      - ./infra/demo-dbs/postgres:/docker-entrypoint-initdb.d:ro
+      - demo-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U demo -d analytics"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  demo-mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: analytics
+      MYSQL_USER: demo
+      MYSQL_PASSWORD: demo
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "${DEMO_MYSQL_PORT:-13306}:3306"
+    volumes:
+      - ./infra/demo-dbs/mysql:/docker-entrypoint-initdb.d:ro
+      - demo-mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u demo -pdemo"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  demo-clickhouse:
+    image: clickhouse/clickhouse-server:24.8
+    environment:
+      CLICKHOUSE_DB: analytics
+      CLICKHOUSE_USER: demo
+      CLICKHOUSE_PASSWORD: demo
+      CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: "1"
+    ports:
+      - "${DEMO_CLICKHOUSE_HTTP_PORT:-18123}:8123"
+      - "${DEMO_CLICKHOUSE_NATIVE_PORT:-19000}:9000"
+    volumes:
+      - ./infra/demo-dbs/clickhouse:/docker-entrypoint-initdb.d:ro
+      - demo-clickhouse-data:/var/lib/clickhouse
+    healthcheck:
+      test: ["CMD", "clickhouse-client", "--user", "demo", "--password", "demo", "--query", "SELECT 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  demo-mongo:
+    image: mongo:7
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_INITDB_DATABASE: analytics
+    ports:
+      - "${DEMO_MONGO_PORT:-27018}:27017"
+    volumes:
+      - ./infra/demo-dbs/mongo:/docker-entrypoint-initdb.d:ro
+      - demo-mongo-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  demo-redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--requirepass", "demo"]
+    ports:
+      - "${DEMO_REDIS_PORT:-16379}:6379"
+    volumes:
+      - demo-redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "demo", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  demo-redis-seed:
+    image: redis:7-alpine
+    depends_on:
+      demo-redis:
+        condition: service_healthy
+    command:
+      - sh
+      - -c
+      - |
+        redis-cli -h demo-redis -a demo SET feature:checkout_conversion 0.184
+        redis-cli -h demo-redis -a demo HSET realtime:orders today 1280 paid 1179 cancelled 101
+        redis-cli -h demo-redis -a demo SADD active_segments retail b2b vip
+        redis-cli -h demo-redis -a demo LPUSH recent_events checkout search add_to_cart page_view
+
   backend:
     build:
       context: ./backend
@@ -196,5 +294,10 @@ services:
 
 volumes:
   postgres-data:
+  demo-postgres-data:
+  demo-mysql-data:
+  demo-clickhouse-data:
+  demo-mongo-data:
+  demo-redis-data:
   airflow-postgres-data:
   airflow-logs:

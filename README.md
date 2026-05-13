@@ -10,7 +10,8 @@ Fullstack-приложение для data engineering workflows: AI-агент 
 - SQL Workspace с read-only выполнением запросов и инспекцией схемы.
 - Airflow orchestration: просмотр DAG, запуск DAG runs, управление пайплайнами.
 - Spark jobs: отправка задач, проверка статуса и вывод результата.
-- Catalog и Connections для обзора доступных таблиц, продуктов и MCP tools.
+- Catalog и Connections для обзора доступных таблиц, продуктов, MCP tools и подключений к БД.
+- Demo DB stack для проверки подключений: PostgreSQL, MySQL, ClickHouse, MongoDB и Redis.
 - Artifact workflow: генерация DAG/PySpark-скриптов, syntax validation, Git-версии.
 - Docker sandbox для проверки Python, Airflow DAG и Spark scripts по пользователям.
 - Auth, роли пользователей, история сессий, сообщения и tool runs.
@@ -21,7 +22,7 @@ Fullstack-приложение для data engineering workflows: AI-агент 
 - `backend/` — FastAPI, Pydantic v2, SQLAlchemy async, JWT, OpenAI Responses function calling или OpenRouter chat tool calling, Langfuse tracing adapter.
 - `infra/` — sample Airflow DAGs, Spark job и sandbox-сервис для запуска/проверки агентских скриптов.
 - `docs/` — описание дипломной работы и проектные материалы.
-- `docker-compose.yml` — PostgreSQL, backend, frontend, Airflow webserver/scheduler, Spark master/worker, optional agent debugger.
+- `docker-compose.yml` — PostgreSQL, demo DB stack, backend, frontend, Airflow webserver/scheduler, Spark master/worker, optional agent debugger.
 
 ## Архитектура
 
@@ -32,6 +33,7 @@ User
   -> LangGraph agent orchestrator
   -> Tool registry
      -> SQL / Catalog
+     -> Database connections
      -> Airflow
      -> Spark
      -> MCP integrations
@@ -106,9 +108,16 @@ docker compose --profile debug up --build agent-debugger
 - Airflow: `http://localhost:8080` (`airflow` / `airflow`)
 - Spark master UI: `http://localhost:8081`
 - Agent debugger: `http://localhost:${AGENT_DEBUGGER_PORT:-8090}` при profile `debug`
+- Demo PostgreSQL: `localhost:15433` (`demo` / `demo`, database `analytics`)
+- Demo MySQL: `localhost:13306` (`demo` / `demo`, database `analytics`)
+- Demo ClickHouse HTTP/native: `localhost:18123` / `localhost:19000` (`demo` / `demo`, database `analytics`)
+- Demo MongoDB: `localhost:27018` (`demo` / `demo`, database `analytics`)
+- Demo Redis: `localhost:16379` (password `demo`)
 
 Backend CORS автоматически включает `localhost` и `127.0.0.1` для `FRONTEND_PORT`, плюс стандартные `3000` и `3002`.
 Frontend по умолчанию обращается к backend через same-origin proxy `/api/backend/*`, поэтому браузеру не нужен прямой CORS-доступ к backend-порту.
+
+Backend автоматически создает `shared` подключения к этим demo DB. Агент видит их через tool `list_database_connections`, может создавать/обновлять подключения через `upsert_database_connection` и проверять доступность через `test_database_connection`; изменения появляются на экранах Settings и Connections.
 
 ## Проверки
 

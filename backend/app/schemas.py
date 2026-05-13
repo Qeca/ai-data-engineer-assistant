@@ -43,6 +43,62 @@ class UserUpdate(BaseModel):
     status: Literal["active", "invited", "disabled"] | None = None
 
 
+DatabaseEngine = Literal["postgresql", "mysql", "clickhouse", "mongodb", "redis"]
+ConnectionVisibility = Literal["private", "shared"]
+
+
+class DatabaseConnectionRead(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: str
+    name: str
+    engine: DatabaseEngine
+    host: str
+    port: int
+    database: str | None = None
+    username: str | None = None
+    options_json: dict[str, Any] | None = None
+    visibility: ConnectionVisibility
+    owner_user_id: str | None = None
+    status: Literal["unknown", "online", "offline"]
+    last_error: str | None = None
+    last_tested_at: datetime | None = None
+    created_at: datetime
+    updated_at: datetime
+    has_password: bool = False
+
+
+class DatabaseConnectionCreate(BaseModel):
+    name: str = Field(min_length=2, max_length=255)
+    engine: DatabaseEngine
+    host: str = Field(min_length=1, max_length=255)
+    port: int = Field(ge=1, le=65535)
+    database: str | None = None
+    username: str | None = None
+    password: str | None = None
+    options: dict[str, Any] = Field(default_factory=dict)
+    visibility: ConnectionVisibility = "private"
+
+
+class DatabaseConnectionUpdate(BaseModel):
+    name: str | None = Field(default=None, min_length=2, max_length=255)
+    engine: DatabaseEngine | None = None
+    host: str | None = Field(default=None, min_length=1, max_length=255)
+    port: int | None = Field(default=None, ge=1, le=65535)
+    database: str | None = None
+    username: str | None = None
+    password: str | None = None
+    options: dict[str, Any] | None = None
+    visibility: ConnectionVisibility | None = None
+
+
+class DatabaseConnectionTestRead(BaseModel):
+    connection_id: str
+    status: Literal["online", "offline"]
+    latency_ms: int
+    error: str | None = None
+
+
 class AgentQueryRequest(BaseModel):
     query: str = Field(min_length=1)
     session_id: str | None = None

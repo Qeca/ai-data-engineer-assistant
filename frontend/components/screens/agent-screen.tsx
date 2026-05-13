@@ -7,15 +7,16 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { api } from "@/lib/api";
 import { useAppStore, type Screen } from "@/lib/store";
-import type { AgentMessage, ToolCall, UiAction } from "@/types";
+import type { AgentMessage, AgentStreamEvent, ToolCall, UiAction } from "@/types";
 import { Badge } from "@/components/ui";
 
 type ChatMessage = {
-  role: "user" | "assistant";
+  role: "user" | "assistant" | "tool";
   content: string;
   intent?: string;
   tools?: ToolCall[];
   uiActions?: UiAction[];
+  toolOutput?: Record<string, unknown>;
 };
 
 const starter: ChatMessage[] = [
@@ -55,25 +56,19 @@ export function AgentScreen() {
 
   const ask = useMutation({
     mutationFn: (query: string) =>
-      api.agentQuery(token ?? "", query, sessionId, {
-        screen,
-        user,
-        visible_panels: ["navigation", "chat", "tools"],
-      }),
-    onSuccess: (result) => {
-      setSessionId(result.session_id);
-      applyUiActions(result.ui_actions);
-      queryClient.invalidateQueries({ queryKey: ["agent-sessions"] });
-      setMessages((current) => [
-        ...current,
+      api.agentQueryStream(
+        token ?? "",
+        query,
+        sessionId,
         {
-          role: "assistant",
-          content: result.answer,
-          intent: result.intent,
-          tools: result.tool_calls,
-          uiActions: result.ui_actions,
+          screen,
+          user,
+          visible_panels: ["navigation", "chat", "tools"],
         },
-      ]);
+        handleStreamEvent,
+      ),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["agent-sessions"] });
     },
   });
 
@@ -100,6 +95,67 @@ export function AgentScreen() {
       if (action.type === "navigate" && typeof action.screen === "string") {
         setScreen(action.screen as Screen);
       }
+      if (action.type === "refresh_connections") {
+        queryClient.invalidateQueries({ queryKey: ["database-connections"] });
+      }
+    }
+  }
+
+  function handleStreamEvent(event: AgentStreamEvent) {
+    if (event.type === "session") {
+      setSessionId(event.session_id);
+      return;
+    }
+
+    if (event.type === "tool_call_start") {
+      setMessages((current) => [
+        ...current,
+        {
+          role: "tool",
+          content: `Запускаю \`${event.tool_name}\``,
+          intent: "tool-start",
+          toolOutput: event.arguments,
+        },
+      ]);
+      return;
+    }
+
+    if (event.type === "tool_call_result") {
+      const toolCall = event.tool_call;
+      applyUiActions(toolCall.ui_actions ?? []);
+      setMessages((current) => [
+        ...current,
+        {
+          role: "tool",
+          content: summarizeToolCall(toolCall),
+          intent: "tool-result",
+          tools: [toolCall],
+          toolOutput: toolCall.output,
+        },
+      ]);
+      return;
+    }
+
+    if (event.type === "final") {
+      const result = event.response;
+      setSessionId(result.session_id);
+      applyUiActions(result.ui_actions);
+      queryClient.invalidateQueries({ queryKey: ["agent-sessions"] });
+      setMessages((current) => [
+        ...current,
+        {
+          role: "assistant",
+          content: result.answer,
+          intent: result.intent,
+          tools: result.tool_calls,
+          uiActions: result.ui_actions,
+        },
+      ]);
+      return;
+    }
+
+    if (event.type === "error") {
+      setMessages((current) => [...current, { role: "assistant", content: event.error, intent: "agent-error" }]);
     }
   }
 
@@ -132,7 +188,7 @@ export function AgentScreen() {
         </div>
         <div className="card-body" style={{ borderTop: "1px solid var(--border-subtle)" }}>
           <div className="stat-label" style={{ marginBottom: 8 }}>Tools</div>
-          {["SiteStatusTool", "SiteControlTool", "SQLTool", "CatalogTool", "AirflowTool", "SparkTool"].map((tool) => (
+          {["SiteStatusTool", "SiteControlTool", "SQLTool", "CatalogTool", "DatabaseConnectionTool", "AirflowTool", "SparkTool"].map((tool) => (
             <div key={tool} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 7 }}>
               <Badge status="success">ready</Badge>
               <span className="mono">{tool}</span>
@@ -144,9 +200,9 @@ export function AgentScreen() {
       <section className="work-area">
         <div className="chat-list">
           {messages.map((message, index) => (
-            <div className={`chat-msg ${message.role === "user" ? "user" : ""}`} key={`${message.role}-${index}`}>
+            <div className={`chat-msg ${message.role === "user" ? "user" : ""} ${message.role === "tool" ? "tool" : ""}`} key={`${message.role}-${index}`}>
               <div className={`avatar ${message.role === "assistant" ? "ai" : ""}`}>
-                {message.role === "assistant" ? "AI" : "YOU"}
+                {message.role === "assistant" ? "AI" : message.role === "tool" ? "TOOL" : "YOU"}
               </div>
               <div className="bubble">
                 {message.role === "assistant" ? (
@@ -168,6 +224,12 @@ export function AgentScreen() {
                       </span>
                     ))}
                   </div>
+                )}
+                {message.toolOutput && (
+                  <details className="tool-output" open>
+                    <summary>result</summary>
+                    <pre>{formatToolOutput(message.toolOutput)}</pre>
+                  </details>
                 )}
               </div>
             </div>
@@ -208,4 +270,15 @@ function toChatMessage(message: AgentMessage): ChatMessage {
     content: message.content,
     intent,
   };
+}
+
+function summarizeToolCall(toolCall: ToolCall): string {
+  const state = toolCall.status === "success" ? "готов" : "ошибка";
+  return `\`${toolCall.tool_name}\` ${state} за ${toolCall.latency_ms}ms`;
+}
+
+function formatToolOutput(output: Record<string, unknown>): string {
+  const text = JSON.stringify(output, null, 2);
+  if (text.length <= 3000) return text;
+  return `${text.slice(0, 3000)}\n... truncated`;
 }

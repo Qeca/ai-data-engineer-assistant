@@ -8,6 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.config import settings
 from app.models import SparkJob, User
 from app.services.artifacts import ArtifactService
+from app.services.connections import DatabaseConnectionService
 from app.services.debug_sandbox import DebugSandboxClient
 from app.services.external_mcp import ExternalMCPGateway
 from app.tools.airflow import AirflowTool
@@ -20,7 +21,14 @@ from app.tools.sql import SQLTool
 class AgentToolRegistry:
     product_tool_names: dict[str, list[str]] = {
         "site": ["list_site_status", "navigate_site"],
-        "database": ["execute_sql", "list_catalog", "inspect_database"],
+        "database": [
+            "execute_sql",
+            "list_catalog",
+            "inspect_database",
+            "list_database_connections",
+            "upsert_database_connection",
+            "test_database_connection",
+        ],
         "airflow": [
             "list_pipelines",
             "manage_airflow_dags",
@@ -50,6 +58,7 @@ class AgentToolRegistry:
         self.app_state = app_state or {}
         self.sql = SQLTool()
         self.catalog = CatalogTool()
+        self.connections = DatabaseConnectionService()
         self.airflow = AirflowTool()
         self.spark = SparkTool()
         self.artifacts = ArtifactService()
@@ -143,6 +152,58 @@ class AgentToolRegistry:
                     }
                 },
                 ["sample_limit"],
+            ),
+            self._spec(
+                "list_database_connections",
+                "List database connections visible to the current user. Use this before answering what DBs are connected or before changing DB connection settings.",
+                {},
+                [],
+            ),
+            self._spec(
+                "upsert_database_connection",
+                "Create or update a database connection so it appears in Settings and Connections. Admin and engineer roles can configure connections; analyst can only view.",
+                {
+                    "connection_id": {
+                        "type": "string",
+                        "description": "Existing connection id to update, or empty string to upsert by name.",
+                    },
+                    "name": {"type": "string", "description": "Human-readable connection name."},
+                    "engine": {
+                        "type": "string",
+                        "enum": ["postgresql", "mysql", "clickhouse", "mongodb", "redis"],
+                    },
+                    "host": {"type": "string", "description": "Backend/container reachable host."},
+                    "port": {"type": "integer", "minimum": 1, "maximum": 65535},
+                    "database": {"type": "string", "description": "Database/schema name, or empty for Redis."},
+                    "username": {"type": "string", "description": "Username, or empty if not needed."},
+                    "password": {"type": "string", "description": "Password, or empty string to keep existing password."},
+                    "visibility": {"type": "string", "enum": ["private", "shared"]},
+                    "options": {
+                        "type": "object",
+                        "description": "Extra settings such as public_host, public_port, sslmode, schema, warehouse.",
+                    },
+                },
+                [
+                    "connection_id",
+                    "name",
+                    "engine",
+                    "host",
+                    "port",
+                    "database",
+                    "username",
+                    "password",
+                    "visibility",
+                    "options",
+                ],
+            ),
+            self._spec(
+                "test_database_connection",
+                "Check whether a database connection endpoint is reachable from the backend network and persist its status.",
+                {
+                    "connection_id": {"type": "string", "description": "Connection id, or empty string to search by name."},
+                    "name": {"type": "string", "description": "Connection name if connection_id is empty."},
+                },
+                ["connection_id", "name"],
             ),
             self._spec(
                 "list_pipelines",
@@ -337,6 +398,12 @@ class AgentToolRegistry:
             return await self.external_mcp.call_tool(args["product"], args["tool_name"], args["arguments"])
         if name == "inspect_database":
             return await self.catalog.inspect_database(self.db, int(args["sample_limit"]))
+        if name == "list_database_connections":
+            return await self.list_database_connections()
+        if name == "upsert_database_connection":
+            return await self.upsert_database_connection(args)
+        if name == "test_database_connection":
+            return await self.test_database_connection(args["connection_id"], args["name"])
         if name == "list_pipelines":
             return await self.airflow.execute(self.db, dag_id="", action="list")
         if name == "manage_airflow_dags":
@@ -456,6 +523,7 @@ class AgentToolRegistry:
         started = time.perf_counter()
         pipelines = await self.airflow.list_pipelines(self.db)
         tables = await self.catalog.list_tables(self.db)
+        database_connections = await self.connections.list_visible(self.db, self.user)
         spark_rows = await self.db.scalars(select(SparkJob).order_by(SparkJob.created_at.desc()).limit(10))
         spark_jobs = [
             {
@@ -480,9 +548,15 @@ class AgentToolRegistry:
                 "table_count": len(tables),
                 "tables": [table.name for table in tables],
             },
+            "database_connections": [
+                self.connections.serialize_for_tool(connection) for connection in database_connections
+            ],
             "capabilities": [
                 "navigate_site",
                 "execute_sql",
+                "list_database_connections",
+                "upsert_database_connection",
+                "test_database_connection",
                 "trigger_airflow_dag",
                 "submit_spark_job",
                 "list_catalog",
@@ -521,6 +595,79 @@ class AgentToolRegistry:
             latency_ms=self._elapsed_ms(started),
         )
 
+    async def list_database_connections(self) -> ToolExecution:
+        started = time.perf_counter()
+        try:
+            connections = await self.connections.list_visible(self.db, self.user)
+            return ToolExecution(
+                tool_name="DatabaseConnectionTool",
+                status="success",
+                input={},
+                output={
+                    "connections": [
+                        self.connections.serialize_for_tool(connection) for connection in connections
+                    ]
+                },
+                latency_ms=self._elapsed_ms(started),
+            )
+        except Exception as exc:
+            return self.error_execution("DatabaseConnectionTool", {}, started, exc)
+
+    async def upsert_database_connection(self, args: dict[str, Any]) -> ToolExecution:
+        started = time.perf_counter()
+        payload = self._connection_payload(args)
+        try:
+            connection = await self.connections.upsert(self.db, self.user, payload)
+            return ToolExecution(
+                tool_name="DatabaseConnectionTool",
+                status="success",
+                input={key: value for key, value in payload.items() if key != "password"},
+                output={"connection": self.connections.serialize_for_tool(connection)},
+                latency_ms=self._elapsed_ms(started),
+                metadata={
+                    "ui_actions": [
+                        {"type": "refresh_connections"},
+                        {"type": "toast", "message": f"Подключение {connection.name} сохранено"},
+                    ]
+                },
+            )
+        except Exception as exc:
+            return self.error_execution(
+                "DatabaseConnectionTool",
+                {key: value for key, value in payload.items() if key != "password"},
+                started,
+                exc,
+            )
+
+    async def test_database_connection(self, connection_id: str, name: str) -> ToolExecution:
+        started = time.perf_counter()
+        args = {"connection_id": connection_id, "name": name}
+        try:
+            connection = None
+            if connection_id:
+                connection = await self.connections.get_visible(self.db, self.user, connection_id)
+            if connection is None and name:
+                connection = await self.connections.find_visible_by_name(self.db, self.user, name)
+            if connection is None:
+                raise LookupError("Database connection not found")
+
+            result = await self.connections.test_connection(self.db, connection)
+            status = "success" if result["status"] == "online" else "error"
+            return ToolExecution(
+                tool_name="DatabaseConnectionTool",
+                status=status,
+                input=args,
+                output={
+                    **result,
+                    "connection": self.connections.serialize_for_tool(connection),
+                },
+                latency_ms=self._elapsed_ms(started),
+                error=result["error"] if status == "error" else None,
+                metadata={"ui_actions": [{"type": "refresh_connections"}]},
+            )
+        except Exception as exc:
+            return self.error_execution("DatabaseConnectionTool", args, started, exc)
+
     def navigate_site(self, screen: str) -> ToolExecution:
         return ToolExecution(
             tool_name="SiteControlTool",
@@ -535,6 +682,27 @@ class AgentToolRegistry:
                 ]
             },
         )
+
+    @staticmethod
+    def _connection_payload(args: dict[str, Any]) -> dict[str, Any]:
+        payload: dict[str, Any] = {
+            "name": args["name"],
+            "engine": args["engine"],
+            "host": args["host"],
+            "port": int(args["port"]),
+            "visibility": args["visibility"],
+            "options": args.get("options") or {},
+        }
+        for source_key, target_key in [
+            ("connection_id", "id"),
+            ("database", "database"),
+            ("username", "username"),
+            ("password", "password"),
+        ]:
+            value = args.get(source_key)
+            if value not in (None, ""):
+                payload[target_key] = value
+        return payload
 
     def read_runtime_artifact(self, artifact_type: str, name: str, tool_name: str) -> ToolExecution:
         started = time.perf_counter()

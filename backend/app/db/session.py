@@ -9,6 +9,7 @@ from app.core.config import settings
 from app.core.security import hash_password
 from app.db.base import Base
 from app.models import User
+from app.services.connections import DatabaseConnectionService
 
 
 connect_args = {"check_same_thread": False} if settings.database_url.startswith("sqlite") else {}
@@ -74,6 +75,7 @@ async def init_db() -> None:
 
     async with AsyncSessionLocal() as session:
         await seed_admin(session)
+        await DatabaseConnectionService().seed_demo_connections(session)
         await seed_demo_data(session)
 
 

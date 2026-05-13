@@ -2,10 +2,14 @@ import type {
   AgentMessage,
   AgentResponse,
   AgentSession,
+  AgentStreamEvent,
   AirflowTaskInstance,
   AirflowRun,
   AirflowTaskLog,
   CatalogTable,
+  DatabaseConnection,
+  DatabaseConnectionPayload,
+  DatabaseConnectionTest,
   Pipeline,
   SparkJob,
   SqlResult,
@@ -45,6 +49,68 @@ async function request<T>(path: string, options: ApiOptions = {}): Promise<T> {
   return response.json() as Promise<T>;
 }
 
+async function requestStream<T>(
+  path: string,
+  options: ApiOptions,
+  onEvent: (event: AgentStreamEvent) => void,
+): Promise<T> {
+  const headers = new Headers(options.headers);
+  headers.set("Content-Type", "application/json");
+  if (options.token) {
+    headers.set("Authorization", `Bearer ${options.token}`);
+  }
+
+  const response = await fetch(`${API_URL}${path}`, {
+    ...options,
+    headers,
+  });
+
+  if (!response.ok || !response.body) {
+    throw new Error(response.statusText || "Stream request failed");
+  }
+
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = "";
+  let finalValue: T | null = null;
+
+  while (true) {
+    const { value, done } = await reader.read();
+    if (done) break;
+    buffer += decoder.decode(value, { stream: true });
+    const lines = buffer.split("\n");
+    buffer = lines.pop() ?? "";
+
+    for (const line of lines) {
+      if (!line.trim()) continue;
+      const event = JSON.parse(line) as AgentStreamEvent;
+      onEvent(event);
+      if (event.type === "final") {
+        finalValue = event.response as T;
+      }
+      if (event.type === "error") {
+        throw new Error(event.error);
+      }
+    }
+  }
+
+  if (buffer.trim()) {
+    const event = JSON.parse(buffer) as AgentStreamEvent;
+    onEvent(event);
+    if (event.type === "final") {
+      finalValue = event.response as T;
+    }
+    if (event.type === "error") {
+      throw new Error(event.error);
+    }
+  }
+
+  if (!finalValue) {
+    throw new Error("Agent stream finished without final response");
+  }
+  return finalValue;
+}
+
 export const api = {
   login: (email: string, password: string) =>
     request<TokenPair>("/auth/login", {
@@ -70,6 +136,22 @@ export const api = {
       token,
       body: JSON.stringify({ query, session_id: sessionId, app_state: appState ?? {} }),
     }),
+  agentQueryStream: (
+    token: string,
+    query: string,
+    sessionId: string | null | undefined,
+    appState: Record<string, unknown> | undefined,
+    onEvent: (event: AgentStreamEvent) => void,
+  ) =>
+    requestStream<AgentResponse>(
+      "/agent/query/stream",
+      {
+        method: "POST",
+        token,
+        body: JSON.stringify({ query, session_id: sessionId, app_state: appState ?? {} }),
+      },
+      onEvent,
+    ),
   sessions: (token: string) => request<AgentSession[]>("/sessions", { token }),
   sessionMessages: (token: string, sessionId: string) =>
     request<AgentMessage[]>(`/sessions/${encodeURIComponent(sessionId)}/messages`, { token }),
@@ -78,6 +160,25 @@ export const api = {
       method: "POST",
       token,
       body: JSON.stringify({ query, limit }),
+    }),
+  connections: (token: string) => request<DatabaseConnection[]>("/connections", { token }),
+  createConnection: (token: string, payload: DatabaseConnectionPayload) =>
+    request<DatabaseConnection>("/connections", {
+      method: "POST",
+      token,
+      body: JSON.stringify(payload),
+    }),
+  updateConnection: (token: string, id: string, payload: Partial<DatabaseConnectionPayload>) =>
+    request<DatabaseConnection>(`/connections/${encodeURIComponent(id)}`, {
+      method: "PATCH",
+      token,
+      body: JSON.stringify(payload),
+    }),
+  testConnection: (token: string, id: string) =>
+    request<DatabaseConnectionTest>(`/connections/${encodeURIComponent(id)}/test`, {
+      method: "POST",
+      token,
+      body: JSON.stringify({}),
     }),
   catalogTables: (token: string) => request<CatalogTable[]>("/catalog/tables", { token }),
   pipelines: (token: string) => request<Pipeline[]>("/pipelines", { token }),

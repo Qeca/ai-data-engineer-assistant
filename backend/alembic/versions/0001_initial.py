@@ -30,6 +30,29 @@ def upgrade():
     op.create_index("ix_app_users_email", "app_users", ["email"], unique=True)
 
     op.create_table(
+        "database_connections",
+        sa.Column("id", sa.String(length=36), primary_key=True),
+        sa.Column("name", sa.String(length=255), nullable=False),
+        sa.Column("engine", sa.String(length=32), nullable=False),
+        sa.Column("host", sa.String(length=255), nullable=False),
+        sa.Column("port", sa.Integer(), nullable=False),
+        sa.Column("database", sa.String(length=255)),
+        sa.Column("username", sa.String(length=255)),
+        sa.Column("password_secret", sa.Text()),
+        sa.Column("options_json", sa.JSON()),
+        sa.Column("visibility", sa.String(length=32), nullable=False),
+        sa.Column("owner_user_id", sa.String(length=36), sa.ForeignKey("app_users.id", ondelete="CASCADE")),
+        sa.Column("status", sa.String(length=32), nullable=False),
+        sa.Column("last_error", sa.Text()),
+        sa.Column("last_tested_at", sa.DateTime(timezone=True)),
+        sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.func.now()),
+        sa.Column("updated_at", sa.DateTime(timezone=True), server_default=sa.func.now()),
+    )
+    op.create_index("ix_database_connections_name", "database_connections", ["name"])
+    op.create_index("ix_database_connections_engine", "database_connections", ["engine"])
+    op.create_index("ix_database_connections_owner_user_id", "database_connections", ["owner_user_id"])
+
+    op.create_table(
         "agent_sessions",
         sa.Column("id", sa.String(length=36), primary_key=True),
         sa.Column("user_id", sa.String(length=36), sa.ForeignKey("app_users.id", ondelete="CASCADE")),
@@ -125,4 +148,5 @@ def downgrade():
     op.drop_table("tool_runs")
     op.drop_table("messages")
     op.drop_table("agent_sessions")
+    op.drop_table("database_connections")
     op.drop_table("app_users")

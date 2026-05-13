@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Any, Literal, TypedDict
+from typing import Any, Awaitable, Callable, Literal, TypedDict
 
 from langgraph.graph import END, START, StateGraph
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -35,6 +35,7 @@ class AgentGraphState(TypedDict, total=False):
     intent: str
     answer: str
     ui_actions: list[dict[str, Any]]
+    event_handler: Callable[[dict[str, Any]], Awaitable[None]]
 
 
 class AgentOrchestrator:
@@ -51,6 +52,7 @@ class AgentOrchestrator:
         query: str,
         user: User,
         app_state: dict[str, Any] | None = None,
+        event_handler: Callable[[dict[str, Any]], Awaitable[None]] | None = None,
     ) -> AgentResult:
         registry = AgentToolRegistry(db, user, app_state)
         final_state = await self.graph.ainvoke(
@@ -59,6 +61,7 @@ class AgentOrchestrator:
                 "registry": registry,
                 "tool_calls": [],
                 "loop_count": 0,
+                "event_handler": event_handler,
             }
         )
         tool_calls = final_state.get("tool_calls", [])
@@ -179,8 +182,23 @@ class AgentOrchestrator:
             messages.append(self._chat_client(provider).assistant_message_for_history(state["response"]))
 
         for call in state.get("pending_calls", []):
+            await self._emit(
+                state,
+                {
+                    "type": "tool_call_start",
+                    "tool_name": call.name,
+                    "arguments": call.arguments,
+                },
+            )
             execution = await registry.execute(call.name, call.arguments)
             tool_calls.append(execution)
+            await self._emit(
+                state,
+                {
+                    "type": "tool_call_result",
+                    "tool_call": self._tool_event_payload(execution),
+                },
+            )
             if provider == "openai":
                 openai_outputs.append(
                     {
@@ -210,6 +228,23 @@ class AgentOrchestrator:
     def _route_after_tools(self, state: AgentGraphState) -> Literal["llm", "final"]:
         return "llm"
 
+    @staticmethod
+    async def _emit(state: AgentGraphState, event: dict[str, Any]) -> None:
+        handler = state.get("event_handler")
+        if handler:
+            await handler(event)
+
+    @staticmethod
+    def _tool_event_payload(execution: ToolExecution) -> dict[str, Any]:
+        return {
+            "tool_name": execution.tool_name,
+            "status": execution.status,
+            "input": execution.input,
+            "output": execution.output,
+            "latency_ms": execution.latency_ms,
+            "ui_actions": execution.ui_actions,
+        }
+
     async def _configuration_error_node(self, state: AgentGraphState) -> AgentGraphState:
         return {
             "intent": "configuration-error",
@@ -237,6 +272,7 @@ class AgentOrchestrator:
             "Не дублируй одну и ту же проверку через локальный tool и внешний MCP. "
             "Не выдумывай статусы: вызывай list_site_status, list_pipelines, get_airflow_run или get_spark_job. "
             "Если пользователь спрашивает, что лежит в базе/БД/warehouse, вызывай inspect_database. "
+            "Если пользователь спрашивает про подключения к БД или просит настроить БД, вызывай list_database_connections, upsert_database_connection и test_database_connection. "
             "Для SQL вызывай execute_sql. Для Airflow вызывай trigger_airflow_dag/get_airflow_run. "
             "Для просмотра результатов DAG как в Airflow UI вызывай list_airflow_runs, list_airflow_task_instances и get_airflow_task_log. "
             "Для управления DAG как в интерфейсе вызывай manage_airflow_dags: pause, unpause, pause_all, unpause_all или list. "
@@ -291,6 +327,8 @@ class AgentOrchestrator:
             return "sql"
         if "DatabaseInspectorTool" in names:
             return "database"
+        if "DatabaseConnectionTool" in names:
+            return "database-connections"
         if "AirflowControlTool" in names:
             return "airflow-control"
         if any(name in names for name in ["AirflowTool", "AirflowRunTool", "AirflowTaskTool", "AirflowLogTool"]):
@@ -426,6 +464,19 @@ class AgentOrchestrator:
     @staticmethod
     def _database_observation_line(tool_calls: list[ToolExecution]) -> str | None:
         inspector = next((call for call in reversed(tool_calls) if call.tool_name == "DatabaseInspectorTool"), None)
+        connection_tool = next((call for call in reversed(tool_calls) if call.tool_name == "DatabaseConnectionTool"), None)
+        if connection_tool is not None:
+            connections = connection_tool.output.get("connections")
+            if connections is None and isinstance(connection_tool.output.get("connection"), dict):
+                connections = [connection_tool.output["connection"]]
+            if connections is not None:
+                preview = ", ".join(
+                    f"`{item.get('name')}`/{item.get('engine')} ({item.get('status')})"
+                    for item in connections[:8]
+                    if isinstance(item, dict)
+                )
+                return f"Подключения к БД: {len(connections)}. Основные: {preview}."
+
         if inspector is None:
             return None
 

@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime
 
-from sqlalchemy import Boolean, DateTime, ForeignKey, JSON, String, Text, func
+from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, JSON, String, Text, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
@@ -27,6 +27,34 @@ class User(Base):
     )
 
     sessions: Mapped[list["AgentSession"]] = relationship(back_populates="user")
+    database_connections: Mapped[list["DatabaseConnection"]] = relationship(back_populates="owner")
+
+
+class DatabaseConnection(Base):
+    __tablename__ = "database_connections"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uuid_str)
+    name: Mapped[str] = mapped_column(String(255), index=True)
+    engine: Mapped[str] = mapped_column(String(32), index=True)
+    host: Mapped[str] = mapped_column(String(255))
+    port: Mapped[int] = mapped_column(Integer)
+    database: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    username: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    password_secret: Mapped[str | None] = mapped_column(Text, nullable=True)
+    options_json: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    visibility: Mapped[str] = mapped_column(String(32), default="private")
+    owner_user_id: Mapped[str | None] = mapped_column(
+        ForeignKey("app_users.id", ondelete="CASCADE"), nullable=True, index=True
+    )
+    status: Mapped[str] = mapped_column(String(32), default="unknown")
+    last_error: Mapped[str | None] = mapped_column(Text, nullable=True)
+    last_tested_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
+
+    owner: Mapped[User | None] = relationship(back_populates="database_connections")
 
 
 class AgentSession(Base):
