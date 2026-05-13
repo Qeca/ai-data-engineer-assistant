@@ -6,7 +6,7 @@ from tempfile import mkdtemp
 import docker
 from docker.errors import DockerException, ImageNotFound
 from fastapi import FastAPI
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 app = FastAPI(title="Agent Debug Sandbox", version="0.1.0")
@@ -25,6 +25,19 @@ class DebugRequest(BaseModel):
     user_role: str = ""
 
 
+class BashRequest(BaseModel):
+    command: str
+    files: dict[str, str] = Field(default_factory=dict)
+    timeout_seconds: int = 30
+    memory_limit: str = "1g"
+    image: str | None = None
+    artifact_type: str = "bash"
+    artifact_name: str = "command"
+    user_id: str = "anonymous"
+    user_email: str = ""
+    user_role: str = ""
+
+
 @dataclass
 class RuntimePlan:
     image: str
@@ -35,6 +48,39 @@ class RuntimePlan:
 @app.get("/health")
 def health() -> dict[str, str]:
     return {"status": "ok"}
+
+
+@app.post("/debug/bash")
+def debug_bash(payload: BashRequest) -> dict:
+    run_dir = _new_run_dir(payload.user_id)
+    for relative_path, content in payload.files.items():
+        _write_workspace_file(run_dir, relative_path, content)
+
+    plan = RuntimePlan(
+        image=payload.image or _env("SANDBOX_BASH_IMAGE", "python:3.12-slim"),
+        command=["/bin/bash", "-lc", payload.command],
+        note="Runs a bash command in a Docker container.",
+    )
+    runtime = _run_in_docker(payload, plan, run_dir)
+    return {
+        "sandbox": "agent-debugger",
+        "sandbox_scope": "user",
+        "user_id": payload.user_id,
+        "user_email": payload.user_email,
+        "user_role": payload.user_role,
+        "user_workspace": str(run_dir.host_path.parent),
+        "run_workspace": str(run_dir.host_path),
+        "artifact_type": payload.artifact_type,
+        "artifact_name": payload.artifact_name,
+        "runtime_image": plan.image,
+        "runtime_command": plan.command,
+        "runtime_note": plan.note,
+        "runtime_returncode": runtime["returncode"],
+        "runtime_status": runtime["runtime_status"],
+        "runtime_stdout": runtime["stdout"][-8000:],
+        "runtime_stderr": runtime["stderr"][-8000:],
+        "files": sorted(payload.files.keys()),
+    }
 
 
 @app.post("/debug/python")
@@ -112,6 +158,15 @@ def _new_run_dir(user_id: str) -> RunDirectory:
     return RunDirectory(host_path=host_path, container_path=container_path)
 
 
+def _write_workspace_file(run_dir: RunDirectory, relative_path: str, content: str) -> None:
+    path = Path(relative_path)
+    if path.is_absolute() or ".." in path.parts:
+        raise ValueError("Sandbox file paths must be relative and stay inside workspace")
+    target = run_dir.container_path / path
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_text(content, encoding="utf-8")
+
+
 def _runtime_plan(payload: DebugRequest, script_name: str) -> RuntimePlan:
     if payload.artifact_type == "airflow_dag":
         command = [
@@ -149,7 +204,7 @@ def _runtime_plan(payload: DebugRequest, script_name: str) -> RuntimePlan:
     )
 
 
-def _run_in_docker(payload: DebugRequest, plan: RuntimePlan, run_dir: RunDirectory) -> dict:
+def _run_in_docker(payload: DebugRequest | BashRequest, plan: RuntimePlan, run_dir: RunDirectory) -> dict:
     container = None
     try:
         client = docker.from_env()

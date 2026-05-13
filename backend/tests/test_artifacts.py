@@ -69,6 +69,7 @@ async def test_registry_exposes_artifact_function_tools(monkeypatch, tmp_path):
             "check_airflow_dag_sandbox",
             "run_spark_script_sandbox",
             "run_python_script_sandbox",
+            "run_bash_sandbox",
             "list_artifact_versions",
             "run_git_command",
         }.issubset(names)
@@ -81,6 +82,7 @@ async def test_registry_exposes_artifact_function_tools(monkeypatch, tmp_path):
         assert any(tool["name"] == "call_mcp_tool" for tool in product_specs["external_mcp"]["tools"])
         assert any(tool["name"] == "manage_airflow_dags" for tool in product_specs["airflow"]["tools"])
         assert any(tool["name"] == "inspect_database" for tool in product_specs["database"]["tools"])
+        assert any(tool["name"] == "run_bash_sandbox" for tool in product_specs["artifacts"]["tools"])
         assert any(tool["name"] == "run_git_command" for tool in product_specs["artifacts"]["tools"])
 
         debug = await registry.execute(
@@ -185,6 +187,40 @@ async def test_registry_passes_user_context_to_sandbox(monkeypatch, tmp_path):
         "email": user.email,
         "role": user.role,
     }
+
+
+@pytest.mark.asyncio
+async def test_registry_runs_bash_in_user_sandbox(monkeypatch, tmp_path):
+    monkeypatch.setattr(settings, "artifact_root", str(tmp_path))
+    await init_db()
+
+    captured = {}
+
+    async def fake_run_bash(**kwargs):
+        captured.update(kwargs)
+        return {
+            "sandbox": "agent-debugger",
+            "runtime_status": "success",
+            "runtime_returncode": 0,
+            "runtime_stdout": "ok\n",
+            "runtime_stderr": "",
+        }
+
+    async with AsyncSessionLocal() as session:
+        user = await session.scalar(select(User).where(User.email == "admin@local.dev"))
+        registry = AgentToolRegistry(session, user, {"screen": "ai-agent"})
+        monkeypatch.setattr(registry.debug_sandbox, "run_bash", fake_run_bash)
+        result = await registry.execute(
+            "run_bash_sandbox",
+            {"command": "python -c 'print(1)'", "files": {"main.py": "print('ok')"}, "timeout_seconds": 5},
+        )
+
+    assert result.tool_name == "BashSandboxTool"
+    assert result.status == "success"
+    assert captured["command"] == "python -c 'print(1)'"
+    assert captured["files"] == {"main.py": "print('ok')"}
+    assert captured["timeout_seconds"] == 5
+    assert captured["user_context"]["email"] == "admin@local.dev"
 
 
 @pytest.mark.asyncio

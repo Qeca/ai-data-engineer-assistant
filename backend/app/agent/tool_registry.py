@@ -52,6 +52,7 @@ class AgentToolRegistry:
             "check_airflow_dag_sandbox",
             "run_spark_script_sandbox",
             "run_python_script_sandbox",
+            "run_bash_sandbox",
             "list_artifact_versions",
             "run_git_command",
         ],
@@ -363,6 +364,28 @@ class AgentToolRegistry:
                 ["script_name", "code", "error_log", "arguments"],
             ),
             self._spec(
+                "run_bash_sandbox",
+                "Run arbitrary bash commands or code in an isolated per-user Docker sandbox. Use this when the user asks to execute code, run shell commands, inspect files created for the run, or debug with bash. The command runs inside the sandbox, not on the host.",
+                {
+                    "command": {
+                        "type": "string",
+                        "description": "Bash command to run, for example: python - <<'PY'\\nprint('ok')\\nPY",
+                    },
+                    "files": {
+                        "type": "object",
+                        "description": "Optional files to create in the sandbox workspace before running the command. Keys are relative paths, values are UTF-8 text content.",
+                        "additionalProperties": {"type": "string"},
+                    },
+                    "timeout_seconds": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 120,
+                        "description": "Sandbox timeout in seconds.",
+                    },
+                },
+                ["command", "files", "timeout_seconds"],
+            ),
+            self._spec(
                 "list_artifact_versions",
                 "List saved DB versions and Git history for Airflow DAGs and Spark scripts.",
                 {
@@ -518,6 +541,12 @@ class AgentToolRegistry:
                 args["error_log"],
                 args["arguments"],
             )
+        if name == "run_bash_sandbox":
+            return await self.run_bash_sandbox(
+                args["command"],
+                args["files"],
+                args["timeout_seconds"],
+            )
         if name == "debug_python_artifact":
             return await self.run_python_script_sandbox("artifact.py", args["code"], args["error_log"], [])
         if name == "list_artifact_versions":
@@ -593,6 +622,7 @@ class AgentToolRegistry:
                 "check_airflow_dag_sandbox",
                 "run_spark_script_sandbox",
                 "run_python_script_sandbox",
+                "run_bash_sandbox",
                 "list_artifact_versions",
                 "run_git_command",
             ],
@@ -885,6 +915,55 @@ class AgentToolRegistry:
             error_log=error_log,
             arguments=arguments,
         )
+
+    async def run_bash_sandbox(
+        self,
+        command: str,
+        files: dict[str, str],
+        timeout_seconds: int,
+    ) -> ToolExecution:
+        started = time.perf_counter()
+        safe_timeout = max(1, min(int(timeout_seconds), 120))
+        try:
+            remote_result = await self.debug_sandbox.run_bash(
+                command=command,
+                files=files,
+                timeout_seconds=safe_timeout,
+                user_context=self.sandbox_user_context(),
+            )
+            if not remote_result:
+                return ToolExecution(
+                    tool_name="BashSandboxTool",
+                    status="error",
+                    input={"command": command, "files": sorted(files), "timeout_seconds": safe_timeout},
+                    output={
+                        "error": "Docker sandbox is not configured. Set AGENT_DEBUGGER_URL and run agent-debugger.",
+                        "runtime_status": "sandbox_not_configured",
+                        "command": command,
+                    },
+                    latency_ms=self._elapsed_ms(started),
+                    error="sandbox_not_configured",
+                )
+            return ToolExecution(
+                tool_name="BashSandboxTool",
+                status="success",
+                input={"command": command, "files": sorted(files), "timeout_seconds": safe_timeout},
+                output=remote_result,
+                latency_ms=self._elapsed_ms(started),
+            )
+        except Exception as exc:
+            return ToolExecution(
+                tool_name="BashSandboxTool",
+                status="error",
+                input={"command": command, "files": sorted(files), "timeout_seconds": safe_timeout},
+                output={
+                    "error": str(exc),
+                    "runtime_status": "sandbox_error",
+                    "command": command,
+                },
+                latency_ms=self._elapsed_ms(started),
+                error=exc.__class__.__name__,
+            )
 
     async def run_artifact_sandbox(
         self,

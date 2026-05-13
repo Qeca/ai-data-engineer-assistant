@@ -278,6 +278,7 @@ class AgentOrchestrator:
             "Для написания нового DAG вызывай write_airflow_dag, для нового Spark-скрипта write_spark_script. "
             "После записи DAG запускай check_airflow_dag_sandbox, после записи Spark-скрипта run_spark_script_sandbox. "
             "Для отладки существующих DAG/скриптов используй sandbox tools, а не просто текстовый совет. "
+            "Для выполнения произвольного кода или bash-команд вызывай run_bash_sandbox; это Docker sandbox, не host shell. "
             "Для истории и версий артефактов вызывай list_artifact_versions; версии ведутся в Git. "
             "Для прямой работы с Git вызывай run_git_command и передавай полную команду вида git status --short, git diff или git log --oneline -n 5. "
             "Пользователь не имеет прямого доступа к внутреннему workspace и путям вида /workspace/...; показывай код, логи и результаты в ответе или UI, а не отправляй пользователя открывать такие файлы самому. "

@@ -34,6 +34,7 @@ def test_agent_instructions_train_model_for_mcp_tool_loop():
     assert "filesystem MCP используй только" in instructions
     assert "Пользователь не имеет прямого доступа к внутреннему workspace" in instructions
     assert "run_git_command" in instructions
+    assert "run_bash_sandbox" in instructions
 
 
 def test_agent_initial_messages_use_standard_chat_history():

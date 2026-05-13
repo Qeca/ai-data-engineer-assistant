@@ -13,6 +13,31 @@ class DebugSandboxClient:
     async def debug_python(self, code: str, error_log: str = "") -> dict[str, Any] | None:
         return await self.run_artifact("python", "artifact.py", code, error_log)
 
+    async def run_bash(
+        self,
+        command: str,
+        files: dict[str, str] | None = None,
+        timeout_seconds: int = 30,
+        user_context: dict[str, str] | None = None,
+    ) -> dict[str, Any] | None:
+        if not settings.agent_debugger_url:
+            return None
+
+        async with httpx.AsyncClient(timeout=timeout_seconds + 15) as client:
+            response = await client.post(
+                f"{settings.agent_debugger_url.rstrip('/')}/debug/bash",
+                json={
+                    "command": command,
+                    "files": files or {},
+                    "timeout_seconds": timeout_seconds,
+                    "user_id": (user_context or {}).get("id", "anonymous"),
+                    "user_email": (user_context or {}).get("email", ""),
+                    "user_role": (user_context or {}).get("role", ""),
+                },
+            )
+            response.raise_for_status()
+            return response.json()
+
     async def run_artifact(
         self,
         artifact_type: str,
