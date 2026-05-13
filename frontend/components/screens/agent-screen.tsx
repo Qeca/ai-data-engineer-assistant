@@ -291,12 +291,6 @@ export function AgentScreen() {
               </div>
             ),
           )}
-          {ask.isPending && messages.at(-1)?.role !== "tool" && (
-            <div className="chat-msg">
-              <div className="avatar ai">AI</div>
-              <div className="bubble">Выполняю tool-call...</div>
-            </div>
-          )}
           {ask.error && <div className="error-text">{ask.error.message}</div>}
           {sessionMessages.isFetching && sessionId && (
             <div className="chat-msg">
