@@ -32,6 +32,7 @@ def test_agent_instructions_train_model_for_mcp_tool_loop():
     assert "spark: use for Spark" in instructions
     assert "artifacts_git: use for Git status" in instructions
     assert "filesystem MCP используй только" in instructions
+    assert "Пользователь не имеет прямого доступа к внутреннему workspace" in instructions
 
 
 def test_agent_initial_messages_use_standard_chat_history():
