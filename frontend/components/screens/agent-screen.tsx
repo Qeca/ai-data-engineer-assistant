@@ -163,9 +163,9 @@ export function AgentScreen() {
     <div className="split">
       <aside className="left-panel">
         <div className="card-body">
-          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
-            <div className="stat-label" style={{ flex: 1 }}>Chats</div>
-            <button className="icon-btn" onClick={openNewChat} title="New chat">
+          <div className="chat-panel-heading">
+            <div className="stat-label">Chats</div>
+            <button className="btn btn-ghost icon-btn" type="button" onClick={openNewChat} title="Новый чат" aria-label="Новый чат">
               <Plus size={14} />
             </button>
           </div>

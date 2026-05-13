@@ -329,6 +329,11 @@ body {
   padding: 0;
 }
 
+.icon-btn:focus-visible {
+  outline: 2px solid rgba(45, 126, 248, 0.75);
+  outline-offset: 2px;
+}
+
 .input,
 .textarea,
 .select {
@@ -520,6 +525,17 @@ body {
   display: flex;
   flex-direction: column;
   gap: 6px;
+}
+
+.chat-panel-heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.chat-panel-heading .stat-label {
+  flex: 1;
 }
 
 .chat-session {
