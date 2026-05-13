@@ -23,13 +23,20 @@ services:
       JWT_SECRET: local-dev-secret
       CORS_ORIGINS: '["http://localhost:${FRONTEND_PORT:-3000}","http://127.0.0.1:${FRONTEND_PORT:-3000}","http://localhost:3000","http://127.0.0.1:3000","http://localhost:3002","http://127.0.0.1:3002"]'
       AIRFLOW_BASE_URL: http://airflow-webserver:8080
+      AIRFLOW_PUBLIC_URL: http://localhost:${AIRFLOW_WEBSERVER_PORT:-8080}
       SPARK_MASTER_URL: spark://spark-master:7077
       SPARK_STATUS_URL: http://spark-master:8080
-      LLM_PROVIDER: ${LLM_PROVIDER:-openai}
+      LLM_PROVIDER: ${LLM_PROVIDER:-magnitgpt}
       OPENAI_API_KEY: ${OPENAI_API_KEY:-}
       OPENAI_MODEL: ${OPENAI_MODEL:-gpt-5.5}
+      OPENAI_BASE_URL: ${OPENAI_BASE_URL:-https://api.openai.com/v1}
       OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
       OPENROUTER_MODEL: ${OPENROUTER_MODEL:-openai/gpt-5.5}
+      OPENROUTER_BASE_URL: ${OPENROUTER_BASE_URL:-https://openrouter.ai/api/v1}
+      MAGNITGPT_API_KEY: ${MAGNITGPT_API_KEY:-}
+      MAGNITGPT_MODEL: ${MAGNITGPT_MODEL:-MagnitGPT}
+      MAGNITGPT_BASE_URL: ${MAGNITGPT_BASE_URL:-https://llmlite.ai.corp.tander.ru/v1}
+      MAGNITGPT_VERIFY_SSL: ${MAGNITGPT_VERIFY_SSL:-true}
       LANGFUSE_PUBLIC_KEY: ${LANGFUSE_PUBLIC_KEY:-}
       LANGFUSE_SECRET_KEY: ${LANGFUSE_SECRET_KEY:-}
       LANGFUSE_HOST: ${LANGFUSE_HOST:-http://langfuse:3000}
@@ -88,10 +95,14 @@ services:
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
       AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@airflow-postgres:5432/airflow
       AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+      AIRFLOW__API__AUTH_BACKENDS: airflow.api.auth.backend.basic_auth,airflow.api.auth.backend.session
+      AIRFLOW__WEBSERVER__SECRET_KEY: local-dev-airflow-secret
       _AIRFLOW_DB_MIGRATE: "true"
       _AIRFLOW_WWW_USER_CREATE: "true"
       _AIRFLOW_WWW_USER_USERNAME: airflow
       _AIRFLOW_WWW_USER_PASSWORD: airflow
+    volumes:
+      - airflow-logs:/opt/airflow/logs
     command: version
 
   airflow-webserver:
@@ -103,10 +114,13 @@ services:
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
       AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@airflow-postgres:5432/airflow
       AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+      AIRFLOW__API__AUTH_BACKENDS: airflow.api.auth.backend.basic_auth,airflow.api.auth.backend.session
       AIRFLOW__WEBSERVER__EXPOSE_CONFIG: "true"
+      AIRFLOW__WEBSERVER__SECRET_KEY: local-dev-airflow-secret
     volumes:
       - ./infra/airflow/dags:/opt/airflow/dags
       - ./infra/spark/jobs:/opt/airflow/jobs
+      - airflow-logs:/opt/airflow/logs
     ports:
       - "${AIRFLOW_WEBSERVER_PORT:-8080}:8080"
     command: webserver
@@ -120,15 +134,25 @@ services:
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
       AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@airflow-postgres:5432/airflow
       AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+      AIRFLOW__API__AUTH_BACKENDS: airflow.api.auth.backend.basic_auth,airflow.api.auth.backend.session
+      AIRFLOW__WEBSERVER__SECRET_KEY: local-dev-airflow-secret
     volumes:
       - ./infra/airflow/dags:/opt/airflow/dags
       - ./infra/spark/jobs:/opt/airflow/jobs
+      - airflow-logs:/opt/airflow/logs
     command: scheduler
 
   spark-master:
-    image: bitnami/spark:3.5.4
-    environment:
-      SPARK_MODE: master
+    image: apache/spark:3.5.4
+    command:
+      - /opt/spark/bin/spark-class
+      - org.apache.spark.deploy.master.Master
+      - --host
+      - 0.0.0.0
+      - --port
+      - "7077"
+      - --webui-port
+      - "8080"
     ports:
       - "${SPARK_MASTER_PORT:-7077}:7077"
       - "${SPARK_MASTER_UI_PORT:-8081}:8080"
@@ -136,12 +160,17 @@ services:
       - ./infra/spark/jobs:/opt/spark/jobs
 
   spark-worker:
-    image: bitnami/spark:3.5.4
-    environment:
-      SPARK_MODE: worker
-      SPARK_MASTER_URL: spark://spark-master:7077
-      SPARK_WORKER_MEMORY: 2G
-      SPARK_WORKER_CORES: 2
+    image: apache/spark:3.5.4
+    command:
+      - /opt/spark/bin/spark-class
+      - org.apache.spark.deploy.worker.Worker
+      - spark://spark-master:7077
+      - --cores
+      - "2"
+      - --memory
+      - 2G
+      - --webui-port
+      - "8081"
     depends_on:
       - spark-master
     volumes:
@@ -157,7 +186,7 @@ services:
       SANDBOX_HOST_RUNS_DIR: ${SANDBOX_HOST_RUNS_DIR:-/tmp/ai-de-sandbox-runs}
       SANDBOX_PYTHON_IMAGE: python:3.12-slim
       SANDBOX_AIRFLOW_IMAGE: apache/airflow:2.10.4
-      SANDBOX_SPARK_IMAGE: bitnami/spark:3.5.4
+      SANDBOX_SPARK_IMAGE: apache/spark:3.5.4
     ports:
       - "${AGENT_DEBUGGER_PORT:-8090}:8090"
     volumes:
@@ -168,3 +197,4 @@ services:
 volumes:
   postgres-data:
   airflow-postgres-data:
+  airflow-logs:

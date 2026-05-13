@@ -1,4 +1,3 @@
-from __future__ import annotations
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 

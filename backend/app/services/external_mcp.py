@@ -1,9 +1,8 @@
-from __future__ import annotations
-
 import asyncio
 import json
 import os
 import signal
+import shutil
 import time
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
@@ -211,23 +210,34 @@ class ExternalMCPGateway:
 
     @staticmethod
     def _database_config() -> ExternalMCPServerConfig:
+        database_url = settings.mcp_database_url or ExternalMCPGateway._sync_database_url()
+        if shutil.which("mcp-server-postgres"):
+            return ExternalMCPServerConfig(
+                product="database",
+                command="mcp-server-postgres",
+                args=[database_url],
+                description="Official/reference PostgreSQL MCP server with schema and read-only query tools.",
+            )
+
         return ExternalMCPServerConfig(
             product="database",
             command=settings.mcp_npx_command,
             args=[
                 "-y",
                 "@modelcontextprotocol/server-postgres",
-                settings.mcp_database_url or ExternalMCPGateway._sync_database_url(),
+                database_url,
             ],
             description="Official/reference PostgreSQL MCP server with schema and read-only query tools.",
         )
 
     @staticmethod
     def _airflow_config() -> ExternalMCPServerConfig:
+        command = "astro-airflow-mcp" if shutil.which("astro-airflow-mcp") else settings.mcp_uvx_command
+        args = ["--transport", "stdio"] if command == "astro-airflow-mcp" else ["astro-airflow-mcp", "--transport", "stdio"]
         return ExternalMCPServerConfig(
             product="airflow",
-            command=settings.mcp_uvx_command,
-            args=["astro-airflow-mcp", "--transport", "stdio"],
+            command=command,
+            args=args,
             env={
                 "AIRFLOW_API_URL": settings.airflow_base_url or "http://localhost:8080",
                 "AIRFLOW_USERNAME": settings.airflow_username,
@@ -238,18 +248,21 @@ class ExternalMCPGateway:
 
     @staticmethod
     def _spark_config() -> ExternalMCPServerConfig:
+        command = "pyspark-mcp" if shutil.which("pyspark-mcp") else settings.mcp_uvx_command
+        args = [
+            "--master",
+            settings.mcp_spark_master,
+            "--host",
+            "127.0.0.1",
+            "--port",
+            "8090",
+        ]
+        if command != "pyspark-mcp":
+            args = ["pyspark-mcp", *args]
         return ExternalMCPServerConfig(
             product="spark",
-            command=settings.mcp_uvx_command,
-            args=[
-                "pyspark-mcp",
-                "--master",
-                settings.mcp_spark_master,
-                "--host",
-                "127.0.0.1",
-                "--port",
-                "8090",
-            ],
+            command=command,
+            args=args,
             description="pyspark-mcp HTTP MCP server for Spark catalog and query plan inspection.",
             transport="streamable_http",
             url="http://127.0.0.1:8090/mcp",
@@ -258,19 +271,30 @@ class ExternalMCPGateway:
 
     @staticmethod
     def _artifacts_git_config() -> ExternalMCPServerConfig:
+        command = "mcp-server-git" if shutil.which("mcp-server-git") else settings.mcp_uvx_command
+        args = [
+            "--repository",
+            settings.artifact_git_root or settings.artifact_root,
+        ]
+        if command != "mcp-server-git":
+            args = ["mcp-server-git", *args]
         return ExternalMCPServerConfig(
             product="artifacts_git",
-            command=settings.mcp_uvx_command,
-            args=[
-                "mcp-server-git",
-                "--repository",
-                settings.artifact_git_root or settings.artifact_root,
-            ],
+            command=command,
+            args=args,
             description="Reference Git MCP server for artifact Git history and repository operations.",
         )
 
     @staticmethod
     def _artifacts_filesystem_config() -> ExternalMCPServerConfig:
+        if shutil.which("mcp-server-filesystem"):
+            return ExternalMCPServerConfig(
+                product="artifacts_filesystem",
+                command="mcp-server-filesystem",
+                args=[settings.artifact_root],
+                description="Reference filesystem MCP server restricted to the artifact root.",
+            )
+
         return ExternalMCPServerConfig(
             product="artifacts_filesystem",
             command=settings.mcp_npx_command,

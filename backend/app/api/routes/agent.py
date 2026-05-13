@@ -1,8 +1,11 @@
+import logging
+
 from fastapi import APIRouter, Depends
 from fastapi.encoders import jsonable_encoder
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.agent.orchestrator import AgentOrchestrator
+from app.agent.orchestrator import AgentOrchestrator, AgentResult
 from app.api.deps import get_current_user
 from app.db.session import get_db
 from app.models import AgentSession, Message, ToolRun, User
@@ -12,6 +15,7 @@ from app.services.tracing import TraceClient
 router = APIRouter(prefix="/agent", tags=["agent"])
 orchestrator = AgentOrchestrator()
 tracing = TraceClient()
+logger = logging.getLogger(__name__)
 
 
 @router.post("/query", response_model=AgentQueryResponse)
@@ -30,12 +34,43 @@ async def query_agent(
         db.add(session)
         await db.flush()
 
+    previous_messages = (
+        await db.scalars(
+            select(Message)
+            .where(Message.session_id == session.id)
+            .order_by(Message.created_at.desc())
+            .limit(12)
+        )
+    ).all()
+    conversation_history = [
+        {
+            "role": message.role,
+            "content": message.content,
+            "metadata": message.metadata_json or {},
+        }
+        for message in reversed(previous_messages)
+    ]
+    app_state = dict(payload.app_state or {})
+    app_state["conversation_history"] = conversation_history
+
     user_message = Message(session_id=session.id, role="user", content=payload.query, metadata_json={})
     db.add(user_message)
     await db.flush()
 
     async with tracing.trace("agent.query", user_id=user.id, input={"query": payload.query}) as trace:
-        result = await orchestrator.run(db, payload.query, user, payload.app_state)
+        try:
+            result = await orchestrator.run(db, payload.query, user, app_state)
+        except Exception as exc:  # noqa: BLE001
+            logger.exception("Agent query failed")
+            result = AgentResult(
+                intent="agent-error",
+                answer=(
+                    "Агентский запрос завершился ошибкой, но backend остался жив. "
+                    f"`{exc.__class__.__name__}`: {exc}"
+                ),
+                tool_calls=[],
+                ui_actions=[],
+            )
         assistant_message = Message(
             session_id=session.id,
             role="assistant",

@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import json
 import time
 from typing import Any
@@ -23,10 +21,20 @@ class AgentToolRegistry:
     product_tool_names: dict[str, list[str]] = {
         "site": ["list_site_status", "navigate_site"],
         "database": ["execute_sql", "list_catalog", "inspect_database"],
-        "airflow": ["list_pipelines", "manage_airflow_dags", "trigger_airflow_dag", "get_airflow_run"],
+        "airflow": [
+            "list_pipelines",
+            "manage_airflow_dags",
+            "trigger_airflow_dag",
+            "get_airflow_run",
+            "list_airflow_runs",
+            "list_airflow_task_instances",
+            "get_airflow_task_log",
+        ],
         "spark": ["submit_spark_job", "get_spark_job"],
         "external_mcp": ["list_mcp_products", "list_mcp_tools", "call_mcp_tool"],
         "artifacts": [
+            "read_airflow_dag",
+            "read_spark_script",
             "write_airflow_dag",
             "write_spark_script",
             "check_airflow_dag_sandbox",
@@ -136,7 +144,12 @@ class AgentToolRegistry:
                 },
                 ["sample_limit"],
             ),
-            self._spec("list_pipelines", "List Airflow pipelines and their latest statuses.", {}, []),
+            self._spec(
+                "list_pipelines",
+                "List Airflow DAGs with latest statuses, schedule, owner, next run, and task/operator structure. Use this to answer what DAGs do.",
+                {},
+                [],
+            ),
             self._spec(
                 "manage_airflow_dags",
                 "List, pause, unpause, pause all, or unpause all Airflow DAGs. Use this for the same DAG controls a user can do in the UI.",
@@ -169,6 +182,32 @@ class AgentToolRegistry:
                 ["dag_id", "run_id"],
             ),
             self._spec(
+                "list_airflow_runs",
+                "List recent Airflow runs for a DAG, including run ids and states.",
+                {"dag_id": {"type": "string", "description": "Airflow DAG id."}},
+                ["dag_id"],
+            ),
+            self._spec(
+                "list_airflow_task_instances",
+                "List task instances for one Airflow DAG run.",
+                {
+                    "dag_id": {"type": "string"},
+                    "run_id": {"type": "string"},
+                },
+                ["dag_id", "run_id"],
+            ),
+            self._spec(
+                "get_airflow_task_log",
+                "Read an Airflow task log for a DAG run like the Airflow UI log view.",
+                {
+                    "dag_id": {"type": "string"},
+                    "run_id": {"type": "string"},
+                    "task_id": {"type": "string"},
+                    "try_number": {"type": "integer", "minimum": 1, "maximum": 50},
+                },
+                ["dag_id", "run_id", "task_id", "try_number"],
+            ),
+            self._spec(
                 "submit_spark_job",
                 "Submit a Spark job and persist its metadata and result sample.",
                 {
@@ -186,8 +225,20 @@ class AgentToolRegistry:
                 ["job_id"],
             ),
             self._spec(
+                "read_airflow_dag",
+                "Read the active Airflow DAG Python source from the runtime DAG folder. Use this before changing an existing DAG.",
+                {"dag_id": {"type": "string", "description": "DAG id or DAG filename."}},
+                ["dag_id"],
+            ),
+            self._spec(
+                "read_spark_script",
+                "Read the active Spark script source from the runtime Spark jobs folder. Use this before changing an existing Spark script.",
+                {"script_name": {"type": "string", "description": "Script filename or logical name."}},
+                ["script_name"],
+            ),
+            self._spec(
                 "write_airflow_dag",
-                "Create or update a Python Airflow DAG file, validate syntax, and store an artifact version.",
+                "Create or update a Python Airflow DAG file, validate syntax, store a user-scoped Git version, and deploy the valid source into the active Airflow DAG folder.",
                 {
                     "dag_id": {"type": "string", "description": "DAG id, used as the Python filename."},
                     "code": {"type": "string", "description": "Complete Python DAG source code."},
@@ -197,7 +248,7 @@ class AgentToolRegistry:
             ),
             self._spec(
                 "write_spark_script",
-                "Create or update a Python Spark script, validate syntax, and store an artifact version.",
+                "Create or update a Python Spark script, validate syntax, store a user-scoped Git version, and deploy the valid source into the active Spark jobs folder.",
                 {
                     "script_name": {"type": "string", "description": "Script filename or logical name."},
                     "code": {"type": "string", "description": "Complete Python Spark script source code."},
@@ -304,6 +355,41 @@ class AgentToolRegistry:
                 output=run.model_dump(),
                 latency_ms=self._elapsed_ms(started),
             )
+        if name == "list_airflow_runs":
+            started = time.perf_counter()
+            runs = await self.airflow.list_runs(self.db, args["dag_id"])
+            return ToolExecution(
+                tool_name="AirflowRunTool",
+                status="success",
+                input=args,
+                output={"runs": [run.model_dump() for run in runs]},
+                latency_ms=self._elapsed_ms(started),
+            )
+        if name == "list_airflow_task_instances":
+            started = time.perf_counter()
+            tasks = await self.airflow.list_task_instances(args["dag_id"], args["run_id"])
+            return ToolExecution(
+                tool_name="AirflowTaskTool",
+                status="success",
+                input=args,
+                output={"tasks": [task.model_dump() for task in tasks]},
+                latency_ms=self._elapsed_ms(started),
+            )
+        if name == "get_airflow_task_log":
+            started = time.perf_counter()
+            log = await self.airflow.get_task_log(
+                args["dag_id"],
+                args["run_id"],
+                args["task_id"],
+                int(args["try_number"]),
+            )
+            return ToolExecution(
+                tool_name="AirflowLogTool",
+                status="success",
+                input=args,
+                output=log.model_dump(),
+                latency_ms=self._elapsed_ms(started),
+            )
         if name == "submit_spark_job":
             return await self.spark.execute(
                 self.db,
@@ -325,6 +411,10 @@ class AgentToolRegistry:
                 output=job.model_dump(),
                 latency_ms=self._elapsed_ms(started),
             )
+        if name == "read_airflow_dag":
+            return self.read_runtime_artifact("airflow_dag", args["dag_id"], "AirflowDAGSourceTool")
+        if name == "read_spark_script":
+            return self.read_runtime_artifact("spark_script", args["script_name"], "SparkScriptSourceTool")
         if name == "write_airflow_dag":
             return await self.write_airflow_dag(args["dag_id"], args["code"], args["message"])
         if name == "write_spark_script":
@@ -401,6 +491,11 @@ class AgentToolRegistry:
                 "call_mcp_tool",
                 "inspect_database",
                 "manage_airflow_dags",
+                "list_airflow_runs",
+                "list_airflow_task_instances",
+                "get_airflow_task_log",
+                "read_airflow_dag",
+                "read_spark_script",
                 "write_airflow_dag",
                 "write_spark_script",
                 "check_airflow_dag_sandbox",
@@ -441,6 +536,31 @@ class AgentToolRegistry:
             },
         )
 
+    def read_runtime_artifact(self, artifact_type: str, name: str, tool_name: str) -> ToolExecution:
+        started = time.perf_counter()
+        artifact_name = name if name.endswith(".py") else f"{name}.py"
+        try:
+            path, code = self.artifacts.read_runtime_code(artifact_type, artifact_name)
+            return ToolExecution(
+                tool_name=tool_name,
+                status="success",
+                input={"artifact_type": artifact_type, "artifact_name": artifact_name},
+                output={
+                    "artifact_type": artifact_type,
+                    "artifact_name": artifact_name,
+                    "path": str(path),
+                    "code": code,
+                },
+                latency_ms=self._elapsed_ms(started),
+            )
+        except Exception as exc:
+            return self.error_execution(
+                tool_name,
+                {"artifact_type": artifact_type, "artifact_name": artifact_name},
+                started,
+                exc,
+            )
+
     async def write_airflow_dag(self, dag_id: str, code: str, message: str) -> ToolExecution:
         started = time.perf_counter()
         try:
@@ -451,15 +571,27 @@ class AgentToolRegistry:
                 message=message,
                 author_user_id=self.user.id,
             )
+            output = result.__dict__
+            if result.validation_status == "valid" and self.can_deploy_runtime_artifacts():
+                output = {
+                    **output,
+                    "deployed_to_runtime": True,
+                    **self.artifacts.deploy_runtime_copy(
+                        "airflow_dag",
+                        result.artifact_name,
+                        code,
+                        message,
+                    ),
+                }
             return ToolExecution(
                 tool_name="ArtifactTool",
                 status="success",
                 input={"dag_id": dag_id, "message": message},
-                output=result.__dict__,
+                output=output,
                 latency_ms=self._elapsed_ms(started),
                 metadata={
                     "ui_actions": [
-                        {"type": "toast", "message": f"DAG {dag_id} сохранен, версия {result.version}"}
+                        {"type": "toast", "message": f"DAG {dag_id} сохранен и задеплоен, версия {result.version}"}
                     ]
                 },
             )
@@ -476,15 +608,27 @@ class AgentToolRegistry:
                 message=message,
                 author_user_id=self.user.id,
             )
+            output = result.__dict__
+            if result.validation_status == "valid" and self.can_deploy_runtime_artifacts():
+                output = {
+                    **output,
+                    "deployed_to_runtime": True,
+                    **self.artifacts.deploy_runtime_copy(
+                        "spark_script",
+                        result.artifact_name,
+                        code,
+                        message,
+                    ),
+                }
             return ToolExecution(
                 tool_name="ArtifactTool",
                 status="success",
                 input={"script_name": script_name, "message": message},
-                output=result.__dict__,
+                output=output,
                 latency_ms=self._elapsed_ms(started),
                 metadata={
                     "ui_actions": [
-                        {"type": "toast", "message": f"Spark script {script_name} сохранен, версия {result.version}"}
+                        {"type": "toast", "message": f"Spark script {script_name} сохранен и задеплоен, версия {result.version}"}
                     ]
                 },
             )
@@ -627,6 +771,9 @@ class AgentToolRegistry:
             "email": self.user.email,
             "role": self.user.role,
         }
+
+    def can_deploy_runtime_artifacts(self) -> bool:
+        return self.user.role in {"admin", "engineer"}
 
     async def list_artifact_versions(
         self,

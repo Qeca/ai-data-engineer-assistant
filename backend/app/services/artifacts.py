@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import hashlib
 import py_compile
 import re
@@ -161,6 +159,37 @@ class ArtifactService:
         if artifact_type == "spark_script":
             return root / "spark" / "jobs" / artifact_name
         raise ValueError(f"Unsupported artifact type: {artifact_type}")
+
+    def runtime_path_for(self, artifact_type: str, artifact_name: str) -> Path:
+        if artifact_type == "airflow_dag":
+            return self.root / "airflow" / "dags" / artifact_name
+        if artifact_type == "spark_script":
+            return self.root / "spark" / "jobs" / artifact_name
+        raise ValueError(f"Unsupported runtime artifact type: {artifact_type}")
+
+    def read_runtime_code(self, artifact_type: str, artifact_name: str) -> tuple[Path, str]:
+        path = self.runtime_path_for(artifact_type, artifact_name)
+        return path, path.read_text(encoding="utf-8")
+
+    def deploy_runtime_copy(
+        self,
+        artifact_type: str,
+        artifact_name: str,
+        code: str,
+        message: str,
+    ) -> dict[str, str | None]:
+        path = self.runtime_path_for(artifact_type, artifact_name)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(code, encoding="utf-8")
+        git_result = self.git.commit_file(path, f"runtime deploy: {artifact_type}: {artifact_name} - {message}")
+        return {
+            "runtime_path": str(path),
+            "runtime_git_status": git_result.status,
+            "runtime_git_repository": git_result.repository,
+            "runtime_git_commit_sha": git_result.commit_sha,
+            "runtime_git_commit_short_sha": git_result.commit_short_sha,
+            "runtime_git_error": git_result.error,
+        }
 
     def read_code(
         self,

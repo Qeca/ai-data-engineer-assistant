@@ -11,8 +11,11 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends default-jre-headless git nodejs npm \
     && rm -rf /var/lib/apt/lists/*
 
+RUN npm install -g @modelcontextprotocol/server-postgres @modelcontextprotocol/server-filesystem
+
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir astro-airflow-mcp pyspark-mcp mcp-server-git
 
 COPY app ./app
 COPY alembic ./alembic

@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from functools import lru_cache
 
 from pydantic import Field
@@ -30,11 +28,18 @@ class Settings(BaseSettings):
     openrouter_model: str = "openai/gpt-5.5"
     openrouter_base_url: str = "https://openrouter.ai/api/v1"
 
+    magnitgpt_api_key: str | None = None
+    magnitgpt_model: str = "MagnitGPT"
+    magnitgpt_base_url: str = "https://llmlite.ai.corp.tander.ru/v1"
+    magnitgpt_verify_ssl: bool = True
+    magnitgpt_timeout_seconds: float = 25.0
+
     langfuse_public_key: str | None = None
     langfuse_secret_key: str | None = None
     langfuse_host: str = "http://langfuse:3000"
 
     airflow_base_url: str | None = "http://airflow-webserver:8080"
+    airflow_public_url: str | None = None
     airflow_username: str = "airflow"
     airflow_password: str = "airflow"
 

@@ -39,7 +39,7 @@ User
      -> Docker sandbox
 ```
 
-Агент может работать через OpenAI Responses API, OpenRouter tool calling или локальный fallback-режим. Даже без LLM-ключей демо-сценарии и тесты используют тот же registry инструментов.
+Агент работает через MagnitGPT, OpenAI Responses API или OpenRouter tool calling. Без LLM-ключа rule-based сценарии не запускаются: backend возвращает ошибку конфигурации, чтобы ответы не подменялись хардкодом.
 
 ## Быстрый локальный запуск
 
@@ -94,7 +94,7 @@ docker compose --profile debug up --build agent-debugger
 
 - `python:3.12-slim` для обычных Python-скриптов;
 - `apache/airflow:2.10.4` для import-check DAG;
-- `bitnami/spark:3.5.4` для Spark scripts.
+- `apache/spark:3.5.4` для Spark scripts.
 
 Для этого сервису монтируется Docker socket и общий каталог `SANDBOX_HOST_RUNS_DIR`.
 Рабочие каталоги и Docker labels разделяются по пользователям: `SANDBOX_HOST_RUNS_DIR/users/<user_id>/run-*`.
@@ -117,10 +117,46 @@ cd backend
 pytest
 ```
 
+Сценарные проверки агентского поведения:
+
+```bash
+cd backend
+pytest tests/test_agent_scenarios.py
+```
+
 ```bash
 cd frontend
 npm run build
 ```
+
+## Тестовые Postgres-Базы
+
+Для ручной проверки MCP database и SQL-сценариев есть сиды в `infra/postgres/test_databases.sql`.
+
+```bash
+docker cp infra/postgres/test_databases.sql postgres:/tmp/test_databases.sql
+docker exec postgres psql -U postgres -v ON_ERROR_STOP=1 -f /tmp/test_databases.sql
+```
+
+Скрипт создает три отдельные базы:
+
+- `ai_de_playground` — основная аналитическая база: `customers`, `products`, `orders`, `order_items`, `payments`, `events`, views `analytics.hourly_order_anomalies`, `analytics.customer_ltv`, `quality.order_quality_checks`.
+- `marketing_playground` — кампании, рекламные расходы, лиды и конверсии.
+- `ops_playground` — источники данных, pipeline runs, data quality checks и incidents.
+
+Для MCP database backend должен стартовать с:
+
+```bash
+MCP_DATABASE_URL=postgresql://postgres:postgres@host.docker.internal:5432/ai_de_playground
+```
+
+Примеры запросов агенту:
+
+- `какие MCP tools умеет database`
+- `через MCP database выполни query: select * from analytics.hourly_order_anomalies limit 5`
+- `что лежит в базе ai_de_playground`
+- `найди аномалии по заказам за последние 30 дней`
+- `посчитай LTV по сегментам клиентов`
 
 ## API
 
@@ -137,10 +173,11 @@ npm run build
 
 Function/tool calling включается через env:
 
+- `LLM_PROVIDER=magnitgpt` + `MAGNITGPT_API_KEY` для MagnitGPT через OpenAI-compatible `/chat/completions`.
 - `LLM_PROVIDER=openai` + `OPENAI_API_KEY` для OpenAI Responses API.
 - `LLM_PROVIDER=openrouter` + `OPENROUTER_API_KEY` для OpenRouter chat tool calling.
 
-Оркестрация агента построена на LangGraph: runtime выбирает OpenAI/OpenRouter или локальный fallback, выполняет tool-call loop, вызывает product tools и финализирует ответ через graph nodes. Без ключа агент работает в локальном fallback-режиме для демо и тестов, но с тем же registry tools и сохранением `tool_runs`.
+Оркестрация агента построена на LangGraph в ReAct-цикле: model call -> function tool call -> observation -> следующий model call до финального ответа. Rule-based fallback без LLM отключен: если ключ модели не настроен, агент возвращает ошибку конфигурации и не подменяет модель захардкоженными сценариями.
 
 Доступные function tools:
 
@@ -159,17 +196,17 @@ Function/tool calling включается через env:
 - `run_python_script_sandbox` — запускает обычный Python-скрипт в user-scoped Docker sandbox.
 - `list_artifact_versions` — история версий DAG/Spark-скриптов из БД с Git history по файлу.
 
-Готовые внешние MCP-серверы подключаются через MCP Python client: stdio для npm/uvx-серверов и streamable HTTP для серверов, которые сами поднимают HTTP endpoint.
+Готовые внешние MCP-серверы подключаются через MCP Python client: stdio для локальных CLI-серверов и streamable HTTP для серверов, которые сами поднимают HTTP endpoint. Backend Docker image устанавливает npm/Python MCP servers заранее и использует их binaries напрямую, поэтому зависимости не скачиваются во время пользовательского tool-call.
 
-- `database` — `@modelcontextprotocol/server-postgres` через `npx`, schema/read-only query tools.
-- `airflow` — `astro-airflow-mcp` от Astronomer через `uvx`, DAG/runs/logs/health tools.
-- `spark` — `pyspark-mcp` через `uvx` и streamable HTTP `/mcp`, Spark catalog/query plan tools.
-- `artifacts_git` — reference `mcp-server-git` через `uvx`, Git tools для артефактов.
-- `artifacts_filesystem` — reference filesystem MCP через `npx`, ограниченный `ARTIFACT_ROOT`.
+- `database` — `@modelcontextprotocol/server-postgres`, schema/read-only query tools.
+- `airflow` — `astro-airflow-mcp` от Astronomer, DAG/runs/logs/health tools.
+- `spark` — `pyspark-mcp` и streamable HTTP `/mcp`, Spark catalog/query plan tools.
+- `artifacts_git` — reference `mcp-server-git`, Git tools для артефактов.
+- `artifacts_filesystem` — reference filesystem MCP, ограниченный `ARTIFACT_ROOT`.
 
 MCP-compatible tool schema также доступна из общего registry и разложена по продуктам: `site`, `database`, `airflow`, `spark`, `external_mcp`, `artifacts`.
 
-Модель обучается работать с MCP через отдельный prompt playbook в `MCPInstructionBook`: сначала `list_mcp_products` при неизвестном продукте, затем `list_mcp_tools(product)`, затем `call_mcp_tool(product, exact_tool_name, arguments)` строго по найденной input schema. Если внешний MCP недоступен или не имеет нужного tool, агент использует локальный fallback tool и сообщает об этом в ответе. Для записи пользовательских DAG/Spark-скриптов модель предпочитает локальные artifact tools, потому что они enforce user scope, sandbox validation и Git versioning; filesystem MCP оставлен для явного чтения, поиска и низкоуровневых операций в `ARTIFACT_ROOT`.
+Модель обучается работать с MCP через отдельный prompt playbook в `MCPInstructionBook`: сначала `list_mcp_products` при неизвестном продукте, затем `list_mcp_tools(product)`, затем `call_mcp_tool(product, exact_tool_name, arguments)` строго по найденной input schema. Если внешний MCP недоступен или не имеет нужного tool, агент использует локальный product tool и сообщает об этом в ответе. Для записи пользовательских DAG/Spark-скриптов модель предпочитает локальные artifact tools, потому что они enforce user scope, sandbox validation и Git versioning; filesystem MCP оставлен для явного чтения, поиска и низкоуровневых операций в `ARTIFACT_ROOT`.
 
 Артефакты сохраняются по пользователям в `infra/users/<user_id>/...`; обычный пользователь видит и отлаживает только свои версии. Admin видит все версии в истории. Git-репозиторий артефактов инициализируется строго в `ARTIFACT_GIT_ROOT`, чтобы не смешивать с git-репозиторием исходного кода.
 

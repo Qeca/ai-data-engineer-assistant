@@ -116,8 +116,10 @@ class PipelineRead(BaseModel):
     schedule: str
     status: str
     owner: str
+    description: str | None = None
     last_run: str | None = None
     next_run: str | None = None
+    tasks: list[dict[str, Any]] = Field(default_factory=list)
 
 
 class AirflowRunRequest(BaseModel):
@@ -130,6 +132,27 @@ class AirflowRunRead(BaseModel):
     status: str
     external_url: str | None = None
     created_at: datetime | None = None
+
+
+class AirflowTaskInstanceRead(BaseModel):
+    dag_id: str
+    run_id: str
+    task_id: str
+    state: str
+    try_number: int = 1
+    operator: str | None = None
+    start_date: str | None = None
+    end_date: str | None = None
+    duration: float | None = None
+
+
+class AirflowTaskLogRead(BaseModel):
+    dag_id: str
+    run_id: str
+    task_id: str
+    try_number: int
+    content: str
+    source: str = "airflow"
 
 
 class SparkJobRequest(BaseModel):

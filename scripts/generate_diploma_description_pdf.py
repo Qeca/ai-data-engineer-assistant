@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from pathlib import Path
 
 from reportlab.lib.enums import TA_CENTER, TA_JUSTIFY

@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import py_compile
 from dataclasses import dataclass
 from pathlib import Path
@@ -120,7 +118,6 @@ def _runtime_plan(payload: DebugRequest, script_name: str) -> RuntimePlan:
             "python",
             "-c",
             (
-                "from __future__ import annotations\n"
                 "import importlib.util\n"
                 f"spec = importlib.util.spec_from_file_location('agent_dag', '/workspace/{script_name}')\n"
                 "module = importlib.util.module_from_spec(spec)\n"
@@ -140,8 +137,8 @@ def _runtime_plan(payload: DebugRequest, script_name: str) -> RuntimePlan:
 
     if payload.artifact_type == "spark_script":
         return RuntimePlan(
-            image=_env("SANDBOX_SPARK_IMAGE", "bitnami/spark:3.5.4"),
-            command=["/opt/bitnami/spark/bin/spark-submit", f"/workspace/{script_name}", *payload.arguments],
+            image=_env("SANDBOX_SPARK_IMAGE", "apache/spark:3.5.4"),
+            command=["/opt/spark/bin/spark-submit", f"/workspace/{script_name}", *payload.arguments],
             note="Runs Spark script through spark-submit in a Docker container.",
         )
 

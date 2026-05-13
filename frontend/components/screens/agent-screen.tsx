@@ -1,11 +1,13 @@
 "use client";
 
-import { useMutation } from "@tanstack/react-query";
-import { SendHorizonal } from "lucide-react";
-import { FormEvent, useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { MessageSquare, Plus, SendHorizonal } from "lucide-react";
+import { FormEvent, useEffect, useState } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { api } from "@/lib/api";
 import { useAppStore, type Screen } from "@/lib/store";
-import type { ToolCall, UiAction } from "@/types";
+import type { AgentMessage, ToolCall, UiAction } from "@/types";
 import { Badge } from "@/components/ui";
 
 type ChatMessage = {
@@ -29,9 +31,27 @@ export function AgentScreen() {
   const screen = useAppStore((state) => state.screen);
   const setScreen = useAppStore((state) => state.setScreen);
   const user = useAppStore((state) => state.user);
+  const queryClient = useQueryClient();
   const [sessionId, setSessionId] = useState<string | null>(null);
-  const [input, setInput] = useState("Проанализируй таблицу orders за последние 30 дней и найди аномалии по часам");
+  const [input, setInput] = useState("");
   const [messages, setMessages] = useState<ChatMessage[]>(starter);
+
+  const sessions = useQuery({
+    queryKey: ["agent-sessions", token],
+    queryFn: () => api.sessions(token ?? ""),
+    enabled: Boolean(token),
+  });
+
+  const sessionMessages = useQuery({
+    queryKey: ["agent-session-messages", token, sessionId],
+    queryFn: () => api.sessionMessages(token ?? "", sessionId ?? ""),
+    enabled: Boolean(token && sessionId),
+  });
+
+  useEffect(() => {
+    if (!sessionMessages.data) return;
+    setMessages(sessionMessages.data.map(toChatMessage));
+  }, [sessionMessages.data]);
 
   const ask = useMutation({
     mutationFn: (query: string) =>
@@ -43,6 +63,7 @@ export function AgentScreen() {
     onSuccess: (result) => {
       setSessionId(result.session_id);
       applyUiActions(result.ui_actions);
+      queryClient.invalidateQueries({ queryKey: ["agent-sessions"] });
       setMessages((current) => [
         ...current,
         {
@@ -65,6 +86,15 @@ export function AgentScreen() {
     ask.mutate(query);
   }
 
+  function openNewChat() {
+    setSessionId(null);
+    setMessages(starter);
+  }
+
+  function openChat(id: string) {
+    setSessionId(id);
+  }
+
   function applyUiActions(actions: UiAction[]) {
     for (const action of actions) {
       if (action.type === "navigate" && typeof action.screen === "string") {
@@ -77,24 +107,36 @@ export function AgentScreen() {
     <div className="split">
       <aside className="left-panel">
         <div className="card-body">
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
+            <div className="stat-label" style={{ flex: 1 }}>Chats</div>
+            <button className="icon-btn" onClick={openNewChat} title="New chat">
+              <Plus size={14} />
+            </button>
+          </div>
+          <div className="chat-session-list">
+            <button className={`chat-session ${sessionId === null ? "active" : ""}`} onClick={openNewChat}>
+              <MessageSquare size={14} />
+              <span>Новый чат</span>
+            </button>
+            {(sessions.data ?? []).map((session) => (
+              <button
+                className={`chat-session ${session.id === sessionId ? "active" : ""}`}
+                key={session.id}
+                onClick={() => openChat(session.id)}
+              >
+                <MessageSquare size={14} />
+                <span>{session.title}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="card-body" style={{ borderTop: "1px solid var(--border-subtle)" }}>
           <div className="stat-label" style={{ marginBottom: 8 }}>Tools</div>
           {["SiteStatusTool", "SiteControlTool", "SQLTool", "CatalogTool", "AirflowTool", "SparkTool"].map((tool) => (
             <div key={tool} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 7 }}>
               <Badge status="success">ready</Badge>
               <span className="mono">{tool}</span>
             </div>
-          ))}
-        </div>
-        <div className="card-body" style={{ borderTop: "1px solid var(--border-subtle)" }}>
-          <div className="stat-label" style={{ marginBottom: 8 }}>Examples</div>
-          {[
-            "Запусти DAG orders_sync",
-            "Отправь Spark job для clickstream",
-            "Покажи каталог таблиц",
-          ].map((text) => (
-            <button key={text} className="btn btn-ghost" style={{ width: "100%", justifyContent: "flex-start" }} onClick={() => setInput(text)}>
-              {text}
-            </button>
           ))}
         </div>
       </aside>
@@ -107,7 +149,11 @@ export function AgentScreen() {
                 {message.role === "assistant" ? "AI" : "YOU"}
               </div>
               <div className="bubble">
-                <div>{message.content}</div>
+                {message.role === "assistant" ? (
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>{message.content}</ReactMarkdown>
+                ) : (
+                  <div>{message.content}</div>
+                )}
                 {message.intent && (
                   <div style={{ marginTop: 10, display: "flex", gap: 8, flexWrap: "wrap" }}>
                     <Badge status="ai">{message.intent}</Badge>
@@ -133,6 +179,12 @@ export function AgentScreen() {
             </div>
           )}
           {ask.error && <div className="error-text">{ask.error.message}</div>}
+          {sessionMessages.isFetching && sessionId && (
+            <div className="chat-msg">
+              <div className="avatar ai">AI</div>
+              <div className="bubble">Загружаю чат...</div>
+            </div>
+          )}
         </div>
 
         <form className="chat-input" onSubmit={submit}>
@@ -146,4 +198,14 @@ export function AgentScreen() {
     </div>
   );
 
+}
+
+function toChatMessage(message: AgentMessage): ChatMessage {
+  const role = message.role === "user" ? "user" : "assistant";
+  const intent = typeof message.metadata_json?.intent === "string" ? message.metadata_json.intent : undefined;
+  return {
+    role,
+    content: message.content,
+    intent,
+  };
 }

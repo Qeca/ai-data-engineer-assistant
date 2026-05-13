@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import sys
 import socket
 from pathlib import Path
@@ -23,8 +21,6 @@ async def test_external_mcp_gateway_lists_and_calls_stdio_tools(tmp_path):
     server_path = tmp_path / "fake_mcp_server.py"
     server_path.write_text(
         """
-from __future__ import annotations
-
 from mcp.server.fastmcp import FastMCP
 
 mcp = FastMCP("fake")
@@ -66,8 +62,6 @@ async def test_external_mcp_gateway_lists_and_calls_streamable_http_tools(tmp_pa
     server_path = tmp_path / "fake_http_mcp_server.py"
     server_path.write_text(
         f"""
-from __future__ import annotations
-
 from mcp.server.fastmcp import FastMCP
 
 mcp = FastMCP("fake-http", host="127.0.0.1", port={port}, streamable_http_path="/mcp", log_level="ERROR")

@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from dataclasses import dataclass
 
 
@@ -22,7 +20,7 @@ class MCPInstructionBook:
         MCPProductLesson(
             product="airflow",
             use_for="Airflow health, DAGs, runs, logs, variables, connections, pools and trigger actions.",
-            examples=("покажи DAG runs через MCP", "запусти DAG", "проверь Airflow health/logs"),
+            examples=("покажи DAG runs через MCP", "запусти DAG через MCP", "проверь Airflow health/logs через MCP"),
             fallback="list_pipelines, manage_airflow_dags, trigger_airflow_dag, get_airflow_run",
         ),
         MCPProductLesson(
@@ -49,6 +47,7 @@ class MCPInstructionBook:
         product_lines = " ".join(self._render_lesson(lesson) for lesson in self.lessons)
         return (
             "MCP PLAYBOOK. "
+            "Внешние MCP-серверы используй только при явном запросе MCP или когда локальные product tools не покрывают задачу. "
             "Когда нужно работать с готовым внешним MCP-сервером, всегда действуй циклом discovery -> call -> validate. "
             "Если пользователь спрашивает какие MCP доступны, вызови list_mcp_products. "
             "Если продукт понятен, сначала вызови list_mcp_tools с product. "

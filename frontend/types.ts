@@ -30,6 +30,21 @@ export type AgentResponse = {
   ui_actions: UiAction[];
 };
 
+export type AgentSession = {
+  id: string;
+  title: string;
+  created_at: string;
+  updated_at: string;
+};
+
+export type AgentMessage = {
+  id: string;
+  role: "user" | "assistant" | string;
+  content: string;
+  metadata_json?: Record<string, unknown> | null;
+  created_at: string;
+};
+
 export type UiAction =
   | { type: "navigate"; screen: string }
   | { type: "toast"; message: string }
@@ -55,8 +70,10 @@ export type Pipeline = {
   schedule: string;
   status: string;
   owner: string;
+  description?: string | null;
   last_run?: string | null;
   next_run?: string | null;
+  tasks?: { task_id?: string; operator_name?: string; downstream_task_ids?: string[] }[];
 };
 
 export type AirflowRun = {
@@ -65,6 +82,27 @@ export type AirflowRun = {
   status: string;
   external_url?: string | null;
   created_at?: string | null;
+};
+
+export type AirflowTaskInstance = {
+  dag_id: string;
+  run_id: string;
+  task_id: string;
+  state: string;
+  try_number: number;
+  operator?: string | null;
+  start_date?: string | null;
+  end_date?: string | null;
+  duration?: number | null;
+};
+
+export type AirflowTaskLog = {
+  dag_id: string;
+  run_id: string;
+  task_id: string;
+  try_number: number;
+  content: string;
+  source?: string;
 };
 
 export type SparkJob = {

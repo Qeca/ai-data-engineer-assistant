@@ -1,6 +1,10 @@
 import type {
+  AgentMessage,
   AgentResponse,
+  AgentSession,
+  AirflowTaskInstance,
   AirflowRun,
+  AirflowTaskLog,
   CatalogTable,
   Pipeline,
   SparkJob,
@@ -66,6 +70,9 @@ export const api = {
       token,
       body: JSON.stringify({ query, session_id: sessionId, app_state: appState ?? {} }),
     }),
+  sessions: (token: string) => request<AgentSession[]>("/sessions", { token }),
+  sessionMessages: (token: string, sessionId: string) =>
+    request<AgentMessage[]>(`/sessions/${encodeURIComponent(sessionId)}/messages`, { token }),
   executeSql: (token: string, query: string, limit = 100) =>
     request<SqlResult>("/sql/execute", {
       method: "POST",
@@ -83,6 +90,18 @@ export const api = {
   getDagRun: (token: string, dagId: string, runId: string) =>
     request<AirflowRun>(
       `/airflow/dags/${encodeURIComponent(dagId)}/runs/${encodeURIComponent(runId)}`,
+      { token },
+    ),
+  dagRuns: (token: string, dagId: string) =>
+    request<AirflowRun[]>(`/airflow/dags/${encodeURIComponent(dagId)}/runs`, { token }),
+  dagTaskInstances: (token: string, dagId: string, runId: string) =>
+    request<AirflowTaskInstance[]>(
+      `/airflow/dags/${encodeURIComponent(dagId)}/runs/${encodeURIComponent(runId)}/tasks`,
+      { token },
+    ),
+  dagTaskLog: (token: string, dagId: string, runId: string, taskId: string, tryNumber = 1) =>
+    request<AirflowTaskLog>(
+      `/airflow/dags/${encodeURIComponent(dagId)}/runs/${encodeURIComponent(runId)}/tasks/${encodeURIComponent(taskId)}/logs/${tryNumber}`,
       { token },
     ),
   submitSpark: (token: string, payload: { name: string; app_resource: string; params: Record<string, unknown> }) =>

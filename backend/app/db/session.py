@@ -16,8 +16,11 @@ engine = create_async_engine(settings.database_url, echo=False, future=True, con
 AsyncSessionLocal = async_sessionmaker(engine, expire_on_commit=False, class_=AsyncSession)
 
 
-def sqlite_dt(value: datetime) -> str:
-    return value.replace(tzinfo=None).isoformat(sep=" ", timespec="seconds")
+def db_timestamp(value: datetime) -> datetime | str:
+    normalized = value.replace(tzinfo=None)
+    if settings.database_url.startswith("sqlite"):
+        return normalized.isoformat(sep=" ", timespec="seconds")
+    return normalized
 
 
 async def get_db() -> AsyncSession:
@@ -132,7 +135,7 @@ async def seed_demo_data(session: AsyncSession) -> None:
             rows.append(
                 {
                     "id": row_id,
-                    "created_at": sqlite_dt(ts),
+                    "created_at": db_timestamp(ts),
                     "user_id": rnd.randint(1, 180),
                     "total_amount": round(rnd.uniform(8, 450), 2),
                     "status": "paid" if rnd.random() > 0.08 else "cancelled",
@@ -161,7 +164,7 @@ async def seed_demo_data(session: AsyncSession) -> None:
                 "id": idx,
                 "email": f"user{idx}@example.com",
                 "segment": ["retail", "b2b", "vip"][idx % 3],
-                "created_at": sqlite_dt(now - timedelta(days=idx % 120)),
+                "created_at": db_timestamp(now - timedelta(days=idx % 120)),
             }
             for idx in range(1, 181)
         ],
@@ -176,7 +179,7 @@ async def seed_demo_data(session: AsyncSession) -> None:
         [
             {
                 "id": idx,
-                "created_at": sqlite_dt(now - timedelta(minutes=idx * 7)),
+                "created_at": db_timestamp(now - timedelta(minutes=idx * 7)),
                 "user_id": rnd.randint(1, 180),
                 "event_name": ["page_view", "checkout", "search", "add_to_cart"][idx % 4],
                 "payload": "{}",
