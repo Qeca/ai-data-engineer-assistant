@@ -554,6 +554,51 @@ body {
   cursor: pointer;
 }
 
+.chat-session-row {
+  display: flex;
+  align-items: center;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+}
+
+.chat-session-row .chat-session {
+  min-width: 0;
+  flex: 1;
+  border: 0;
+}
+
+.chat-session-row .chat-session:hover {
+  background: transparent;
+}
+
+.chat-session-row:hover,
+.chat-session-row.active {
+  background: var(--bg-hover);
+  border-color: var(--border-subtle);
+}
+
+.chat-session-row:hover .chat-session,
+.chat-session-row.active .chat-session {
+  color: var(--text-primary);
+}
+
+.chat-delete {
+  width: 28px;
+  height: 28px;
+  margin-right: 3px;
+  color: var(--text-tertiary);
+  opacity: 0;
+}
+
+.chat-session-row:hover .chat-delete,
+.chat-delete:focus-visible {
+  opacity: 1;
+}
+
+.chat-delete:hover {
+  color: var(--color-error);
+}
+
 .chat-session span {
   min-width: 0;
   overflow: hidden;

@@ -46,6 +46,10 @@ async function request<T>(path: string, options: ApiOptions = {}): Promise<T> {
     throw new Error(Array.isArray(detail) ? detail.map((item) => item.msg).join(", ") : detail);
   }
 
+  if (response.status === 204) {
+    return undefined as T;
+  }
+
   return response.json() as Promise<T>;
 }
 
@@ -155,6 +159,11 @@ export const api = {
   sessions: (token: string) => request<AgentSession[]>("/sessions", { token }),
   sessionMessages: (token: string, sessionId: string) =>
     request<AgentMessage[]>(`/sessions/${encodeURIComponent(sessionId)}/messages`, { token }),
+  deleteSession: (token: string, sessionId: string) =>
+    request<void>(`/sessions/${encodeURIComponent(sessionId)}`, {
+      method: "DELETE",
+      token,
+    }),
   executeSql: (token: string, query: string, limit = 100) =>
     request<SqlResult>("/sql/execute", {
       method: "POST",

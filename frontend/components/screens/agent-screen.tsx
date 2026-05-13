@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { CheckCircle2, ChevronRight, Circle, Loader2, MessageSquare, Plus, SendHorizonal } from "lucide-react";
+import { CheckCircle2, ChevronRight, Circle, Loader2, MessageSquare, Plus, SendHorizonal, Trash2 } from "lucide-react";
 import { FormEvent, useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -77,6 +77,18 @@ export function AgentScreen() {
     },
   });
 
+  const deleteChat = useMutation({
+    mutationFn: (id: string) => api.deleteSession(token ?? "", id),
+    onSuccess: (_, deletedId) => {
+      if (sessionId === deletedId) {
+        setSessionId(null);
+        setMessages(starter);
+      }
+      queryClient.invalidateQueries({ queryKey: ["agent-sessions"] });
+      queryClient.removeQueries({ queryKey: ["agent-session-messages", token, deletedId] });
+    },
+  });
+
   function submit(event: FormEvent) {
     event.preventDefault();
     const query = input.trim();
@@ -93,6 +105,10 @@ export function AgentScreen() {
 
   function openChat(id: string) {
     setSessionId(id);
+  }
+
+  function removeChat(id: string) {
+    deleteChat.mutate(id);
   }
 
   function applyUiActions(actions: UiAction[]) {
@@ -180,14 +196,22 @@ export function AgentScreen() {
               <span>Новый чат</span>
             </button>
             {(sessions.data ?? []).map((session) => (
-              <button
-                className={`chat-session ${session.id === sessionId ? "active" : ""}`}
-                key={session.id}
-                onClick={() => openChat(session.id)}
-              >
-                <MessageSquare size={14} />
-                <span>{session.title}</span>
-              </button>
+              <div className={`chat-session-row ${session.id === sessionId ? "active" : ""}`} key={session.id}>
+                <button className="chat-session" type="button" onClick={() => openChat(session.id)}>
+                  <MessageSquare size={14} />
+                  <span>{session.title}</span>
+                </button>
+                <button
+                  className="btn btn-ghost icon-btn chat-delete"
+                  type="button"
+                  onClick={() => removeChat(session.id)}
+                  disabled={deleteChat.isPending}
+                  title="Удалить чат"
+                  aria-label={`Удалить чат ${session.title}`}
+                >
+                  <Trash2 size={13} />
+                </button>
+              </div>
             ))}
           </div>
         </div>
