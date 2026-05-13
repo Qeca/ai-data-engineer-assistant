@@ -55,8 +55,9 @@ export function AgentScreen() {
   const screen = useAppStore((state) => state.screen);
   const setScreen = useAppStore((state) => state.setScreen);
   const user = useAppStore((state) => state.user);
+  const sessionId = useAppStore((state) => state.agentSessionId);
+  const setSessionId = useAppStore((state) => state.setAgentSessionId);
   const queryClient = useQueryClient();
-  const [sessionId, setSessionId] = useState<string | null>(null);
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<ChatMessage[]>(starter);
   const [panelWidth, setPanelWidth] = useState(270);

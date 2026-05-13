@@ -1083,6 +1083,11 @@ body {
   background: var(--bg-base);
 }
 
+.app-loading {
+  min-height: 100vh;
+  background: var(--bg-base);
+}
+
 .login-panel {
   width: min(420px, 100%);
   border: 1px solid var(--border-default);

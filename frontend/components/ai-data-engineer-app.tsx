@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
 import { useAppStore } from "@/lib/store";
 import { LoginPanel } from "@/components/login-panel";
@@ -18,6 +18,7 @@ import { SparkScreen } from "@/components/screens/spark-screen";
 import { SqlScreen } from "@/components/screens/sql-screen";
 
 export function AIDataEngineerApp() {
+  const [hydrated, setHydrated] = useState(false);
   const token = useAppStore((state) => state.accessToken);
   const screen = useAppStore((state) => state.screen);
   const setUser = useAppStore((state) => state.setUser);
@@ -34,6 +35,16 @@ export function AIDataEngineerApp() {
     if (me.data) setUser(me.data);
     if (me.error) logout();
   }, [me.data, me.error, logout, setUser]);
+
+  useEffect(() => {
+    const unsubscribe = useAppStore.persist.onFinishHydration(() => setHydrated(true));
+    setHydrated(useAppStore.persist.hasHydrated());
+    return unsubscribe;
+  }, []);
+
+  if (!hydrated) {
+    return <main className="app-loading" />;
+  }
 
   if (!token) {
     return <LoginPanel />;
