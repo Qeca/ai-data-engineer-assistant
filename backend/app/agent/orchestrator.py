@@ -31,7 +31,6 @@ class AgentGraphState(TypedDict, total=False):
     pending_calls: list[Any]
     openai_outputs: list[dict[str, Any]]
     tool_calls: list[ToolExecution]
-    loop_count: int
     intent: str
     answer: str
     ui_actions: list[dict[str, Any]]
@@ -60,7 +59,6 @@ class AgentOrchestrator:
                 "query": query,
                 "registry": registry,
                 "tool_calls": [],
-                "loop_count": 0,
                 "event_handler": event_handler,
             }
         )
@@ -215,13 +213,11 @@ class AgentOrchestrator:
                     )
                 )
 
-        loop_count = state.get("loop_count", 0) + 1
         result: AgentGraphState = {
             "tool_calls": tool_calls,
             "pending_calls": [],
             "openai_outputs": openai_outputs,
             "messages": messages,
-            "loop_count": loop_count,
         }
         return result
 
