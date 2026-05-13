@@ -2,7 +2,7 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { CheckCircle2, ChevronRight, Circle, Loader2, MessageSquare, Plus, SendHorizonal, Trash2 } from "lucide-react";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, PointerEvent, useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { api } from "@/lib/api";
@@ -41,6 +41,7 @@ export function AgentScreen() {
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<ChatMessage[]>(starter);
+  const [panelWidth, setPanelWidth] = useState(270);
 
   const sessions = useQuery({
     queryKey: ["agent-sessions", token],
@@ -58,6 +59,11 @@ export function AgentScreen() {
     if (!sessionMessages.data) return;
     setMessages(sessionMessages.data.map(toChatMessage));
   }, [sessionMessages.data]);
+
+  useEffect(() => {
+    const saved = window.localStorage.getItem("agent-sidebar-width");
+    if (saved) setPanelWidth(clamp(Number(saved), 230, 520));
+  }, []);
 
   const ask = useMutation({
     mutationFn: (query: string) =>
@@ -109,6 +115,27 @@ export function AgentScreen() {
 
   function removeChat(id: string) {
     deleteChat.mutate(id);
+  }
+
+  function resizePanel(event: PointerEvent<HTMLDivElement>) {
+    const startX = event.clientX;
+    const startWidth = panelWidth;
+    let nextWidth = startWidth;
+    event.currentTarget.setPointerCapture(event.pointerId);
+
+    function move(moveEvent: globalThis.PointerEvent) {
+      nextWidth = clamp(startWidth + moveEvent.clientX - startX, 230, 520);
+      setPanelWidth(nextWidth);
+    }
+
+    function up() {
+      window.localStorage.setItem("agent-sidebar-width", String(nextWidth));
+      window.removeEventListener("pointermove", move);
+      window.removeEventListener("pointerup", up);
+    }
+
+    window.addEventListener("pointermove", move);
+    window.addEventListener("pointerup", up);
   }
 
   function applyUiActions(actions: UiAction[]) {
@@ -182,7 +209,7 @@ export function AgentScreen() {
 
   return (
     <div className="split">
-      <aside className="left-panel">
+      <aside className="left-panel resizable-panel" style={{ width: panelWidth }}>
         <div className="card-body">
           <div className="chat-panel-heading">
             <div className="stat-label">Chats</div>
@@ -224,6 +251,7 @@ export function AgentScreen() {
             </div>
           ))}
         </div>
+        <div className="resize-handle" onPointerDown={resizePanel} aria-label="Resize chats" role="separator" />
       </aside>
 
       <section className="work-area">
@@ -497,6 +525,10 @@ function stripMarkdown(value: string): string {
 function formatLatency(ms: number): string {
   if (ms < 1000) return `${ms}ms`;
   return `${(ms / 1000).toFixed(ms >= 10000 ? 0 : 1)}s`;
+}
+
+function clamp(value: number, min: number, max: number) {
+  return Math.min(Math.max(value, min), max);
 }
 
 function formatToolOutput(output: Record<string, unknown>): string {

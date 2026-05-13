@@ -16,6 +16,7 @@ import {
   Table2,
   UserCircle,
 } from "lucide-react";
+import { PointerEvent, useEffect, useState } from "react";
 import { useAppStore, type Screen } from "@/lib/store";
 
 const sections: { label: string; items: { screen: Screen; label: string; icon: React.ElementType; badge?: string }[] }[] =
@@ -52,10 +53,37 @@ export function Shell({ children }: { children: React.ReactNode }) {
   const toggleTheme = useAppStore((state) => state.toggleTheme);
   const logout = useAppStore((state) => state.logout);
   const user = useAppStore((state) => state.user);
+  const [sidebarWidth, setSidebarWidth] = useState(250);
+
+  useEffect(() => {
+    const saved = window.localStorage.getItem("main-sidebar-width");
+    if (saved) setSidebarWidth(clamp(Number(saved), 210, 420));
+  }, []);
+
+  function resizeSidebar(event: PointerEvent<HTMLDivElement>) {
+    const startX = event.clientX;
+    const startWidth = sidebarWidth;
+    let nextWidth = startWidth;
+    event.currentTarget.setPointerCapture(event.pointerId);
+
+    function move(moveEvent: globalThis.PointerEvent) {
+      nextWidth = clamp(startWidth + moveEvent.clientX - startX, 210, 420);
+      setSidebarWidth(nextWidth);
+    }
+
+    function up() {
+      window.localStorage.setItem("main-sidebar-width", String(nextWidth));
+      window.removeEventListener("pointermove", move);
+      window.removeEventListener("pointerup", up);
+    }
+
+    window.addEventListener("pointermove", move);
+    window.addEventListener("pointerup", up);
+  }
 
   return (
     <div className={`app-shell ${theme === "light" ? "theme-light" : ""}`}>
-      <aside className="sidebar">
+      <aside className="sidebar resizable-panel" style={{ width: sidebarWidth }}>
         <div className="sidebar-logo">
           <div className="logo-mark">DE</div>
           <div>
@@ -94,6 +122,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
             {user?.full_name ?? "Profile"}
           </button>
         </div>
+        <div className="resize-handle" onPointerDown={resizeSidebar} aria-label="Resize navigation" role="separator" />
       </aside>
       <main className="main">
         <div className="topbar">
@@ -114,6 +143,10 @@ export function Shell({ children }: { children: React.ReactNode }) {
       </main>
     </div>
   );
+}
+
+function clamp(value: number, min: number, max: number) {
+  return Math.min(Math.max(value, min), max);
 }
 
 function screenLabel(screen: Screen) {
