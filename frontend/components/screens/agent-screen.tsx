@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { MessageSquare, Plus, SendHorizonal } from "lucide-react";
+import { CheckCircle2, Circle, Loader2, MessageSquare, Plus, SendHorizonal } from "lucide-react";
 import { FormEvent, useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -18,6 +18,10 @@ type ChatMessage = {
   uiActions?: UiAction[];
   toolOutput?: Record<string, unknown>;
 };
+
+type RenderItem =
+  | { type: "message"; message: ChatMessage; key: string }
+  | { type: "activity"; messages: ChatMessage[]; key: string };
 
 const starter: ChatMessage[] = [
   {
@@ -199,42 +203,40 @@ export function AgentScreen() {
 
       <section className="work-area">
         <div className="chat-list">
-          {messages.map((message, index) => (
-            <div className={`chat-msg ${message.role === "user" ? "user" : ""} ${message.role === "tool" ? "tool" : ""}`} key={`${message.role}-${index}`}>
-              <div className={`avatar ${message.role === "assistant" ? "ai" : ""}`}>
-                {message.role === "assistant" ? "AI" : message.role === "tool" ? "TOOL" : "YOU"}
+          {groupMessages(messages).map((item) =>
+            item.type === "activity" ? (
+              <ActivityMessage key={item.key} messages={item.messages} />
+            ) : (
+              <div className={`chat-msg ${item.message.role === "user" ? "user" : ""}`} key={item.key}>
+                <div className={`avatar ${item.message.role === "assistant" ? "ai" : ""}`}>
+                  {item.message.role === "assistant" ? "AI" : "YOU"}
+                </div>
+                <div className="bubble">
+                  {item.message.role === "assistant" ? (
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{item.message.content}</ReactMarkdown>
+                  ) : (
+                    <div>{item.message.content}</div>
+                  )}
+                  {item.message.intent && (
+                    <div style={{ marginTop: 10, display: "flex", gap: 8, flexWrap: "wrap" }}>
+                      <Badge status="ai">{item.message.intent}</Badge>
+                      {item.message.tools?.map((tool) => (
+                        <Badge key={`${tool.tool_name}-${tool.latency_ms}`} status={tool.status}>
+                          {tool.tool_name} · {tool.latency_ms}ms
+                        </Badge>
+                      ))}
+                      {item.message.uiActions?.map((action, actionIndex) => (
+                        <span className="tag" key={`${action.type}-${actionIndex}`}>
+                          ui:{action.type}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
-              <div className="bubble">
-                {message.role === "assistant" ? (
-                  <ReactMarkdown remarkPlugins={[remarkGfm]}>{message.content}</ReactMarkdown>
-                ) : (
-                  <div>{message.content}</div>
-                )}
-                {message.intent && (
-                  <div style={{ marginTop: 10, display: "flex", gap: 8, flexWrap: "wrap" }}>
-                    <Badge status="ai">{message.intent}</Badge>
-                    {message.tools?.map((tool) => (
-                      <Badge key={`${tool.tool_name}-${tool.latency_ms}`} status={tool.status}>
-                        {tool.tool_name} · {tool.latency_ms}ms
-                      </Badge>
-                    ))}
-                    {message.uiActions?.map((action, actionIndex) => (
-                      <span className="tag" key={`${action.type}-${actionIndex}`}>
-                        ui:{action.type}
-                      </span>
-                    ))}
-                  </div>
-                )}
-                {message.toolOutput && (
-                  <details className="tool-output" open>
-                    <summary>result</summary>
-                    <pre>{formatToolOutput(message.toolOutput)}</pre>
-                  </details>
-                )}
-              </div>
-            </div>
-          ))}
-          {ask.isPending && (
+            ),
+          )}
+          {ask.isPending && messages.at(-1)?.role !== "tool" && (
             <div className="chat-msg">
               <div className="avatar ai">AI</div>
               <div className="bubble">Выполняю tool-call...</div>
@@ -260,6 +262,83 @@ export function AgentScreen() {
     </div>
   );
 
+}
+
+function ActivityMessage({ messages }: { messages: ChatMessage[] }) {
+  const toolCalls = messages.flatMap((message) => message.tools ?? []);
+  const totalLatency = toolCalls.reduce((sum, tool) => sum + tool.latency_ms, 0);
+  const hasPending = messages.some((message) => message.intent === "tool-start");
+
+  return (
+    <div className="chat-msg activity">
+      <div className="avatar ai">AI</div>
+      <div className="activity-card">
+        <div className="activity-header">
+          {hasPending ? <Loader2 size={15} className="spin" /> : <CheckCircle2 size={15} />}
+          <span>Активность</span>
+          {totalLatency > 0 && <span className="activity-time">· {formatLatency(totalLatency)}</span>}
+        </div>
+        <div className="activity-timeline">
+          {messages.map((message, index) => (
+            <ActivityStep key={`${message.content}-${index}`} message={message} />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ActivityStep({ message }: { message: ChatMessage }) {
+  const tool = message.tools?.[0];
+  const output = tool?.output ?? message.toolOutput;
+  const isPending = message.intent === "tool-start";
+
+  return (
+    <div className="activity-step">
+      <div className={`activity-step-icon ${tool?.status === "error" ? "error" : ""}`}>
+        {isPending ? <Loader2 size={13} className="spin" /> : tool?.status === "success" ? <CheckCircle2 size={13} /> : <Circle size={13} />}
+      </div>
+      <div className="activity-step-body">
+        <div className="activity-step-title">{activityTitle(message, tool)}</div>
+        <div className="activity-step-sub">{activitySummary(message, tool)}</div>
+        <div className="activity-step-meta">
+          {tool && <span>{tool.tool_name}</span>}
+          {tool && <span>{formatLatency(tool.latency_ms)}</span>}
+          {tool?.status && <span>{tool.status}</span>}
+        </div>
+        {output && (
+          <details className="activity-details">
+            <summary>Детали</summary>
+            <pre>{formatToolOutput(output)}</pre>
+          </details>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function groupMessages(items: ChatMessage[]): RenderItem[] {
+  const grouped: RenderItem[] = [];
+  let index = 0;
+
+  while (index < items.length) {
+    const message = items[index];
+    if (message.role !== "tool") {
+      grouped.push({ type: "message", message, key: `${message.role}-${index}` });
+      index += 1;
+      continue;
+    }
+
+    const activityMessages: ChatMessage[] = [];
+    const startIndex = index;
+    while (items[index]?.role === "tool") {
+      activityMessages.push(items[index]);
+      index += 1;
+    }
+    grouped.push({ type: "activity", messages: activityMessages, key: `activity-${startIndex}` });
+  }
+
+  return grouped;
 }
 
 function toChatMessage(message: AgentMessage): ChatMessage {
@@ -295,6 +374,57 @@ function isToolCall(value: unknown): value is ToolCall {
 function summarizeToolCall(toolCall: ToolCall): string {
   const state = toolCall.status === "success" ? "готов" : "ошибка";
   return `\`${toolCall.tool_name}\` ${state} за ${toolCall.latency_ms}ms`;
+}
+
+function activityTitle(message: ChatMessage, tool?: ToolCall): string {
+  if (message.intent === "tool-start") return stripMarkdown(message.content);
+  if (!tool) return stripMarkdown(message.content);
+  if (tool.status === "error") return `${tool.tool_name} завершился с ошибкой`;
+  return `${tool.tool_name} выполнен`;
+}
+
+function activitySummary(message: ChatMessage, tool?: ToolCall): string {
+  if (message.intent === "tool-start") return "Агент вызвал function tool и ждёт результат.";
+  if (!tool) return "Шаг выполнен.";
+
+  const output = tool.output;
+  if (Array.isArray(output.pipelines)) {
+    const names = output.pipelines
+      .map((item) => (isRecord(item) ? item.dag_id : undefined))
+      .filter(Boolean)
+      .slice(0, 4)
+      .join(", ");
+    return `Проверены Airflow DAG: ${output.pipelines.length}${names ? ` (${names})` : ""}.`;
+  }
+  if (Array.isArray(output.rows)) {
+    return `SQL вернул строк: ${output.rows.length}.`;
+  }
+  if (Array.isArray(output.tables)) {
+    return `Каталог БД: ${output.tables.length} таблиц.`;
+  }
+  if (typeof output.run_id === "string") {
+    return `DAG run: ${output.run_id}, статус ${String(output.status ?? tool.status)}.`;
+  }
+  if (typeof output.job_id === "string") {
+    return `Spark job: ${output.job_id}, статус ${String(output.status ?? tool.status)}.`;
+  }
+  if (typeof output.status === "string") {
+    return `Статус: ${output.status}.`;
+  }
+  return "Результат получен и передан модели.";
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return Boolean(value && typeof value === "object" && !Array.isArray(value));
+}
+
+function stripMarkdown(value: string): string {
+  return value.replaceAll("`", "");
+}
+
+function formatLatency(ms: number): string {
+  if (ms < 1000) return `${ms}ms`;
+  return `${(ms / 1000).toFixed(ms >= 10000 ? 0 : 1)}s`;
 }
 
 function formatToolOutput(output: Record<string, unknown>): string {
