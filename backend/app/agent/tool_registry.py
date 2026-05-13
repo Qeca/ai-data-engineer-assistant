@@ -739,7 +739,7 @@ class AgentToolRegistry:
                 message=message,
                 author_user_id=self.user.id,
             )
-            output = result.__dict__
+            output = {**result.__dict__, "code": code}
             if result.validation_status == "valid" and self.can_deploy_runtime_artifacts():
                 output = {
                     **output,
@@ -776,7 +776,7 @@ class AgentToolRegistry:
                 message=message,
                 author_user_id=self.user.id,
             )
-            output = result.__dict__
+            output = {**result.__dict__, "code": code}
             if result.validation_status == "valid" and self.can_deploy_runtime_artifacts():
                 output = {
                     **output,

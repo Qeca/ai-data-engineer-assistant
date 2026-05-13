@@ -123,6 +123,7 @@ with DAG(
     assert written.status == "success"
     assert written.output["deployed_to_runtime"] is True
     assert written.output["runtime_path"] == str(runtime_path)
+    assert written.output["code"] == dag_code
     assert runtime_path.read_text(encoding="utf-8") == dag_code
     assert read_back.tool_name == "AirflowDAGSourceTool"
     assert read_back.output["code"] == dag_code

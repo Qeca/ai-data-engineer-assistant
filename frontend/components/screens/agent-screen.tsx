@@ -1,7 +1,8 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { CheckCircle2, ChevronRight, Circle, Loader2, MessageSquare, Plus, SendHorizonal, Trash2 } from "lucide-react";
+import dynamic from "next/dynamic";
+import { CheckCircle2, ChevronRight, Circle, Code2, Loader2, MessageSquare, Plus, RotateCcw, SendHorizonal, Trash2, X } from "lucide-react";
 import { FormEvent, PointerEvent, useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -24,6 +25,23 @@ type RenderItem =
   | { type: "activity"; messages: ChatMessage[]; key: string }
   | { type: "assistant_with_activity"; message: ChatMessage; activityMessages: ChatMessage[]; key: string };
 
+type CodeArtifact = {
+  artifactType: string;
+  artifactName: string;
+  code: string;
+  originalCode: string;
+  path?: string;
+  runtimePath?: string;
+  toolName?: string;
+  status?: string;
+  validationStatus?: string;
+  version?: number;
+  gitCommit?: string;
+  deployedToRuntime?: boolean;
+};
+
+const MonacoEditor = dynamic(() => import("@monaco-editor/react"), { ssr: false });
+
 const starter: ChatMessage[] = [
   {
     role: "assistant",
@@ -42,6 +60,8 @@ export function AgentScreen() {
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<ChatMessage[]>(starter);
   const [panelWidth, setPanelWidth] = useState(270);
+  const [codePanelWidth, setCodePanelWidth] = useState(560);
+  const [activeArtifact, setActiveArtifact] = useState<CodeArtifact | null>(null);
 
   const sessions = useQuery({
     queryKey: ["agent-sessions", token],
@@ -57,12 +77,16 @@ export function AgentScreen() {
 
   useEffect(() => {
     if (!sessionMessages.data) return;
-    setMessages(sessionMessages.data.map(toChatMessage));
+    const nextMessages = sessionMessages.data.map(toChatMessage);
+    setMessages(nextMessages);
+    setActiveArtifact(findLatestArtifact(nextMessages));
   }, [sessionMessages.data]);
 
   useEffect(() => {
     const saved = window.localStorage.getItem("agent-sidebar-width");
     if (saved) setPanelWidth(clamp(Number(saved), 230, 520));
+    const savedCodePanel = window.localStorage.getItem("agent-code-panel-width");
+    if (savedCodePanel) setCodePanelWidth(clamp(Number(savedCodePanel), 380, 820));
   }, []);
 
   const ask = useMutation({
@@ -74,7 +98,7 @@ export function AgentScreen() {
         {
           screen,
           user,
-          visible_panels: ["navigation", "chat", "tools"],
+          visible_panels: activeArtifact ? ["navigation", "chat", "tools", "code"] : ["navigation", "chat", "tools"],
         },
         handleStreamEvent,
       ),
@@ -89,6 +113,7 @@ export function AgentScreen() {
       if (sessionId === deletedId) {
         setSessionId(null);
         setMessages(starter);
+        setActiveArtifact(null);
       }
       queryClient.invalidateQueries({ queryKey: ["agent-sessions"] });
       queryClient.removeQueries({ queryKey: ["agent-session-messages", token, deletedId] });
@@ -107,10 +132,12 @@ export function AgentScreen() {
   function openNewChat() {
     setSessionId(null);
     setMessages(starter);
+    setActiveArtifact(null);
   }
 
   function openChat(id: string) {
     setSessionId(id);
+    setActiveArtifact(null);
   }
 
   function removeChat(id: string) {
@@ -136,6 +163,40 @@ export function AgentScreen() {
 
     window.addEventListener("pointermove", move);
     window.addEventListener("pointerup", up);
+  }
+
+  function resizeCodePanel(event: PointerEvent<HTMLDivElement>) {
+    const startX = event.clientX;
+    const startWidth = codePanelWidth;
+    let nextWidth = startWidth;
+    event.currentTarget.setPointerCapture(event.pointerId);
+
+    function move(moveEvent: globalThis.PointerEvent) {
+      nextWidth = clamp(startWidth - moveEvent.clientX + startX, 380, 820);
+      setCodePanelWidth(nextWidth);
+    }
+
+    function up() {
+      window.localStorage.setItem("agent-code-panel-width", String(nextWidth));
+      window.removeEventListener("pointermove", move);
+      window.removeEventListener("pointerup", up);
+    }
+
+    window.addEventListener("pointermove", move);
+    window.addEventListener("pointerup", up);
+  }
+
+  function updateArtifactCode(code: string) {
+    setActiveArtifact((current) => (current ? { ...current, code } : current));
+  }
+
+  function resetArtifactCode() {
+    setActiveArtifact((current) => (current ? { ...current, code: current.originalCode } : current));
+  }
+
+  function prepareArtifactSave() {
+    if (!activeArtifact) return;
+    setInput(buildArtifactSavePrompt(activeArtifact));
   }
 
   function applyUiActions(actions: UiAction[]) {
@@ -171,6 +232,8 @@ export function AgentScreen() {
     if (event.type === "tool_call_result") {
       const toolCall = event.tool_call;
       applyUiActions(toolCall.ui_actions ?? []);
+      const artifact = artifactFromToolCall(toolCall);
+      if (artifact) setActiveArtifact(artifact);
       setMessages((current) => [
         ...current,
         {
@@ -188,6 +251,8 @@ export function AgentScreen() {
       const result = event.response;
       setSessionId(result.session_id);
       applyUiActions(result.ui_actions);
+      const artifact = findLatestArtifactFromToolCalls(result.tool_calls);
+      if (artifact) setActiveArtifact(artifact);
       queryClient.invalidateQueries({ queryKey: ["agent-sessions"] });
       setMessages((current) => [
         ...current,
@@ -254,63 +319,151 @@ export function AgentScreen() {
         <div className="resize-handle" onPointerDown={resizePanel} aria-label="Resize chats" role="separator" />
       </aside>
 
-      <section className="work-area">
-        <div className="chat-list">
-          {groupMessages(messages).map((item) =>
-            item.type === "activity" ? (
-              <ActivityMessage key={item.key} messages={item.messages} />
-            ) : item.type === "assistant_with_activity" ? (
-              <AssistantMessage key={item.key} message={item.message} activityMessages={item.activityMessages} />
-            ) : (
-              <div className={`chat-msg ${item.message.role === "user" ? "user" : ""}`} key={item.key}>
-                <div className={`avatar ${item.message.role === "assistant" ? "ai" : ""}`}>
-                  {item.message.role === "assistant" ? "AI" : "YOU"}
+      <section className="work-area agent-work-area">
+        <div className="agent-conversation">
+          <div className="chat-list">
+            {groupMessages(messages).map((item) =>
+              item.type === "activity" ? (
+                <ActivityMessage key={item.key} messages={item.messages} />
+              ) : item.type === "assistant_with_activity" ? (
+                <AssistantMessage key={item.key} message={item.message} activityMessages={item.activityMessages} />
+              ) : (
+                <div className={`chat-msg ${item.message.role === "user" ? "user" : ""}`} key={item.key}>
+                  <div className={`avatar ${item.message.role === "assistant" ? "ai" : ""}`}>
+                    {item.message.role === "assistant" ? "AI" : "YOU"}
+                  </div>
+                  <div className="bubble">
+                    {item.message.role === "assistant" ? (
+                      <ReactMarkdown remarkPlugins={[remarkGfm]}>{item.message.content}</ReactMarkdown>
+                    ) : (
+                      <div>{item.message.content}</div>
+                    )}
+                    {item.message.intent && (
+                      <div style={{ marginTop: 10, display: "flex", gap: 8, flexWrap: "wrap" }}>
+                        <Badge status="ai">{item.message.intent}</Badge>
+                        {item.message.tools?.map((tool) => (
+                          <Badge key={`${tool.tool_name}-${tool.latency_ms}`} status={tool.status}>
+                            {tool.tool_name} · {tool.latency_ms}ms
+                          </Badge>
+                        ))}
+                        {item.message.uiActions?.map((action, actionIndex) => (
+                          <span className="tag" key={`${action.type}-${actionIndex}`}>
+                            ui:{action.type}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
-                <div className="bubble">
-                  {item.message.role === "assistant" ? (
-                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{item.message.content}</ReactMarkdown>
-                  ) : (
-                    <div>{item.message.content}</div>
-                  )}
-                  {item.message.intent && (
-                    <div style={{ marginTop: 10, display: "flex", gap: 8, flexWrap: "wrap" }}>
-                      <Badge status="ai">{item.message.intent}</Badge>
-                      {item.message.tools?.map((tool) => (
-                        <Badge key={`${tool.tool_name}-${tool.latency_ms}`} status={tool.status}>
-                          {tool.tool_name} · {tool.latency_ms}ms
-                        </Badge>
-                      ))}
-                      {item.message.uiActions?.map((action, actionIndex) => (
-                        <span className="tag" key={`${action.type}-${actionIndex}`}>
-                          ui:{action.type}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                </div>
+              ),
+            )}
+            {ask.error && <div className="error-text">{ask.error.message}</div>}
+            {sessionMessages.isFetching && sessionId && (
+              <div className="chat-msg">
+                <div className="avatar ai">AI</div>
+                <div className="bubble">Загружаю чат...</div>
               </div>
-            ),
-          )}
-          {ask.error && <div className="error-text">{ask.error.message}</div>}
-          {sessionMessages.isFetching && sessionId && (
-            <div className="chat-msg">
-              <div className="avatar ai">AI</div>
-              <div className="bubble">Загружаю чат...</div>
-            </div>
-          )}
+            )}
+          </div>
+
+          <form className="chat-input" onSubmit={submit}>
+            <textarea className="textarea" value={input} onChange={(event) => setInput(event.target.value)} />
+            <button className="btn btn-primary" disabled={ask.isPending}>
+              <SendHorizonal size={14} />
+              Send
+            </button>
+          </form>
         </div>
 
-        <form className="chat-input" onSubmit={submit}>
-          <textarea className="textarea" value={input} onChange={(event) => setInput(event.target.value)} />
-          <button className="btn btn-primary" disabled={ask.isPending}>
-            <SendHorizonal size={14} />
-            Send
-          </button>
-        </form>
+        {activeArtifact && (
+          <CodeWorkspace
+            artifact={activeArtifact}
+            width={codePanelWidth}
+            onChange={updateArtifactCode}
+            onClose={() => setActiveArtifact(null)}
+            onPrepareSave={prepareArtifactSave}
+            onReset={resetArtifactCode}
+            onResize={resizeCodePanel}
+          />
+        )}
       </section>
     </div>
   );
 
+}
+
+function CodeWorkspace({
+  artifact,
+  width,
+  onChange,
+  onClose,
+  onPrepareSave,
+  onReset,
+  onResize,
+}: {
+  artifact: CodeArtifact;
+  width: number;
+  onChange: (code: string) => void;
+  onClose: () => void;
+  onPrepareSave: () => void;
+  onReset: () => void;
+  onResize: (event: PointerEvent<HTMLDivElement>) => void;
+}) {
+  const dirty = artifact.code !== artifact.originalCode;
+
+  return (
+    <aside className="code-workspace" style={{ width }}>
+      <div className="code-resize-handle" onPointerDown={onResize} aria-label="Resize code workspace" role="separator" />
+      <div className="code-workspace-header">
+        <div className="code-title">
+          <Code2 size={16} />
+          <div>
+            <div className="code-name">{artifact.artifactName}</div>
+            <div className="code-path">{artifact.path ?? artifact.runtimePath ?? artifact.artifactType}</div>
+          </div>
+        </div>
+        <button className="btn btn-ghost icon-btn" type="button" onClick={onClose} title="Закрыть код" aria-label="Закрыть код">
+          <X size={15} />
+        </button>
+      </div>
+      <div className="code-meta">
+        <Badge status="ai">{artifactLabel(artifact.artifactType)}</Badge>
+        {artifact.validationStatus && <Badge status={artifact.validationStatus === "valid" ? "success" : "error"}>{artifact.validationStatus}</Badge>}
+        {artifact.deployedToRuntime && <Badge status="success">deployed</Badge>}
+        {artifact.version && <span className="tag">v{artifact.version}</span>}
+        {artifact.gitCommit && <span className="tag">{artifact.gitCommit}</span>}
+      </div>
+      <div className="code-editor-shell">
+        <MonacoEditor
+          height="100%"
+          language="python"
+          loading={<div className="code-editor-loading">Загружаю редактор...</div>}
+          options={{
+            automaticLayout: true,
+            fontFamily: "var(--font-mono)",
+            fontSize: 12,
+            lineNumbersMinChars: 3,
+            minimap: { enabled: false },
+            scrollBeyondLastLine: false,
+            wordWrap: "on",
+          }}
+          theme="vs-dark"
+          value={artifact.code}
+          onChange={(value) => onChange(value ?? "")}
+        />
+      </div>
+      <div className="code-workspace-footer">
+        <button className="btn btn-ghost" type="button" onClick={onReset} disabled={!dirty}>
+          <RotateCcw size={14} />
+          Сбросить
+        </button>
+        <button className="btn btn-primary" type="button" onClick={onPrepareSave} disabled={!dirty}>
+          <SendHorizonal size={14} />
+          Вставить правку
+        </button>
+      </div>
+    </aside>
+  );
 }
 
 function AssistantMessage({
@@ -496,6 +649,13 @@ function activitySummary(message: ChatMessage, tool?: ToolCall): string {
   if (Array.isArray(output.tables)) {
     return `Каталог БД: ${output.tables.length} таблиц.`;
   }
+  if (typeof output.code === "string") {
+    const artifactName = readString(output.artifact_name) ?? readString(output.path) ?? "артефакт";
+    return `Открыт исходник ${artifactName}.`;
+  }
+  if (typeof output.artifact_name === "string" && typeof output.version === "number") {
+    return `Артефакт ${output.artifact_name} сохранен, версия ${output.version}.`;
+  }
   if (typeof output.run_id === "string") {
     return `DAG run: ${output.run_id}, статус ${String(output.status ?? tool.status)}.`;
   }
@@ -506,6 +666,87 @@ function activitySummary(message: ChatMessage, tool?: ToolCall): string {
     return `Статус: ${output.status}.`;
   }
   return "Результат получен и передан модели.";
+}
+
+function findLatestArtifact(messages: ChatMessage[]): CodeArtifact | null {
+  for (let index = messages.length - 1; index >= 0; index -= 1) {
+    const artifact = findLatestArtifactFromToolCalls(messages[index].tools ?? []);
+    if (artifact) return artifact;
+  }
+  return null;
+}
+
+function findLatestArtifactFromToolCalls(toolCalls: ToolCall[]): CodeArtifact | null {
+  for (let index = toolCalls.length - 1; index >= 0; index -= 1) {
+    const artifact = artifactFromToolCall(toolCalls[index]);
+    if (artifact) return artifact;
+  }
+  return null;
+}
+
+function artifactFromToolCall(toolCall: ToolCall): CodeArtifact | null {
+  const output = toolCall.output;
+  if (typeof output.code !== "string") return null;
+
+  const path = readString(output.path);
+  const runtimePath = readString(output.runtime_path);
+  const artifactName = readString(output.artifact_name) ?? filenameFromPath(path ?? runtimePath) ?? "artifact.py";
+  const artifactType = readString(output.artifact_type) ?? inferArtifactType(toolCall.tool_name, artifactName, path ?? runtimePath);
+
+  return {
+    artifactType,
+    artifactName,
+    code: output.code,
+    originalCode: output.code,
+    path,
+    runtimePath,
+    toolName: toolCall.tool_name,
+    status: toolCall.status,
+    validationStatus: readString(output.validation_status),
+    version: typeof output.version === "number" ? output.version : undefined,
+    gitCommit: readString(output.git_commit_short_sha),
+    deployedToRuntime: output.deployed_to_runtime === true,
+  };
+}
+
+function inferArtifactType(toolName: string, artifactName: string, path?: string): string {
+  const source = `${toolName} ${artifactName} ${path ?? ""}`.toLowerCase();
+  if (source.includes("spark")) return "spark_script";
+  return "airflow_dag";
+}
+
+function artifactLabel(artifactType: string): string {
+  if (artifactType === "spark_script") return "Spark script";
+  if (artifactType === "airflow_dag") return "Airflow DAG";
+  return artifactType;
+}
+
+function buildArtifactSavePrompt(artifact: CodeArtifact): string {
+  const isSpark = artifact.artifactType === "spark_script";
+  const toolName = isSpark ? "write_spark_script" : "write_airflow_dag";
+  const artifactId = artifact.artifactName.replace(/\.py$/, "");
+  const idField = isSpark ? "script_name" : "dag_id";
+  const artifactKind = isSpark ? "Spark-скрипт" : "Airflow DAG";
+
+  return [
+    `Сохрани обновленный ${artifactKind} через function tool ${toolName}.`,
+    `${idField}: ${artifactId}`,
+    "После записи проверь код в Docker sandbox и кратко покажи результат.",
+    "",
+    "Код:",
+    "```python",
+    artifact.code,
+    "```",
+  ].join("\n");
+}
+
+function filenameFromPath(path?: string): string | undefined {
+  if (!path) return undefined;
+  return path.split("/").filter(Boolean).at(-1);
+}
+
+function readString(value: unknown): string | undefined {
+  return typeof value === "string" && value.length > 0 ? value : undefined;
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -523,10 +764,4 @@ function formatLatency(ms: number): string {
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);
-}
-
-function formatToolOutput(output: Record<string, unknown>): string {
-  const text = JSON.stringify(output, null, 2);
-  if (text.length <= 3000) return text;
-  return `${text.slice(0, 3000)}\n... truncated`;
 }
