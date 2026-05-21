@@ -3,7 +3,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import dynamic from "next/dynamic";
 import { CheckCircle2, ChevronRight, Circle, Code2, Loader2, MessageSquare, Plus, RotateCcw, SendHorizonal, Trash2, X } from "lucide-react";
-import { FormEvent, PointerEvent, useEffect, useState } from "react";
+import { FormEvent, PointerEvent, useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { api } from "@/lib/api";
@@ -70,6 +70,7 @@ export function AgentScreen() {
     () => typeof window !== "undefined" && window.localStorage.getItem("agent-code-panel-dismissed") === "true",
   );
   const [streamingSessionId, setStreamingSessionId] = useState<string | null>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   const sessions = useQuery({
     queryKey: ["agent-sessions", token],
@@ -91,8 +92,10 @@ export function AgentScreen() {
   }, []);
 
   const ask = useMutation({
-    mutationFn: (query: string) =>
-      api.agentQueryStream(
+    mutationFn: (query: string) => {
+      const controller = new AbortController();
+      abortControllerRef.current = controller;
+      return api.agentQueryStream(
         token ?? "",
         query,
         sessionId,
@@ -102,12 +105,23 @@ export function AgentScreen() {
           visible_panels: activeArtifact ? ["navigation", "chat", "tools", "code"] : ["navigation", "chat", "tools"],
         },
         handleStreamEvent,
-      ),
+        controller.signal,
+      );
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["agent-sessions"] });
     },
-    onError: () => {
+    onError: (error) => {
       setStreamingSessionId(null);
+      if (isAbortError(error)) {
+        setMessages((current) => [
+          ...markPendingActivityStopped(current),
+          { role: "assistant", content: "Генерация остановлена пользователем.", intent: "agent-stopped" },
+        ]);
+      }
+    },
+    onSettled: () => {
+      abortControllerRef.current = null;
     },
   });
 
@@ -145,12 +159,17 @@ export function AgentScreen() {
 
   function submit(event: FormEvent) {
     event.preventDefault();
+    if (ask.isPending) return;
     const query = input.trim();
     if (!query) return;
     setStreamingSessionId(sessionId);
     setMessages((current) => [...current, { role: "user", content: query }]);
     setInput("");
     ask.mutate(query);
+  }
+
+  function stopGeneration() {
+    abortControllerRef.current?.abort();
   }
 
   function openNewChat() {
@@ -397,7 +416,7 @@ export function AgentScreen() {
                 </div>
               ),
             )}
-            {ask.error && <div className="error-text">{ask.error.message}</div>}
+            {ask.error && !isAbortError(ask.error) && <div className="error-text">{ask.error.message}</div>}
             {sessionMessages.isFetching && sessionId && (
               <div className="chat-msg">
                 <div className="avatar ai">AI</div>
@@ -408,10 +427,17 @@ export function AgentScreen() {
 
           <form className="chat-input" onSubmit={submit}>
             <textarea className="textarea" value={input} onChange={(event) => setInput(event.target.value)} />
-            <button className="btn btn-primary" disabled={ask.isPending}>
-              <SendHorizonal size={14} />
-              Send
-            </button>
+            {ask.isPending ? (
+              <button className="btn btn-secondary" type="button" onClick={stopGeneration}>
+                <X size={14} />
+                Остановить
+              </button>
+            ) : (
+              <button className="btn btn-primary" disabled={!input.trim()}>
+                <SendHorizonal size={14} />
+                Send
+              </button>
+            )}
           </form>
         </div>
 
@@ -735,6 +761,43 @@ function groupMessages(items: ChatMessage[]): RenderItem[] {
   }
 
   return grouped;
+}
+
+function isAbortError(error: unknown): boolean {
+  return (
+    (typeof DOMException !== "undefined" && error instanceof DOMException && error.name === "AbortError") ||
+    (error instanceof Error && error.name === "AbortError")
+  );
+}
+
+function markPendingActivityStopped(messages: ChatMessage[]): ChatMessage[] {
+  const now = Date.now();
+  return messages.map((message) => {
+    if (message.role !== "tool" || message.intent !== "tool-start") return message;
+
+    const toolName = toolNameFromStartMessage(message.content) ?? "AgentTool";
+    const latencyMs = message.startedAt ? Math.max(0, now - message.startedAt) : 0;
+    const input = isRecord(message.toolOutput) ? message.toolOutput : {};
+    const stoppedTool: ToolCall = {
+      tool_name: toolName,
+      status: "stopped",
+      input,
+      output: { status: "stopped" },
+      latency_ms: latencyMs,
+    };
+
+    return {
+      ...message,
+      content: `${toolName} остановлен пользователем`,
+      intent: "tool-result",
+      tools: [stoppedTool],
+      toolOutput: stoppedTool.output,
+    };
+  });
+}
+
+function toolNameFromStartMessage(content: string): string | undefined {
+  return content.match(/`([^`]+)`/)?.[1];
 }
 
 function toChatMessage(message: AgentMessage): ChatMessage {

@@ -1,6 +1,7 @@
 import logging
 import asyncio
 import json
+from contextlib import suppress
 from datetime import UTC, datetime, timedelta
 from time import perf_counter
 
@@ -233,11 +234,17 @@ async def stream_agent_query(
 
     async def event_stream():
         task = asyncio.create_task(run_agent())
-        while True:
-            event = await queue.get()
-            if event.get("type") == "done":
-                break
-            yield encode_stream_event(event)
-        await task
+        try:
+            while True:
+                event = await queue.get()
+                if event.get("type") == "done":
+                    break
+                yield encode_stream_event(event)
+            await task
+        finally:
+            if not task.done():
+                task.cancel()
+                with suppress(asyncio.CancelledError):
+                    await task
 
     return StreamingResponse(event_stream(), media_type="application/x-ndjson")

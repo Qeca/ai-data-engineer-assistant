@@ -110,10 +110,20 @@ async function requestStream<T>(
     }
   }
 
+  if (options.signal?.aborted) {
+    throw abortError();
+  }
+
   if (!finalValue) {
     throw new Error("Agent stream finished without final response");
   }
   return finalValue;
+}
+
+function abortError(): Error {
+  const error = new Error("Request aborted");
+  error.name = "AbortError";
+  return error;
 }
 
 export const api = {
@@ -147,12 +157,14 @@ export const api = {
     sessionId: string | null | undefined,
     appState: Record<string, unknown> | undefined,
     onEvent: (event: AgentStreamEvent) => void,
+    signal?: AbortSignal,
   ) =>
     requestStream<AgentResponse>(
       "/agent/query/stream",
       {
         method: "POST",
         token,
+        signal,
         body: JSON.stringify({ query, session_id: sessionId, app_state: appState ?? {} }),
       },
       onEvent,
