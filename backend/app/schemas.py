@@ -120,6 +120,7 @@ class AgentQueryResponse(BaseModel):
     answer: str
     tool_calls: list[ToolCallRead]
     ui_actions: list[dict[str, Any]] = Field(default_factory=list)
+    elapsed_ms: int = 0
 
 
 class SessionRead(BaseModel):

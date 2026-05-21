@@ -32,7 +32,7 @@ class Settings(BaseSettings):
     magnitgpt_model: str = "MagnitGPT"
     magnitgpt_base_url: str = "https://llmlite.ai.corp.tander.ru/v1"
     magnitgpt_verify_ssl: bool = True
-    magnitgpt_timeout_seconds: float = 25.0
+    magnitgpt_timeout_seconds: float = 120.0
 
     langfuse_public_key: str | None = None
     langfuse_secret_key: str | None = None

@@ -1,6 +1,8 @@
 import logging
 import asyncio
 import json
+from datetime import UTC, datetime, timedelta
+from time import perf_counter
 
 from fastapi import APIRouter, Depends
 from fastapi.encoders import jsonable_encoder
@@ -87,7 +89,8 @@ async def persist_agent_result(
     trace,
 ) -> Message:
     tool_responses = [tool_call_response(call) for call in result.tool_calls]
-    for tool_response in tool_responses:
+    created_at = datetime.now(UTC)
+    for index, tool_response in enumerate(tool_responses):
         db.add(
             Message(
                 session_id=session.id,
@@ -100,6 +103,7 @@ async def persist_agent_result(
                     "intent": "tool-result",
                     "tool_call": jsonable_encoder(tool_response),
                 },
+                created_at=created_at + timedelta(milliseconds=index),
             )
         )
     await db.flush()
@@ -112,7 +116,9 @@ async def persist_agent_result(
             "intent": result.intent,
             "tool_calls": jsonable_encoder(tool_responses),
             "ui_actions": jsonable_encoder(result.ui_actions),
+            "elapsed_ms": result.elapsed_ms,
         },
+        created_at=created_at + timedelta(milliseconds=len(tool_responses) + 1),
     )
     db.add(assistant_message)
     await db.flush()
@@ -142,6 +148,7 @@ def agent_response(session: AgentSession, assistant_message: Message, result: Ag
         answer=result.answer,
         tool_calls=[tool_call_response(call) for call in result.tool_calls],
         ui_actions=jsonable_encoder(result.ui_actions),
+        elapsed_ms=result.elapsed_ms,
     )
 
 
@@ -154,6 +161,7 @@ async def query_agent(
     session, app_state = await prepare_session(payload, user, db)
 
     async with tracing.trace("agent.query", user_id=user.id, input={"query": payload.query}) as trace:
+        started_at = perf_counter()
         try:
             result = await orchestrator.run(db, payload.query, user, app_state)
         except Exception as exc:  # noqa: BLE001
@@ -166,6 +174,7 @@ async def query_agent(
                 ),
                 tool_calls=[],
                 ui_actions=[],
+                elapsed_ms=round((perf_counter() - started_at) * 1000),
             )
         assistant_message = await persist_agent_result(db, session, result, trace)
 
@@ -189,6 +198,7 @@ async def stream_agent_query(
             await queue.put({"type": "session", "session_id": session.id})
 
             async with tracing.trace("agent.query", user_id=user.id, input={"query": payload.query}) as trace:
+                started_at = perf_counter()
                 try:
                     result = await orchestrator.run(db, payload.query, user, app_state, event_handler=emit)
                 except Exception as exc:  # noqa: BLE001
@@ -201,6 +211,7 @@ async def stream_agent_query(
                         ),
                         tool_calls=[],
                         ui_actions=[],
+                        elapsed_ms=round((perf_counter() - started_at) * 1000),
                     )
                 assistant_message = await persist_agent_result(db, session, result, trace)
                 await queue.put(

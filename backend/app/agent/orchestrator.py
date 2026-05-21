@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from time import perf_counter
 from typing import Any, Awaitable, Callable, Literal, TypedDict
 
 from langgraph.graph import END, START, StateGraph
@@ -20,6 +21,7 @@ class AgentResult:
     answer: str
     tool_calls: list[ToolExecution]
     ui_actions: list[dict[str, Any]]
+    elapsed_ms: int = 0
 
 
 class AgentGraphState(TypedDict, total=False):
@@ -54,6 +56,7 @@ class AgentOrchestrator:
         event_handler: Callable[[dict[str, Any]], Awaitable[None]] | None = None,
     ) -> AgentResult:
         registry = AgentToolRegistry(db, user, app_state)
+        started_at = perf_counter()
         final_state = await self.graph.ainvoke(
             {
                 "query": query,
@@ -68,6 +71,7 @@ class AgentOrchestrator:
             answer=final_state.get("answer") or self._empty_model_answer(tool_calls),
             tool_calls=tool_calls,
             ui_actions=final_state.get("ui_actions") or self._collect_ui_actions(tool_calls),
+            elapsed_ms=round((perf_counter() - started_at) * 1000),
         )
 
     def _build_graph(self):

@@ -18,6 +18,7 @@ type ChatMessage = {
   tools?: ToolCall[];
   uiActions?: UiAction[];
   toolOutput?: Record<string, unknown>;
+  elapsedMs?: number;
 };
 
 type RenderItem =
@@ -63,6 +64,7 @@ export function AgentScreen() {
   const [panelWidth, setPanelWidth] = useState(270);
   const [codePanelWidth, setCodePanelWidth] = useState(560);
   const [activeArtifact, setActiveArtifact] = useState<CodeArtifact | null>(null);
+  const [streamingSessionId, setStreamingSessionId] = useState<string | null>(null);
 
   const sessions = useQuery({
     queryKey: ["agent-sessions", token],
@@ -73,7 +75,7 @@ export function AgentScreen() {
   const sessionMessages = useQuery({
     queryKey: ["agent-session-messages", token, sessionId],
     queryFn: () => api.sessionMessages(token ?? "", sessionId ?? ""),
-    enabled: Boolean(token && sessionId),
+    enabled: Boolean(token && sessionId && sessionId !== streamingSessionId),
   });
 
   useEffect(() => {
@@ -99,14 +101,17 @@ export function AgentScreen() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["agent-sessions"] });
     },
+    onError: () => {
+      setStreamingSessionId(null);
+    },
   });
 
   useEffect(() => {
-    if (!sessionMessages.data || ask.isPending) return;
+    if (!sessionMessages.data || sessionId === streamingSessionId) return;
     const nextMessages = sessionMessages.data.map(toChatMessage);
     setMessages(nextMessages);
     setActiveArtifact(findLatestArtifact(nextMessages));
-  }, [sessionMessages.data, ask.isPending]);
+  }, [sessionId, sessionMessages.data, streamingSessionId]);
 
   useEffect(() => {
     if (!sessionId || ask.isPending || !sessionMessages.error) return;
@@ -135,18 +140,21 @@ export function AgentScreen() {
     event.preventDefault();
     const query = input.trim();
     if (!query) return;
+    setStreamingSessionId(sessionId);
     setMessages((current) => [...current, { role: "user", content: query }]);
     setInput("");
     ask.mutate(query);
   }
 
   function openNewChat() {
+    setStreamingSessionId(null);
     setSessionId(null);
     setMessages(starter);
     setActiveArtifact(null);
   }
 
   function openChat(id: string) {
+    setStreamingSessionId(null);
     setSessionId(id);
     setActiveArtifact(null);
   }
@@ -223,6 +231,7 @@ export function AgentScreen() {
 
   function handleStreamEvent(event: AgentStreamEvent) {
     if (event.type === "session") {
+      setStreamingSessionId(event.session_id);
       setSessionId(event.session_id);
       return;
     }
@@ -264,7 +273,10 @@ export function AgentScreen() {
       applyUiActions(result.ui_actions);
       const artifact = findLatestArtifactFromToolCalls(result.tool_calls);
       if (artifact) setActiveArtifact(artifact);
+      queryClient.removeQueries({ queryKey: ["agent-session-messages", token, result.session_id] });
+      setStreamingSessionId(null);
       queryClient.invalidateQueries({ queryKey: ["agent-sessions"] });
+      queryClient.invalidateQueries({ queryKey: ["agent-session-messages", token, result.session_id] });
       setMessages((current) => [
         ...current,
         {
@@ -273,6 +285,7 @@ export function AgentScreen() {
           intent: result.intent,
           tools: result.tool_calls,
           uiActions: result.ui_actions,
+          elapsedMs: result.elapsed_ms,
         },
       ]);
       return;
@@ -488,7 +501,7 @@ function AssistantMessage({
     <div className="chat-msg">
       <div className="avatar ai">AI</div>
       <div className="assistant-composite">
-        {activityMessages.length > 0 && <ActivityPanel messages={activityMessages} />}
+        {activityMessages.length > 0 && <ActivityPanel messages={activityMessages} elapsedMs={message.elapsedMs} />}
         <div className="bubble assistant-answer">
           <ReactMarkdown remarkPlugins={[remarkGfm]}>{message.content}</ReactMarkdown>
           {message.intent && activityMessages.length === 0 && (
@@ -521,18 +534,19 @@ function ActivityMessage({ messages }: { messages: ChatMessage[] }) {
   );
 }
 
-function ActivityPanel({ messages }: { messages: ChatMessage[] }) {
+function ActivityPanel({ messages, elapsedMs }: { messages: ChatMessage[]; elapsedMs?: number }) {
   const toolCalls = messages.flatMap((message) => message.tools ?? []);
   const totalLatency = toolCalls.reduce((sum, tool) => sum + tool.latency_ms, 0);
   const hasPending = messages.some((message) => message.intent === "tool-start");
+  const displayLatency = elapsedMs ?? totalLatency;
 
   return (
     <details className="activity-card">
       <summary className="activity-header">
         <ChevronRight size={14} className="activity-chevron" />
         {hasPending ? <Loader2 size={15} className="spin" /> : <CheckCircle2 size={15} />}
-        <span>Активность</span>
-        {totalLatency > 0 && <span className="activity-time">· {formatLatency(totalLatency)}</span>}
+        <span>{hasPending ? "Думаю" : "Думал"}</span>
+        {displayLatency > 0 && <span className="activity-time">на протяжении {formatLatency(displayLatency)}</span>}
       </summary>
       <div className="activity-timeline">
         {messages.map((message, index) => (
@@ -571,6 +585,25 @@ function groupMessages(items: ChatMessage[]): RenderItem[] {
 
   while (index < items.length) {
     const message = items[index];
+    if (message.role === "assistant") {
+      const activityMessages: ChatMessage[] = [];
+      let nextIndex = index + 1;
+      while (items[nextIndex]?.role === "tool") {
+        activityMessages.push(items[nextIndex]);
+        nextIndex += 1;
+      }
+      if (activityMessages.length > 0 || (message.tools?.length ?? 0) > 0) {
+        grouped.push({
+          type: "assistant_with_activity",
+          message,
+          activityMessages: activityMessages.length > 0 ? activityMessages : activityMessagesFromTools(message.tools ?? []),
+          key: `assistant-activity-${index}`,
+        });
+        index = nextIndex;
+        continue;
+      }
+    }
+
     if (message.role !== "tool") {
       grouped.push({ type: "message", message, key: `${message.role}-${index}` });
       index += 1;
@@ -614,7 +647,18 @@ function toChatMessage(message: AgentMessage): ChatMessage {
     tools: toolCall ? [toolCall] : toolCalls,
     uiActions,
     toolOutput: role === "tool" ? toolCall?.output : undefined,
+    elapsedMs: typeof metadata.elapsed_ms === "number" ? metadata.elapsed_ms : undefined,
   };
+}
+
+function activityMessagesFromTools(tools: ToolCall[]): ChatMessage[] {
+  return tools.map((tool) => ({
+    role: "tool",
+    content: summarizeToolCall(tool),
+    intent: "tool-result",
+    tools: [tool],
+    toolOutput: tool.output,
+  }));
 }
 
 function isToolCall(value: unknown): value is ToolCall {

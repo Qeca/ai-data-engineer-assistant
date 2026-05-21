@@ -28,6 +28,7 @@ export type AgentResponse = {
   answer: string;
   tool_calls: ToolCall[];
   ui_actions: UiAction[];
+  elapsed_ms: number;
 };
 
 export type AgentStreamEvent =
