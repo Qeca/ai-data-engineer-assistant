@@ -694,6 +694,7 @@ body {
 }
 
 .agent-work-area {
+  position: relative;
   flex-direction: row;
 }
 
@@ -965,6 +966,80 @@ body {
   line-height: 1.45;
 }
 
+.spark-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.spark-detail-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.detail-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.detail-text {
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+.code-inline {
+  max-width: 100%;
+  overflow: auto;
+  padding: 8px 10px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--bg-base);
+  color: var(--text-code);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.kv-grid {
+  display: grid;
+  gap: 7px;
+}
+
+.kv-row {
+  display: grid;
+  grid-template-columns: minmax(110px, 0.5fr) minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  padding: 8px 10px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+}
+
+.kv-row span {
+  color: var(--text-secondary);
+}
+
+.kv-row code {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text-code);
+  font-family: var(--font-mono);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.empty-state {
+  padding: 18px;
+  border: 1px dashed var(--border-default);
+  border-radius: var(--radius-lg);
+  color: var(--text-secondary);
+  background: var(--bg-surface);
+}
+
 .chat-msg.user .bubble {
   background: rgba(45, 126, 248, 0.14);
   border-color: rgba(45, 126, 248, 0.24);
@@ -989,6 +1064,28 @@ body {
   overflow: hidden;
   background: var(--bg-surface);
   border-left: 1px solid var(--border-subtle);
+}
+
+.code-drawer-tab {
+  position: absolute;
+  top: 18px;
+  right: 0;
+  z-index: 15;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 10px;
+  border: 1px solid var(--border-default);
+  border-right: 0;
+  border-radius: var(--radius-md) 0 0 var(--radius-md);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.code-drawer-tab:hover {
+  color: var(--text-primary);
+  background: var(--bg-hover);
 }
 
 .code-resize-handle {
@@ -1062,6 +1159,105 @@ body {
   gap: 7px;
   padding: 10px 14px 10px 18px;
   border-bottom: 1px solid var(--border-subtle);
+}
+
+.artifact-versions {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  padding: 10px 14px 12px 18px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.artifact-versions-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--text-secondary);
+  font-weight: 700;
+}
+
+.artifact-version-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.artifact-version {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 8px;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  background: var(--bg-base);
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.artifact-version.active,
+.artifact-version:hover {
+  color: var(--text-primary);
+  border-color: rgba(45, 126, 248, 0.45);
+  background: rgba(45, 126, 248, 0.12);
+}
+
+.artifact-version code {
+  color: var(--text-code);
+  font-family: var(--font-mono);
+}
+
+.artifact-version-code {
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.artifact-version-code summary {
+  cursor: pointer;
+}
+
+.artifact-version-message {
+  margin: 8px 0;
+  color: var(--text-primary);
+}
+
+.artifact-git-history {
+  display: grid;
+  gap: 5px;
+  margin: 8px 0;
+}
+
+.artifact-git-commit {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr);
+  gap: 8px;
+  align-items: center;
+  color: var(--text-tertiary);
+}
+
+.artifact-git-commit code {
+  color: var(--text-code);
+  font-family: var(--font-mono);
+}
+
+.artifact-git-commit span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.artifact-version-code pre {
+  max-height: 220px;
+  overflow: auto;
+  margin: 0;
+  padding: 10px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--bg-base);
+  color: var(--text-code);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.45;
 }
 
 .code-editor-shell {

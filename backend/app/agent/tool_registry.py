@@ -456,10 +456,11 @@ class AgentToolRegistry:
             run = await self.airflow.get_run(self.db, args["dag_id"], args["run_id"])
             return ToolExecution(
                 tool_name="AirflowTool",
-                status="success",
+                status="error" if run.status in {"error", "failed", "not_found"} else "success",
                 input=args,
                 output=run.model_dump(),
                 latency_ms=self._elapsed_ms(started),
+                error=run.error,
             )
         if name == "list_airflow_runs":
             started = time.perf_counter()

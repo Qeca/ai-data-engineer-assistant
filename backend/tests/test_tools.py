@@ -125,6 +125,24 @@ class FakeAirflowClient:
         return FakeAirflowResponse({"dag_runs": [{"state": "success", "end_date": "2026-05-11T11:00:00+00:00"}]})
 
 
+class FakeAirflowUnavailableClient:
+    def __init__(self, *args, **kwargs) -> None:
+        self.args = args
+        self.kwargs = kwargs
+
+    async def __aenter__(self):
+        return self
+
+    async def __aexit__(self, exc_type, exc, traceback) -> None:
+        return None
+
+    async def get(self, url: str, **kwargs) -> FakeAirflowResponse:
+        raise RuntimeError("airflow unavailable")
+
+    async def post(self, url: str, **kwargs) -> FakeAirflowResponse:
+        raise RuntimeError("airflow unavailable")
+
+
 def test_sql_tool_blocks_write_queries():
     assert SQLTool._is_read_only("select * from orders")
     assert not SQLTool._is_read_only("drop table orders")
@@ -144,7 +162,8 @@ async def test_sql_tool_executes_demo_query():
 
 
 @pytest.mark.asyncio
-async def test_airflow_and_spark_tools_persist_metadata():
+async def test_airflow_and_spark_tools_persist_metadata(monkeypatch):
+    monkeypatch.setattr(settings, "airflow_base_url", None)
     await init_db()
     async with AsyncSessionLocal() as session:
         airflow_run = await AirflowTool().trigger_run(session, "orders_sync", {"test": True})
@@ -161,6 +180,21 @@ async def test_airflow_and_spark_tools_persist_metadata():
     assert spark_job.status == "running"
     assert spark_job.result_sample
     assert any(job.job_id == spark_job.job_id for job in spark_jobs)
+
+
+@pytest.mark.asyncio
+async def test_airflow_trigger_reports_remote_error(monkeypatch):
+    monkeypatch.setattr(settings, "airflow_base_url", "http://airflow.test")
+    monkeypatch.setattr("app.tools.airflow.httpx.AsyncClient", FakeAirflowUnavailableClient)
+    await init_db()
+
+    async with AsyncSessionLocal() as session:
+        result = await AirflowTool().trigger_run(session, "missing_dag", {"source": "unit"})
+        checked = await AirflowTool().get_run(session, result.dag_id, result.run_id)
+
+    assert result.status == "error"
+    assert result.error
+    assert checked.status == "error"
 
 
 @pytest.mark.asyncio

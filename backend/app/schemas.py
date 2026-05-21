@@ -189,6 +189,7 @@ class AirflowRunRead(BaseModel):
     status: str
     external_url: str | None = None
     created_at: datetime | None = None
+    error: str | None = None
 
 
 class AirflowTaskInstanceRead(BaseModel):
@@ -227,3 +228,4 @@ class SparkJobRead(BaseModel):
     result_sample: list[dict[str, Any]] | None = None
     driver_log: str | None = None
     created_at: datetime | None = None
+    updated_at: datetime | None = None

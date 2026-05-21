@@ -220,12 +220,13 @@ class AirflowTool:
         run_id = f"manual__{datetime.now(UTC).strftime('%Y%m%dT%H%M%S')}"
         external_url = None
         status = "queued"
+        error = None
 
         if settings.airflow_base_url:
             try:
                 async with httpx.AsyncClient(timeout=3) as client:
                     response = await client.post(
-                        f"{settings.airflow_base_url.rstrip('/')}/api/v1/dags/{dag_id}/dagRuns",
+                        f"{settings.airflow_base_url.rstrip('/')}/api/v1/dags/{self._path(dag_id)}/dagRuns",
                         auth=(settings.airflow_username, settings.airflow_password),
                         json={"dag_run_id": run_id, "conf": conf},
                     )
@@ -234,10 +235,13 @@ class AirflowTool:
                     run_id = data.get("dag_run_id", run_id)
                     status = data.get("state", status)
                     external_url = self._grid_url(dag_id)
-            except Exception:
-                status = "queued"
+            except Exception as exc:
+                status = "error"
+                error = f"Airflow trigger failed: {exc}"
+                external_url = self._grid_url(dag_id)
 
-        run = PipelineRun(dag_id=dag_id, run_id=run_id, status=status, conf_json=conf, external_url=external_url)
+        stored_conf = {**conf, "_error": error} if error else conf
+        run = PipelineRun(dag_id=dag_id, run_id=run_id, status=status, conf_json=stored_conf, external_url=external_url)
         db.add(run)
         await db.commit()
         await db.refresh(run)
@@ -247,6 +251,7 @@ class AirflowTool:
             status=run.status,
             external_url=run.external_url,
             created_at=run.created_at,
+            error=error,
         )
 
     async def get_run(self, db: AsyncSession, dag_id: str, run_id: str) -> AirflowRunRead:
@@ -262,11 +267,21 @@ class AirflowTool:
                     status=remote_run["status"],
                     external_url=remote_run["external_url"],
                 )
-            return AirflowRunRead(dag_id=dag_id, run_id=run_id, status="not_found")
+            return AirflowRunRead(
+                dag_id=dag_id,
+                run_id=run_id,
+                status="not_found",
+                error="Remote Airflow run was not found.",
+            )
 
         if remote_run is not None:
             run.status = remote_run["status"]
             run.external_url = remote_run["external_url"]
+            await db.commit()
+            await db.refresh(run)
+        elif settings.airflow_base_url and run.status in {"queued", "running"}:
+            run.status = "not_found"
+            run.conf_json = {**(run.conf_json or {}), "_error": "Remote Airflow run was not found."}
             await db.commit()
             await db.refresh(run)
         elif run.status == "queued":
@@ -280,6 +295,7 @@ class AirflowTool:
             status=run.status,
             external_url=run.external_url,
             created_at=run.created_at,
+            error=self._run_error(run.conf_json),
         )
 
     async def list_runs(self, db: AsyncSession, dag_id: str, limit: int = 25) -> list[AirflowRunRead]:
@@ -450,6 +466,13 @@ class AirflowTool:
                     return str(data[key])
         return response.text
 
+    @staticmethod
+    def _run_error(conf: dict | None) -> str | None:
+        if not isinstance(conf, dict):
+            return None
+        value = conf.get("_error")
+        return str(value) if value else None
+
     async def execute(self, db: AsyncSession, dag_id: str, action: str = "trigger") -> ToolExecution:
         started = time.perf_counter()
         if action == "trigger":
@@ -461,10 +484,11 @@ class AirflowTool:
             output = {"pipelines": [pipeline.model_dump() for pipeline in await self.list_pipelines(db)]}
         return ToolExecution(
             tool_name=self.name,
-            status="success",
+            status="error" if output.get("status") in {"error", "failed", "not_found"} else "success",
             input={"dag_id": dag_id, "action": action},
             output=output,
             latency_ms=max(1, int((time.perf_counter() - started) * 1000)),
+            error=output.get("error"),
         )
 
     async def manage_dags(self, db: AsyncSession, action: str, dag_id: str = "") -> ToolExecution:

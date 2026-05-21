@@ -8,7 +8,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { api } from "@/lib/api";
 import { useAppStore, type Screen } from "@/lib/store";
-import type { AgentMessage, AgentStreamEvent, ToolCall, UiAction } from "@/types";
+import type { AgentMessage, AgentStreamEvent, ArtifactVersion, ToolCall, UiAction } from "@/types";
 import { Badge } from "@/components/ui";
 
 type ChatMessage = {
@@ -19,6 +19,7 @@ type ChatMessage = {
   uiActions?: UiAction[];
   toolOutput?: Record<string, unknown>;
   elapsedMs?: number;
+  startedAt?: number;
 };
 
 type RenderItem =
@@ -64,6 +65,10 @@ export function AgentScreen() {
   const [panelWidth, setPanelWidth] = useState(270);
   const [codePanelWidth, setCodePanelWidth] = useState(560);
   const [activeArtifact, setActiveArtifact] = useState<CodeArtifact | null>(null);
+  const [latestArtifact, setLatestArtifact] = useState<CodeArtifact | null>(null);
+  const [codePanelDismissed, setCodePanelDismissed] = useState(
+    () => typeof window !== "undefined" && window.localStorage.getItem("agent-code-panel-dismissed") === "true",
+  );
   const [streamingSessionId, setStreamingSessionId] = useState<string | null>(null);
 
   const sessions = useQuery({
@@ -109,9 +114,11 @@ export function AgentScreen() {
   useEffect(() => {
     if (!sessionMessages.data || sessionId === streamingSessionId) return;
     const nextMessages = sessionMessages.data.map(toChatMessage);
+    const artifact = findLatestArtifact(nextMessages);
     setMessages(nextMessages);
-    setActiveArtifact(findLatestArtifact(nextMessages));
-  }, [sessionId, sessionMessages.data, streamingSessionId]);
+    setLatestArtifact(artifact);
+    setActiveArtifact(codePanelDismissed ? null : artifact);
+  }, [codePanelDismissed, sessionId, sessionMessages.data, streamingSessionId]);
 
   useEffect(() => {
     if (!sessionId || ask.isPending || !sessionMessages.error) return;
@@ -207,10 +214,12 @@ export function AgentScreen() {
 
   function updateArtifactCode(code: string) {
     setActiveArtifact((current) => (current ? { ...current, code } : current));
+    setLatestArtifact((current) => (current && current.artifactName === activeArtifact?.artifactName ? { ...current, code } : current));
   }
 
   function resetArtifactCode() {
     setActiveArtifact((current) => (current ? { ...current, code: current.originalCode } : current));
+    setLatestArtifact((current) => (current ? { ...current, code: current.originalCode } : current));
   }
 
   function prepareArtifactSave() {
@@ -244,6 +253,7 @@ export function AgentScreen() {
           content: `Запускаю \`${event.tool_name}\``,
           intent: "tool-start",
           toolOutput: event.arguments,
+          startedAt: Date.now(),
         },
       ]);
       return;
@@ -253,7 +263,10 @@ export function AgentScreen() {
       const toolCall = event.tool_call;
       applyUiActions(toolCall.ui_actions ?? []);
       const artifact = artifactFromToolCall(toolCall);
-      if (artifact) setActiveArtifact(artifact);
+      if (artifact) {
+        setLatestArtifact(artifact);
+        if (!codePanelDismissed) setActiveArtifact(artifact);
+      }
       setMessages((current) => [
         ...current,
         {
@@ -272,7 +285,10 @@ export function AgentScreen() {
       setSessionId(result.session_id);
       applyUiActions(result.ui_actions);
       const artifact = findLatestArtifactFromToolCalls(result.tool_calls);
-      if (artifact) setActiveArtifact(artifact);
+      if (artifact) {
+        setLatestArtifact(artifact);
+        if (!codePanelDismissed) setActiveArtifact(artifact);
+      }
       queryClient.removeQueries({ queryKey: ["agent-session-messages", token, result.session_id] });
       setStreamingSessionId(null);
       queryClient.invalidateQueries({ queryKey: ["agent-sessions"] });
@@ -399,12 +415,31 @@ export function AgentScreen() {
           </form>
         </div>
 
+        {!activeArtifact && latestArtifact && (
+          <button
+            className="code-drawer-tab"
+            type="button"
+            onClick={() => {
+              setCodePanelDismissed(false);
+              window.localStorage.setItem("agent-code-panel-dismissed", "false");
+              setActiveArtifact(latestArtifact);
+            }}
+          >
+            <Code2 size={14} />
+            Код
+          </button>
+        )}
+
         {activeArtifact && (
           <CodeWorkspace
             artifact={activeArtifact}
             width={codePanelWidth}
             onChange={updateArtifactCode}
-            onClose={() => setActiveArtifact(null)}
+            onClose={() => {
+              setCodePanelDismissed(true);
+              window.localStorage.setItem("agent-code-panel-dismissed", "true");
+              setActiveArtifact(null);
+            }}
             onPrepareSave={prepareArtifactSave}
             onReset={resetArtifactCode}
             onResize={resizeCodePanel}
@@ -433,7 +468,20 @@ function CodeWorkspace({
   onReset: () => void;
   onResize: (event: PointerEvent<HTMLDivElement>) => void;
 }) {
+  const token = useAppStore((state) => state.accessToken);
   const dirty = artifact.code !== artifact.originalCode;
+  const [selectedVersion, setSelectedVersion] = useState<number | null>(null);
+  const versions = useQuery({
+    queryKey: ["artifact-versions", token, artifact.artifactType, artifact.artifactName],
+    queryFn: () => api.artifactVersions(token ?? "", artifact.artifactType, artifact.artifactName),
+    enabled: Boolean(token),
+  });
+  const versionRows: ArtifactVersion[] = versions.data?.versions ?? [];
+  const visibleVersion = versionRows.find((item) => item.version === selectedVersion) ?? versionRows[0] ?? null;
+
+  useEffect(() => {
+    setSelectedVersion(null);
+  }, [artifact.artifactName, artifact.artifactType]);
 
   return (
     <aside className="code-workspace" style={{ width }}>
@@ -456,6 +504,50 @@ function CodeWorkspace({
         {artifact.deployedToRuntime && <Badge status="success">deployed</Badge>}
         {artifact.version && <span className="tag">v{artifact.version}</span>}
         {artifact.gitCommit && <span className="tag">{artifact.gitCommit}</span>}
+      </div>
+      <div className="artifact-versions">
+        <div className="artifact-versions-head">
+          <span>Git versions</span>
+          {versions.isFetching && <span className="tag">loading</span>}
+        </div>
+        {versionRows.length > 0 ? (
+          <>
+            <div className="artifact-version-list">
+              {versionRows.slice(0, 8).map((version) => (
+                <button
+                  className={`artifact-version ${visibleVersion?.version === version.version ? "active" : ""}`}
+                  key={`${version.artifact_name}-${version.version}`}
+                  type="button"
+                  onClick={() => setSelectedVersion(version.version)}
+                >
+                  <span>v{version.version}</span>
+                  <code>{version.git_commit_short_sha ?? version.git_status}</code>
+                </button>
+              ))}
+            </div>
+            {visibleVersion && (
+              <details className="artifact-version-code">
+                <summary>
+                  v{visibleVersion.version} · {visibleVersion.git_commit_short_sha ?? visibleVersion.git_status} · {formatArtifactDate(visibleVersion.created_at)}
+                </summary>
+                <div className="artifact-version-message">{visibleVersion.message}</div>
+                {visibleVersion.git_history.length > 0 && (
+                  <div className="artifact-git-history">
+                    {visibleVersion.git_history.slice(0, 5).map((commit) => (
+                      <div className="artifact-git-commit" key={commit.commit_sha}>
+                        <code>{commit.commit_short_sha}</code>
+                        <span>{commit.message}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                <pre>{visibleVersion.code || "Код версии недоступен."}</pre>
+              </details>
+            )}
+          </>
+        ) : (
+          <div className="card-sub">Версии для этого артефакта пока не найдены.</div>
+        )}
       </div>
       <div className="code-editor-shell">
         <MonacoEditor
@@ -535,10 +627,23 @@ function ActivityMessage({ messages }: { messages: ChatMessage[] }) {
 }
 
 function ActivityPanel({ messages, elapsedMs }: { messages: ChatMessage[]; elapsedMs?: number }) {
+  const [now, setNow] = useState(Date.now());
   const toolCalls = messages.flatMap((message) => message.tools ?? []);
   const totalLatency = toolCalls.reduce((sum, tool) => sum + tool.latency_ms, 0);
-  const hasPending = messages.some((message) => message.intent === "tool-start");
-  const displayLatency = elapsedMs ?? totalLatency;
+  const startedCount = messages.filter((message) => message.intent === "tool-start").length;
+  const finishedCount = messages.filter((message) => message.intent === "tool-result").length;
+  const hasPending = startedCount > finishedCount;
+  const firstStartedAt = messages
+    .map((message) => message.startedAt)
+    .filter((value): value is number => typeof value === "number")
+    .sort((left, right) => left - right)[0];
+  const displayLatency = hasPending && firstStartedAt ? now - firstStartedAt : elapsedMs ?? totalLatency;
+
+  useEffect(() => {
+    if (!hasPending) return;
+    const timerId = window.setInterval(() => setNow(Date.now()), 500);
+    return () => window.clearInterval(timerId);
+  }, [hasPending]);
 
   return (
     <details className="activity-card">
@@ -821,6 +926,11 @@ function stripMarkdown(value: string): string {
 function formatLatency(ms: number): string {
   if (ms < 1000) return `${ms}ms`;
   return `${(ms / 1000).toFixed(ms >= 10000 ? 0 : 1)}s`;
+}
+
+function formatArtifactDate(value?: string | null): string {
+  if (!value) return "-";
+  return new Date(value).toLocaleString("ru-RU");
 }
 
 function clamp(value: number, min: number, max: number) {

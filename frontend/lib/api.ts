@@ -6,6 +6,7 @@ import type {
   AirflowTaskInstance,
   AirflowRun,
   AirflowTaskLog,
+  ArtifactVersion,
   CatalogTable,
   DatabaseConnection,
   DatabaseConnectionPayload,
@@ -223,4 +224,9 @@ export const api = {
   sparkJobs: (token: string) => request<SparkJob[]>("/spark/jobs", { token }),
   getSpark: (token: string, jobId: string) =>
     request<SparkJob>(`/spark/jobs/${encodeURIComponent(jobId)}`, { token }),
+  artifactVersions: (token: string, artifactType: string, artifactName: string) =>
+    request<{ scope: string; versions: ArtifactVersion[] }>(
+      `/artifacts/versions?artifact_type=${encodeURIComponent(artifactType)}&artifact_name=${encodeURIComponent(artifactName)}`,
+      { token },
+    ),
 };

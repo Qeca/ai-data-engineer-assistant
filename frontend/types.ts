@@ -162,4 +162,29 @@ export type SparkJob = {
   result_sample?: Record<string, unknown>[] | null;
   driver_log?: string | null;
   created_at?: string | null;
+  updated_at?: string | null;
+};
+
+export type ArtifactVersion = {
+  artifact_type: string;
+  artifact_name: string;
+  path: string;
+  version: number;
+  content_hash: string;
+  message: string;
+  validation_status: string;
+  validation_output: string;
+  git_status: string;
+  git_repository: string;
+  git_commit_sha?: string | null;
+  git_commit_short_sha?: string | null;
+  git_error?: string | null;
+  created_at?: string | null;
+  git_history: {
+    commit_sha: string;
+    commit_short_sha: string;
+    created_at: string;
+    message: string;
+  }[];
+  code?: string | null;
 };

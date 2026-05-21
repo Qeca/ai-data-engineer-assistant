@@ -86,4 +86,5 @@ class SparkTool:
             result_sample=job.result_sample_json,
             driver_log=job.driver_log,
             created_at=job.created_at,
+            updated_at=job.updated_at,
         )
