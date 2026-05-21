@@ -77,13 +77,6 @@ export function AgentScreen() {
   });
 
   useEffect(() => {
-    if (!sessionMessages.data) return;
-    const nextMessages = sessionMessages.data.map(toChatMessage);
-    setMessages(nextMessages);
-    setActiveArtifact(findLatestArtifact(nextMessages));
-  }, [sessionMessages.data]);
-
-  useEffect(() => {
     const saved = window.localStorage.getItem("agent-sidebar-width");
     if (saved) setPanelWidth(clamp(Number(saved), 230, 520));
     const savedCodePanel = window.localStorage.getItem("agent-code-panel-width");
@@ -107,6 +100,23 @@ export function AgentScreen() {
       queryClient.invalidateQueries({ queryKey: ["agent-sessions"] });
     },
   });
+
+  useEffect(() => {
+    if (!sessionMessages.data || ask.isPending) return;
+    const nextMessages = sessionMessages.data.map(toChatMessage);
+    setMessages(nextMessages);
+    setActiveArtifact(findLatestArtifact(nextMessages));
+  }, [sessionMessages.data, ask.isPending]);
+
+  useEffect(() => {
+    if (!sessionId || ask.isPending || !sessionMessages.error) return;
+    const message = sessionMessages.error instanceof Error ? sessionMessages.error.message : "";
+    if (message !== "Session not found") return;
+    setSessionId(null);
+    setMessages(starter);
+    setActiveArtifact(null);
+    queryClient.removeQueries({ queryKey: ["agent-session-messages", token, sessionId] });
+  }, [ask.isPending, queryClient, sessionId, sessionMessages.error, setSessionId, token]);
 
   const deleteChat = useMutation({
     mutationFn: (id: string) => api.deleteSession(token ?? "", id),

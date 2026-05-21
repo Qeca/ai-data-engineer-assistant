@@ -9,7 +9,8 @@ from app.api.routes import agent as agent_route
 from app.core.config import settings
 from app.db.session import AsyncSessionLocal, init_db
 from app.main import app
-from app.models import User
+from app.models import AgentSession, Message, User
+from app.schemas import AgentQueryRequest
 
 
 def test_agent_uses_langgraph_tool_loop():
@@ -111,6 +112,29 @@ async def test_openai_function_calling_can_control_site(monkeypatch):
         {"type": "navigate", "screen": "spark"},
         {"type": "toast", "message": "Открываю экран spark"},
     ]
+
+
+@pytest.mark.asyncio
+async def test_prepare_session_commits_user_message_before_agent_result():
+    await init_db()
+
+    async with AsyncSessionLocal() as writer:
+        user = await writer.scalar(select(User).where(User.email == "admin@local.dev"))
+        session, _ = await agent_route.prepare_session(
+            AgentQueryRequest(query="Какие DAG сейчас есть?", app_state={"screen": "ai-agent"}),
+            user,
+            writer,
+        )
+        session_id = session.id
+
+    async with AsyncSessionLocal() as reader:
+        visible_session = await reader.get(AgentSession, session_id)
+        messages = (
+            await reader.scalars(select(Message).where(Message.session_id == session_id).order_by(Message.created_at))
+        ).all()
+
+    assert visible_session is not None
+    assert [message.role for message in messages] == ["user"]
 
 
 @pytest.mark.asyncio

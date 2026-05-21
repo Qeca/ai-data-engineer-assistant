@@ -76,7 +76,7 @@ async def prepare_session(
 
     user_message = Message(session_id=session.id, role="user", content=payload.query, metadata_json={})
     db.add(user_message)
-    await db.flush()
+    await db.commit()
     return session, app_state
 
 
