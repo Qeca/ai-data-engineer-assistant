@@ -74,6 +74,14 @@ export function AirflowScreen() {
   const latestRun = trigger.data as AirflowRun | undefined;
   const log = taskLog.data as AirflowTaskLog | undefined;
 
+  function refreshSelectedDag() {
+    if (!selectedDagId) return;
+    void pipelines.refetch();
+    void runs.refetch();
+    if (selectedRunId) void tasks.refetch();
+    if (selectedTask) void taskLog.refetch();
+  }
+
   return (
     <div className="content">
       <div style={{ marginBottom: 14 }}>
@@ -127,8 +135,15 @@ export function AirflowScreen() {
             title={`Runs: ${selectedDagId}`}
             sub="Click a run to inspect task instances"
             action={
-              <button className="icon-btn" onClick={() => queryClient.invalidateQueries({ queryKey: ["airflow-runs"] })}>
-                <RefreshCw size={14} />
+              <button
+                className="btn btn-secondary icon-btn"
+                type="button"
+                onClick={refreshSelectedDag}
+                disabled={runs.isFetching}
+                title="Refresh runs"
+                aria-label="Refresh runs"
+              >
+                <RefreshCw size={14} className={runs.isFetching ? "spin" : undefined} />
               </button>
             }
           >
