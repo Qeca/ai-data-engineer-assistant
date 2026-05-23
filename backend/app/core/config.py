@@ -10,6 +10,9 @@ class Settings(BaseSettings):
     app_env: str = "local"
     database_url: str = "sqlite+aiosqlite:///./dev.db"
     auto_create_tables: bool = True
+    celery_broker_url: str = "redis://localhost:6379/0"
+    celery_result_backend: str = "redis://localhost:6379/1"
+    connection_health_check_interval_seconds: int = 60
     cors_origins: list[str] = Field(
         default_factory=lambda: ["http://localhost:3000", "http://127.0.0.1:3000"]
     )

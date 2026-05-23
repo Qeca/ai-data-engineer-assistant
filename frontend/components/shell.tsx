@@ -1,6 +1,6 @@
 "use client";
 
-import { useQuery, useQueryClient, type QueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import {
   Bot,
   Boxes,
@@ -17,7 +17,7 @@ import {
   Table2,
   UserCircle,
 } from "lucide-react";
-import { PointerEvent, useEffect, useMemo, useRef, useState, type MutableRefObject } from "react";
+import { PointerEvent, useEffect, useMemo, useState } from "react";
 import { api } from "@/lib/api";
 import { useAppStore, type Screen } from "@/lib/store";
 import type { DatabaseConnection, Pipeline, SparkJob } from "@/types";
@@ -64,10 +64,6 @@ export function Shell({ children }: { children: React.ReactNode }) {
   const toggleTheme = useAppStore((state) => state.toggleTheme);
   const logout = useAppStore((state) => state.logout);
   const user = useAppStore((state) => state.user);
-  const queryClient = useQueryClient();
-  const connectionsRef = useRef<DatabaseConnection[]>([]);
-  const checkingConnections = useRef(false);
-  const lastHealthCheckAt = useRef(0);
   const [sidebarWidth, setSidebarWidth] = useState(250);
 
   const pipelines = useQuery({
@@ -113,27 +109,6 @@ export function Shell({ children }: { children: React.ReactNode }) {
     const saved = window.localStorage.getItem("main-sidebar-width");
     if (saved) setSidebarWidth(clamp(Number(saved), 210, 420));
   }, []);
-
-  useEffect(() => {
-    connectionsRef.current = connections.data ?? [];
-  }, [connections.data]);
-
-  useEffect(() => {
-    if (!token || !connections.data?.length) return;
-    const now = Date.now();
-    if (now - lastHealthCheckAt.current < 55_000) return;
-    lastHealthCheckAt.current = now;
-    void testVisibleConnections(token, connections.data, queryClient, checkingConnections);
-  }, [connections.data, queryClient, token]);
-
-  useEffect(() => {
-    if (!token) return;
-    const interval = window.setInterval(() => {
-      lastHealthCheckAt.current = Date.now();
-      void testVisibleConnections(token, connectionsRef.current, queryClient, checkingConnections);
-    }, 60_000);
-    return () => window.clearInterval(interval);
-  }, [queryClient, token]);
 
   function resizeSidebar(event: PointerEvent<HTMLDivElement>) {
     const startX = event.clientX;
@@ -238,19 +213,6 @@ function NavStatus({ badge, counts }: { badge?: string; counts?: NavStatusCounts
       )}
     </span>
   );
-}
-
-async function testVisibleConnections(
-  token: string,
-  rows: DatabaseConnection[],
-  queryClient: QueryClient,
-  checkingConnections: MutableRefObject<boolean>,
-) {
-  if (checkingConnections.current || rows.length === 0) return;
-  checkingConnections.current = true;
-  await Promise.allSettled(rows.map((connection) => api.testConnection(token, connection.id)));
-  checkingConnections.current = false;
-  await queryClient.invalidateQueries({ queryKey: ["database-connections", token] });
 }
 
 function countStatuses(rows: Array<Pipeline | SparkJob | DatabaseConnection>): NavStatusCounts {

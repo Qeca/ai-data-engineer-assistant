@@ -11,6 +11,7 @@ from app.schemas import (
     DatabaseConnectionUpdate,
 )
 from app.services.connections import DatabaseConnectionService
+from app.tasks.connections import refresh_connection_statuses
 
 router = APIRouter(prefix="/connections", tags=["connections"])
 service = DatabaseConnectionService()
@@ -70,3 +71,13 @@ async def test_connection(
     if connection is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Connection not found")
     return await service.test_connection(db, connection)
+
+
+@router.post("/health-checks")
+async def queue_connection_health_checks(
+    user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+) -> dict:
+    connections = await service.list_visible(db, user)
+    task = refresh_connection_statuses.delay([connection.id for connection in connections])
+    return {"task_id": task.id, "queued": len(connections)}

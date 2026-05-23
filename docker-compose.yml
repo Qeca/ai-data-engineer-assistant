@@ -113,11 +113,25 @@ services:
         redis-cli -h demo-redis -a demo SADD active_segments retail b2b vip
         redis-cli -h demo-redis -a demo LPUSH recent_events checkout search add_to_cart page_view
 
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   backend:
     build:
       context: ./backend
     environment:
       DATABASE_URL: postgresql+asyncpg://postgres:postgres@postgres:5432/ai_de
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/1
+      CONNECTION_HEALTH_CHECK_INTERVAL_SECONDS: ${CONNECTION_HEALTH_CHECK_INTERVAL_SECONDS:-60}
       JWT_SECRET: local-dev-secret
       CORS_ORIGINS: '["http://localhost:${FRONTEND_PORT:-3000}","http://127.0.0.1:${FRONTEND_PORT:-3000}","http://localhost:3000","http://127.0.0.1:3000","http://localhost:3002","http://127.0.0.1:3002"]'
       AIRFLOW_BASE_URL: http://airflow-webserver:8080
@@ -154,6 +168,38 @@ services:
       - ./infra:/workspace/infra
     depends_on:
       postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  backend-worker:
+    build:
+      context: ./backend
+    command: celery -A app.worker.celery_app worker --loglevel=info --queues=connections,default --concurrency=${CELERY_WORKER_CONCURRENCY:-2}
+    environment:
+      DATABASE_URL: postgresql+asyncpg://postgres:postgres@postgres:5432/ai_de
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/1
+      CONNECTION_HEALTH_CHECK_INTERVAL_SECONDS: ${CONNECTION_HEALTH_CHECK_INTERVAL_SECONDS:-60}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  backend-beat:
+    build:
+      context: ./backend
+    command: celery -A app.worker.celery_app beat --loglevel=info
+    environment:
+      DATABASE_URL: postgresql+asyncpg://postgres:postgres@postgres:5432/ai_de
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/1
+      CONNECTION_HEALTH_CHECK_INTERVAL_SECONDS: ${CONNECTION_HEALTH_CHECK_INTERVAL_SECONDS:-60}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
         condition: service_healthy
 
   frontend:
@@ -300,5 +346,6 @@ volumes:
   demo-clickhouse-data:
   demo-mongo-data:
   demo-redis-data:
+  redis-data:
   airflow-postgres-data:
   airflow-logs:
