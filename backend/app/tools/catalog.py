@@ -4,7 +4,7 @@ from typing import Any
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core.config import settings
+from app.db.agent_data import agent_data_db
 from app.schemas import CatalogTable, TableColumn
 from app.tools.base import ToolExecution
 
@@ -13,7 +13,11 @@ class CatalogTool:
     name = "CatalogTool"
 
     async def list_tables(self, db: AsyncSession) -> list[CatalogTable]:
-        if settings.database_url.startswith("sqlite"):
+        async with agent_data_db.session(db) as data_db:
+            return await self._list_tables(data_db)
+
+    async def _list_tables(self, db: AsyncSession) -> list[CatalogTable]:
+        if agent_data_db.is_sqlite():
             rows = await db.execute(
                 text(
                     """
@@ -37,15 +41,19 @@ class CatalogTool:
                 tables.append(CatalogTable(name=table_name, columns=columns))
             return tables
 
+        schema_filter = agent_data_db.schema_filter()
+        schema_clause = "AND table_schema = :schema_name" if schema_filter else ""
         rows = await db.execute(
             text(
-                """
+                f"""
                 SELECT table_schema, table_name, column_name, data_type, is_nullable
                 FROM information_schema.columns
                 WHERE table_schema NOT IN ('pg_catalog', 'information_schema')
+                  {schema_clause}
                 ORDER BY table_schema, table_name, ordinal_position
                 """
-            )
+            ),
+            {"schema_name": schema_filter} if schema_filter else {},
         )
         grouped: dict[tuple[str, str], list[TableColumn]] = {}
         for row in rows:
@@ -86,22 +94,23 @@ class CatalogTool:
     async def inspect_database(self, db: AsyncSession, sample_limit: int = 3) -> ToolExecution:
         started = time.perf_counter()
         try:
-            tables = await self.list_tables(db)
-            output_tables: list[dict[str, Any]] = []
-            for table in tables:
-                row_count = await self._row_count(db, table.schema_name, table.name)
-                samples = await self._sample_rows(db, table.schema_name, table.name, sample_limit)
-                output_tables.append(
-                    {
-                        "schema_name": table.schema_name,
-                        "name": table.name,
-                        "type": table.type,
-                        "row_count": row_count,
-                        "column_count": len(table.columns),
-                        "columns": [column.model_dump() for column in table.columns],
-                        "sample_rows": samples,
-                    }
-                )
+            async with agent_data_db.session(db) as data_db:
+                tables = await self._list_tables(data_db)
+                output_tables: list[dict[str, Any]] = []
+                for table in tables:
+                    row_count = await self._row_count(data_db, table.schema_name, table.name)
+                    samples = await self._sample_rows(data_db, table.schema_name, table.name, sample_limit)
+                    output_tables.append(
+                        {
+                            "schema_name": table.schema_name,
+                            "name": table.name,
+                            "type": table.type,
+                            "row_count": row_count,
+                            "column_count": len(table.columns),
+                            "columns": [column.model_dump() for column in table.columns],
+                            "sample_rows": samples,
+                        }
+                    )
             return ToolExecution(
                 tool_name="DatabaseInspectorTool",
                 status="success",
@@ -134,7 +143,7 @@ class CatalogTool:
 
     def _table_ref(self, schema_name: str, table_name: str) -> str:
         quoted_table = self._quote_identifier(table_name)
-        if settings.database_url.startswith("sqlite"):
+        if agent_data_db.is_sqlite():
             return quoted_table
         return f"{self._quote_identifier(schema_name)}.{quoted_table}"
 

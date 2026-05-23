@@ -10,11 +10,11 @@ import type { SqlResult } from "@/types";
 import { Badge } from "@/components/ui";
 
 const defaultSql = `SELECT
-  strftime('%Y-%m-%d %H:00:00', created_at) AS hour,
+  date_trunc('hour', order_ts) AS hour,
   COUNT(*) AS order_count,
-  ROUND(AVG(total_amount), 2) AS avg_amount
+  ROUND(AVG(amount), 2) AS avg_amount
 FROM orders
-WHERE created_at >= datetime('now', '-30 days')
+WHERE order_ts >= now() - interval '30 days'
 GROUP BY 1
 ORDER BY order_count DESC
 LIMIT 10`;
@@ -91,7 +91,7 @@ export function SqlScreen() {
 
         <div style={{ padding: "8px 12px", background: "rgba(139, 92, 246, 0.08)", borderBottom: "1px solid rgba(139, 92, 246, 0.18)" }}>
           <span style={{ color: "var(--text-secondary)" }}>
-            AI hint: для production Postgres агент автоматически заменит SQLite-функции на `date_trunc` и `interval`.
+            SQL выполняется в подключенной аналитической БД, а не в служебной БД продукта.
           </span>
         </div>
 

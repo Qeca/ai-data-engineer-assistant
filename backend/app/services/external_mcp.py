@@ -210,7 +210,7 @@ class ExternalMCPGateway:
 
     @staticmethod
     def _database_config() -> ExternalMCPServerConfig:
-        database_url = settings.mcp_database_url or ExternalMCPGateway._sync_database_url()
+        database_url = settings.mcp_database_url or ExternalMCPGateway._sync_agent_database_url()
         if shutil.which("mcp-server-postgres"):
             return ExternalMCPServerConfig(
                 product="database",
@@ -228,6 +228,15 @@ class ExternalMCPGateway:
                 database_url,
             ],
             description="Official/reference PostgreSQL MCP server with schema and read-only query tools.",
+        )
+
+    @staticmethod
+    def _sync_agent_database_url() -> str:
+        database_url = settings.agent_database_url or settings.database_url
+        return (
+            database_url
+            .replace("postgresql+asyncpg://", "postgresql://")
+            .replace("sqlite+aiosqlite://", "sqlite://")
         )
 
     @staticmethod
@@ -301,12 +310,6 @@ class ExternalMCPGateway:
             args=["-y", "@modelcontextprotocol/server-filesystem", settings.artifact_root],
             description="Reference filesystem MCP server restricted to the artifact root.",
         )
-
-    @staticmethod
-    def _sync_database_url() -> str:
-        if settings.database_url.startswith("postgresql+asyncpg://"):
-            return settings.database_url.replace("postgresql+asyncpg://", "postgresql://", 1)
-        return settings.database_url
 
     @staticmethod
     def _error(

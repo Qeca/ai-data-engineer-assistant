@@ -9,6 +9,8 @@ class Settings(BaseSettings):
 
     app_env: str = "local"
     database_url: str = "sqlite+aiosqlite:///./dev.db"
+    agent_database_url: str | None = None
+    agent_database_schema: str | None = None
     auto_create_tables: bool = True
     celery_broker_url: str = "redis://localhost:6379/0"
     celery_result_backend: str = "redis://localhost:6379/1"

@@ -129,6 +129,8 @@ services:
       context: ./backend
     environment:
       DATABASE_URL: postgresql+asyncpg://postgres:postgres@postgres:5432/ai_de
+      AGENT_DATABASE_URL: postgresql+asyncpg://demo:demo@demo-postgres:5432/analytics
+      AGENT_DATABASE_SCHEMA: sales
       CELERY_BROKER_URL: redis://redis:6379/0
       CELERY_RESULT_BACKEND: redis://redis:6379/1
       CONNECTION_HEALTH_CHECK_INTERVAL_SECONDS: ${CONNECTION_HEALTH_CHECK_INTERVAL_SECONDS:-60}
@@ -160,7 +162,7 @@ services:
       MCP_ENABLED: ${MCP_ENABLED:-true}
       MCP_NPX_COMMAND: ${MCP_NPX_COMMAND:-npx}
       MCP_UVX_COMMAND: ${MCP_UVX_COMMAND:-uvx}
-      MCP_DATABASE_URL: ${MCP_DATABASE_URL:-postgresql://postgres:postgres@postgres:5432/ai_de}
+      MCP_DATABASE_URL: ${MCP_DATABASE_URL:-postgresql://demo:demo@demo-postgres:5432/analytics}
       MCP_SPARK_MASTER: ${MCP_SPARK_MASTER:-local[*]}
     ports:
       - "${BACKEND_PORT:-8000}:8000"
@@ -168,6 +170,8 @@ services:
       - ./infra:/workspace/infra
     depends_on:
       postgres:
+        condition: service_healthy
+      demo-postgres:
         condition: service_healthy
       redis:
         condition: service_healthy

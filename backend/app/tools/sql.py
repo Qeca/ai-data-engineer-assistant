@@ -6,6 +6,7 @@ from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings
+from app.db.agent_data import agent_data_db
 from app.tools.base import ToolExecution
 
 WRITE_KEYWORDS = re.compile(
@@ -32,9 +33,10 @@ class SQLTool:
             )
 
         try:
-            result = await db.execute(text(query))
-            rows = [dict(row._mapping) for row in result.fetchmany(limit)]
-            columns = list(result.keys())
+            async with agent_data_db.session(db) as data_db:
+                result = await data_db.execute(text(query))
+                rows = [dict(row._mapping) for row in result.fetchmany(limit)]
+                columns = list(result.keys())
             return ToolExecution(
                 tool_name=self.name,
                 status="success",
@@ -53,7 +55,7 @@ class SQLTool:
             )
 
     def anomaly_query(self) -> str:
-        if settings.database_url.startswith("sqlite"):
+        if agent_data_db.is_sqlite():
             return """
 SELECT
   strftime('%Y-%m-%d %H:00:00', created_at) AS hour,
@@ -61,6 +63,19 @@ SELECT
   ROUND(AVG(total_amount), 2) AS avg_amount
 FROM orders
 WHERE created_at >= datetime('now', '-30 days')
+GROUP BY 1
+ORDER BY order_count DESC
+LIMIT 10
+""".strip()
+
+        if settings.agent_database_schema == "sales":
+            return """
+SELECT
+  date_trunc('hour', order_ts) AS hour,
+  COUNT(*) AS order_count,
+  ROUND(AVG(amount), 2) AS avg_amount
+FROM orders
+WHERE order_ts >= now() - interval '30 days'
 GROUP BY 1
 ORDER BY order_count DESC
 LIMIT 10
@@ -79,11 +94,23 @@ LIMIT 10
 """.strip()
 
     def revenue_query(self) -> str:
-        if settings.database_url.startswith("sqlite"):
+        if agent_data_db.is_sqlite():
             return """
 SELECT
   date(created_at) AS day,
   ROUND(SUM(total_amount), 2) AS revenue,
+  COUNT(*) AS orders
+FROM orders
+WHERE status = 'paid'
+GROUP BY 1
+ORDER BY day DESC
+LIMIT 14
+""".strip()
+        if settings.agent_database_schema == "sales":
+            return """
+SELECT
+  order_ts::date AS day,
+  ROUND(SUM(amount), 2) AS revenue,
   COUNT(*) AS orders
 FROM orders
 WHERE status = 'paid'
