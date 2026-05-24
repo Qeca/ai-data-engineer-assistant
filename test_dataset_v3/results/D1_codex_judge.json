@@ -1,0 +1,101 @@
+[
+  {
+    "idx": 13,
+    "query": "Перезапусти джоб clickstream_aggregator",
+    "expected": "spark",
+    "got": "airflow",
+    "rule_match": false,
+    "codex_verdict": "no",
+    "codex_reason": "Запрос про перезапуск job соответствует spark, а airflow относится к DAG-операциям и не является синонимом или более общей категорией для Spark job."
+  },
+  {
+    "idx": 14,
+    "query": "Создай DAG для ежедневной загрузки CSV из /data в orders_raw",
+    "expected": "artifact_airflow",
+    "got": "database",
+    "rule_match": false,
+    "codex_verdict": "no",
+    "codex_reason": "Запрос явно про генерацию нового Airflow DAG, а database описывает только возможную целевую таблицу и не покрывает создание DAG-артефакта."
+  },
+  {
+    "idx": 16,
+    "query": "Сгенерируй пайплайн синхронизации с PostgreSQL каждые 30 минут",
+    "expected": "artifact_airflow",
+    "got": "database-connections",
+    "rule_match": false,
+    "codex_verdict": "no",
+    "codex_reason": "Запрос про генерацию нового scheduled pipeline/DAG, а не про управление подключениями к БД; PostgreSQL здесь только источник/цель синхронизации."
+  },
+  {
+    "idx": 17,
+    "query": "Напиши PySpark который считает median по amount в orders",
+    "expected": "artifact_spark",
+    "got": "database",
+    "rule_match": false,
+    "codex_verdict": "no",
+    "codex_reason": "Запрос явно требует генерации PySpark-скрипта как артефакта, а database не покрывает ни Spark, ни генерацию артефакта."
+  },
+  {
+    "idx": 18,
+    "query": "Создай spark задачу для дедупликации clickstream по user_id",
+    "expected": "artifact_spark",
+    "got": "database",
+    "rule_match": false,
+    "codex_verdict": "no",
+    "codex_reason": "Запрос явно про генерацию новой Spark-задачи/скрипта, а database относится к работе с БД и не покрывает создание Spark-артефакта."
+  },
+  {
+    "idx": 26,
+    "query": "Покажи все статусы пайплайнов и джобов",
+    "expected": "site",
+    "got": "airflow",
+    "rule_match": false,
+    "codex_verdict": "partial",
+    "codex_reason": "Запрос про показ статусов пайплайнов и джобов пересекается с airflow/status, но ожидаемая метка site указывает на навигацию к экрану статусов, а не только Airflow DAG."
+  },
+  {
+    "idx": 32,
+    "query": "Отладь traceback: KeyError 'customer_id'",
+    "expected": "debug",
+    "got": "database",
+    "rule_match": false,
+    "codex_verdict": "no",
+    "codex_reason": "Запрос явно просит отладить traceback и исключение KeyError, поэтому intent должен быть debug, а database не является ни синонимом, ни корректной более общей категорией."
+  },
+  {
+    "idx": 33,
+    "query": "Помоги разобраться с OutOfMemoryError в Spark",
+    "expected": "debug",
+    "got": "spark",
+    "rule_match": false,
+    "codex_verdict": "partial",
+    "codex_reason": "Запрос явно про отладку ошибки OutOfMemoryError, но метка spark частично указывает на релевантный домен Spark."
+  },
+  {
+    "idx": 34,
+    "query": "В чём ошибка в моём DAG?",
+    "expected": "debug",
+    "got": "database-connections",
+    "rule_match": false,
+    "codex_verdict": "no",
+    "codex_reason": "Запрос явно про поиск ошибки в DAG, то есть отладку, а не управление подключениями к базе данных."
+  },
+  {
+    "idx": 36,
+    "query": "Вызови MCP filesystem чтобы прочитать конфиг",
+    "expected": "mcp",
+    "got": "agent-error",
+    "rule_match": false,
+    "codex_verdict": "no",
+    "codex_reason": "Запрос явно относится к работе с MCP-сервером, а `agent-error` описывает ошибку агента, а не intent пользователя."
+  },
+  {
+    "idx": 37,
+    "query": "Используй model context protocol для документа",
+    "expected": "mcp",
+    "got": "agent-error",
+    "rule_match": false,
+    "codex_verdict": "no",
+    "codex_reason": "Запрос явно относится к работе с Model Context Protocol, поэтому метка mcp подходит, а agent-error является ошибочным служебным результатом, не описывающим intent."
+  }
+]

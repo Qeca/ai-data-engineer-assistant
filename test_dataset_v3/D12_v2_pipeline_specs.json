@@ -1,0 +1,893 @@
+[
+  {
+    "id": "01_example_complex",
+    "source_file": "D12_real_dags/01_example_complex.py",
+    "source_repo": "apache/airflow",
+    "source_sha": "ea7481d7d59b0eb129f8b39c848a24aa111e7ca3",
+    "source_license": "Apache-2.0",
+    "operators_used": [
+      "BashOperator"
+    ],
+    "decorators_used": [],
+    "schedule": "None",
+    "n_tasks_observed": 37,
+    "spec": "Example Airflow DAG that shows the complex DAG structure. Используй операторы: BashOperator. DAG должен содержать 37 задач(и). Расписание: None. Сгенерируй валидный Airflow DAG и проверь его в sandbox.",
+    "invariants": [
+      "valid_python_ast",
+      {
+        "has_operator": [
+          "BashOperator"
+        ]
+      }
+    ],
+    "must_artifact_type": "dag"
+  },
+  {
+    "id": "02_example_task_group",
+    "source_file": "D12_real_dags/02_example_task_group.py",
+    "source_repo": "apache/airflow",
+    "source_sha": "ea7481d7d59b0eb129f8b39c848a24aa111e7ca3",
+    "source_license": "Apache-2.0",
+    "operators_used": [
+      "BashOperator",
+      "EmptyOperator"
+    ],
+    "decorators_used": [],
+    "schedule": "None",
+    "n_tasks_observed": 9,
+    "spec": "Example DAG demonstrating the usage of the TaskGroup. Используй операторы: BashOperator, EmptyOperator. DAG должен содержать 9 задач(и). Расписание: None. Сгенерируй валидный Airflow DAG и проверь его в sandbox.",
+    "invariants": [
+      "valid_python_ast",
+      {
+        "has_operator": [
+          "BashOperator",
+          "EmptyOperator"
+        ]
+      }
+    ],
+    "must_artifact_type": "dag"
+  },
+  {
+    "id": "03_example_task_group_decorator",
+    "source_file": "D12_real_dags/03_example_task_group_decorator.py",
+    "source_repo": "apache/airflow",
+    "source_sha": "ea7481d7d59b0eb129f8b39c848a24aa111e7ca3",
+    "source_license": "Apache-2.0",
+    "operators_used": [],
+    "decorators_used": [
+      "task",
+      "task_group"
+    ],
+    "schedule": "None",
+    "n_tasks_observed": 5,
+    "spec": "Example DAG demonstrating the usage of the @taskgroup decorator. Используй декораторы Airflow: @task, @task_group. DAG должен содержать 5 задач(и). Расписание: None. Сгенерируй валидный Airflow DAG и проверь его в sandbox.",
+    "invariants": [
+      "valid_python_ast",
+      "uses_taskflow_task",
+      "uses_taskgroup"
+    ],
+    "must_artifact_type": "dag"
+  },
+  {
+    "id": "04_example_dynamic_task_mapping",
+    "source_file": "D12_real_dags/04_example_dynamic_task_mapping.py",
+    "source_repo": "apache/airflow",
+    "source_sha": "ea7481d7d59b0eb129f8b39c848a24aa111e7ca3",
+    "source_license": "Apache-2.0",
+    "operators_used": [],
+    "decorators_used": [
+      "task",
+      "task_group"
+    ],
+    "schedule": "None",
+    "n_tasks_observed": 7,
+    "spec": "Example DAG demonstrating the usage of dynamic task mapping. Используй декораторы Airflow: @task, @task_group. DAG должен содержать 7 задач(и). Расписание: None. Сгенерируй валидный Airflow DAG и проверь его в sandbox.",
+    "invariants": [
+      "valid_python_ast",
+      "uses_taskflow_task",
+      "uses_taskgroup"
+    ],
+    "must_artifact_type": "dag"
+  },
+  {
+    "id": "05_example_nested_branch_dag",
+    "source_file": "D12_real_dags/05_example_nested_branch_dag.py",
+    "source_repo": "apache/airflow",
+    "source_sha": "ea7481d7d59b0eb129f8b39c848a24aa111e7ca3",
+    "source_license": "Apache-2.0",
+    "operators_used": [
+      "EmptyOperator"
+    ],
+    "decorators_used": [
+      "task"
+    ],
+    "schedule": "@daily",
+    "n_tasks_observed": 8,
+    "spec": "Example DAG demonstrating a workflow with nested branching. The join tasks are created with\n``none_failed_min_one_success`` trigger rule such that they are skipped whenever their corresponding\nbranching tasks are skipped. Используй операторы: EmptyOperator. DAG должен содержать 8 задач(и). Расписание: @daily. Сгенерируй валидный Airflow DAG и проверь его в sandbox.",
+    "invariants": [
+      "valid_python_ast",
+      {
+        "has_operator": [
+          "EmptyOperator"
+        ]
+      },
+      "uses_taskflow_task",
+      {
+        "schedule_equals": "@daily"
+      }
+    ],
+    "must_artifact_type": "dag"
+  },
+  {
+    "id": "06_example_setup_teardown",
+    "source_file": "D12_real_dags/06_example_setup_teardown.py",
+    "source_repo": "apache/airflow",
+    "source_sha": "ea7481d7d59b0eb129f8b39c848a24aa111e7ca3",
+    "source_license": "Apache-2.0",
+    "operators_used": [
+      "BashOperator"
+    ],
+    "decorators_used": [],
+    "schedule": "None",
+    "n_tasks_observed": 6,
+    "spec": "Example DAG demonstrating the usage of setup and teardown tasks. Используй операторы: BashOperator. DAG должен содержать 6 задач(и). Расписание: None. Сгенерируй валидный Airflow DAG и проверь его в sandbox.",
+    "invariants": [
+      "valid_python_ast",
+      {
+        "has_operator": [
+          "BashOperator"
+        ]
+      }
+    ],
+    "must_artifact_type": "dag"
+  },
+  {
+    "id": "07_example_setup_teardown_taskflow",
+    "source_file": "D12_real_dags/07_example_setup_teardown_taskflow.py",
+    "source_repo": "apache/airflow",
+    "source_sha": "ea7481d7d59b0eb129f8b39c848a24aa111e7ca3",
+    "source_license": "Apache-2.0",
+    "operators_used": [],
+    "decorators_used": [
+      "setup",
+      "task",
+      "task_group",
+      "teardown"
+    ],
+    "schedule": "None",
+    "n_tasks_observed": 5,
+    "spec": "Example DAG demonstrating the usage of setup and teardown tasks. Используй декораторы Airflow: @setup, @task, @task_group, @teardown. DAG должен содержать 5 задач(и). Расписание: None. Сгенерируй валидный Airflow DAG и проверь его в sandbox.",
+    "invariants": [
+      "valid_python_ast",
+      "uses_taskflow_task",
+      "uses_taskgroup"
+    ],
+    "must_artifact_type": "dag"
+  },
+  {
+    "id": "08_example_branch_labels",
+    "source_file": "D12_real_dags/08_example_branch_labels.py",
+    "source_repo": "apache/airflow",
+    "source_sha": "ea7481d7d59b0eb129f8b39c848a24aa111e7ca3",
+    "source_license": "Apache-2.0",
+    "operators_used": [
+      "EmptyOperator"
+    ],
+    "decorators_used": [],
+    "schedule": "@daily",
+    "n_tasks_observed": 7,
+    "spec": "Example DAG demonstrating the usage of labels with different branches. Используй операторы: EmptyOperator. DAG должен содержать 7 задач(и). Расписание: @daily. Сгенерируй валидный Airflow DAG и проверь его в sandbox.",
+    "invariants": [
+      "valid_python_ast",
+      {
+        "has_operator": [
+          "EmptyOperator"
+        ]
+      },
+      {
+        "schedule_equals": "@daily"
+      }
+    ],
+    "must_artifact_type": "dag"
+  },
+  {
+    "id": "09_example_branch_python_dop_operator_3",
+    "source_file": "D12_real_dags/09_example_branch_python_dop_operator_3.py",
+    "source_repo": "apache/airflow",
+    "source_sha": "ea7481d7d59b0eb129f8b39c848a24aa111e7ca3",
+    "source_license": "Apache-2.0",
+    "operators_used": [
+      "EmptyOperator"
+    ],
+    "decorators_used": [
+      "task"
+    ],
+    "schedule": "*/1 * * * *",
+    "n_tasks_observed": 4,
+    "spec": "Example DAG demonstrating the usage of ``@task.branch`` TaskFlow API decorator with depends_on_past=True,\nwhere tasks may be run or skipped on alternating runs. Используй операторы: EmptyOperator. DAG должен содержать 4 задач(и). Расписание: */1 * * * *. Сгенерируй валидный Airflow DAG и проверь его в sandbox.",
+    "invariants": [
+      "valid_python_ast",
+      {
+        "has_operator": [
+          "EmptyOperator"
+        ]
+      },
+      "uses_taskflow_task",
+      {
+        "schedule_equals": "*/1 * * * *"
+      }
+    ],
+    "must_artifact_type": "dag"
+  },
+  {
+    "id": "10_example_trigger_target_dag",
+    "source_file": "D12_real_dags/10_example_trigger_target_dag.py",
+    "source_repo": "apache/airflow",
+    "source_sha": "ea7481d7d59b0eb129f8b39c848a24aa111e7ca3",
+    "source_license": "Apache-2.0",
+    "operators_used": [
+      "BashOperator",
+      "TriggerDagRunOperator"
+    ],
+    "decorators_used": [
+      "task"
+    ],
+    "schedule": "None",
+    "n_tasks_observed": 2,
+    "spec": "Example usage of the TriggerDagRunOperator. This example holds 2 DAGs:\n1. 1st DAG (example_trigger_controller_dag) holds a TriggerDagRunOperator, which will trigger the 2nd DAG\n2. 2nd DAG (example_trigger_target_dag) which will be triggered by the TriggerDagRunOperator in the 1st DAG Используй операторы: BashOperator, TriggerDagRunOperator. DAG должен содержать 2 задач(и). Расписание: None. Сгенерируй валидный Airflow DAG и проверь его в sandbox.",
+    "invariants": [
+      "valid_python_ast",
+      {
+        "has_operator": [
+          "BashOperator",
+          "TriggerDagRunOperator"
+        ]
+      },
+      "uses_taskflow_task"
+    ],
+    "must_artifact_type": "dag"
+  },
+  {
+    "id": "11_example_xcom",
+    "source_file": "D12_real_dags/11_example_xcom.py",
+    "source_repo": "apache/airflow",
+    "source_sha": "ea7481d7d59b0eb129f8b39c848a24aa111e7ca3",
+    "source_license": "Apache-2.0",
+    "operators_used": [
+      "BashOperator"
+    ],
+    "decorators_used": [
+      "task"
+    ],
+    "schedule": "@once",
+    "n_tasks_observed": 6,
+    "spec": "Example DAG demonstrating the usage of XComs. Используй операторы: BashOperator. DAG должен содержать 6 задач(и). Расписание: @once. Сгенерируй валидный Airflow DAG и проверь его в sandbox.",
+    "invariants": [
+      "valid_python_ast",
+      {
+        "has_operator": [
+          "BashOperator"
+        ]
+      },
+      "uses_taskflow_task",
+      {
+        "schedule_equals": "@once"
+      }
+    ],
+    "must_artifact_type": "dag"
+  },
+  {
+    "id": "12_example_xcomargs",
+    "source_file": "D12_real_dags/12_example_xcomargs.py",
+    "source_repo": "apache/airflow",
+    "source_sha": "ea7481d7d59b0eb129f8b39c848a24aa111e7ca3",
+    "source_license": "Apache-2.0",
+    "operators_used": [
+      "BashOperator"
+    ],
+    "decorators_used": [
+      "task"
+    ],
+    "schedule": "None",
+    "n_tasks_observed": 4,
+    "spec": "Example DAG demonstrating the usage of the XComArgs. Используй операторы: BashOperator. DAG должен содержать 4 задач(и). Расписание: None. Сгенерируй валидный Airflow DAG и проверь его в sandbox.",
+    "invariants": [
+      "valid_python_ast",
+      {
+        "has_operator": [
+          "BashOperator"
+        ]
+      },
+      "uses_taskflow_task"
+    ],
+    "must_artifact_type": "dag"
+  },
+  {
+    "id": "13_tutorial",
+    "source_file": "D12_real_dags/13_tutorial.py",
+    "source_repo": "apache/airflow",
+    "source_sha": "ea7481d7d59b0eb129f8b39c848a24aa111e7ca3",
+    "source_license": "Apache-2.0",
+    "operators_used": [
+      "BashOperator"
+    ],
+    "decorators_used": [],
+    "schedule": "timedelta(days=1",
+    "n_tasks_observed": 3,
+    "spec": "### Tutorial Documentation\nDocumentation that goes along with the Airflow tutorial located\n[here](https://airflow.apache.org/tutorial.html) Используй операторы: BashOperator. DAG должен содержать 3 задач(и). Расписание: timedelta(days=1. Сгенерируй валидный Airflow DAG и проверь его в sandbox.",
+    "invariants": [
+      "valid_python_ast",
+      {
+        "has_operator": [
+          "BashOperator"
+        ]
+      },
+      {
+        "schedule_equals": "timedelta(days=1"
+      }
+    ],
+    "must_artifact_type": "dag"
+  },
+  {
+    "id": "14_tutorial_dag",
+    "source_file": "D12_real_dags/14_tutorial_dag.py",
+    "source_repo": "apache/airflow",
+    "source_sha": "ea7481d7d59b0eb129f8b39c848a24aa111e7ca3",
+    "source_license": "Apache-2.0",
+    "operators_used": [
+      "PythonOperator"
+    ],
+    "decorators_used": [],
+    "schedule": "None",
+    "n_tasks_observed": 3,
+    "spec": "### DAG Tutorial Documentation\nThis DAG is demonstrating an Extract -> Transform -> Load pipeline Используй операторы: PythonOperator. DAG должен содержать 3 задач(и). Расписание: None. Сгенерируй валидный Airflow DAG и проверь его в sandbox.",
+    "invariants": [
+      "valid_python_ast",
+      {
+        "has_operator": [
+          "PythonOperator"
+        ]
+      }
+    ],
+    "must_artifact_type": "dag"
+  },
+  {
+    "id": "15_tutorial_taskflow_api",
+    "source_file": "D12_real_dags/15_tutorial_taskflow_api.py",
+    "source_repo": "apache/airflow",
+    "source_sha": "ea7481d7d59b0eb129f8b39c848a24aa111e7ca3",
+    "source_license": "Apache-2.0",
+    "operators_used": [],
+    "decorators_used": [
+      "dag",
+      "task"
+    ],
+    "schedule": "None",
+    "n_tasks_observed": 3,
+    "spec": "Используй декораторы Airflow: @dag, @task. DAG должен содержать 3 задач(и). Расписание: None. Сгенерируй валидный Airflow DAG и проверь его в sandbox.",
+    "invariants": [
+      "valid_python_ast",
+      "uses_taskflow_task",
+      "uses_dag_decorator"
+    ],
+    "must_artifact_type": "dag"
+  },
+  {
+    "id": "16_tutorial_taskflow_templates",
+    "source_file": "D12_real_dags/16_tutorial_taskflow_templates.py",
+    "source_repo": "apache/airflow",
+    "source_sha": "ea7481d7d59b0eb129f8b39c848a24aa111e7ca3",
+    "source_license": "Apache-2.0",
+    "operators_used": [],
+    "decorators_used": [
+      "dag",
+      "task"
+    ],
+    "schedule": "@daily",
+    "n_tasks_observed": 1,
+    "spec": "Используй декораторы Airflow: @dag, @task. Расписание: @daily. Сгенерируй валидный Airflow DAG и проверь его в sandbox.",
+    "invariants": [
+      "valid_python_ast",
+      "uses_taskflow_task",
+      "uses_dag_decorator",
+      {
+        "schedule_equals": "@daily"
+      }
+    ],
+    "must_artifact_type": "dag"
+  },
+  {
+    "id": "17_example_dag_decorator",
+    "source_file": "D12_real_dags/17_example_dag_decorator.py",
+    "source_repo": "apache/airflow",
+    "source_sha": "ea7481d7d59b0eb129f8b39c848a24aa111e7ca3",
+    "source_license": "Apache-2.0",
+    "operators_used": [
+      "BaseOperator",
+      "BashOperator",
+      "GetRequestOperator"
+    ],
+    "decorators_used": [
+      "dag",
+      "task"
+    ],
+    "schedule": "None",
+    "n_tasks_observed": 2,
+    "spec": "Используй операторы: BaseOperator, BashOperator, GetRequestOperator. DAG должен содержать 2 задач(и). Расписание: None. Сгенерируй валидный Airflow DAG и проверь его в sandbox.",
+    "invariants": [
+      "valid_python_ast",
+      {
+        "has_operator": [
+          "BaseOperator",
+          "BashOperator",
+          "GetRequestOperator"
+        ]
+      },
+      "uses_taskflow_task",
+      "uses_dag_decorator"
+    ],
+    "must_artifact_type": "dag"
+  },
+  {
+    "id": "18_example_dynamic_task_mapping_with_no_taskflow_operators",
+    "source_file": "D12_real_dags/18_example_dynamic_task_mapping_with_no_taskflow_operators.py",
+    "source_repo": "apache/airflow",
+    "source_sha": "ea7481d7d59b0eb129f8b39c848a24aa111e7ca3",
+    "source_license": "Apache-2.0",
+    "operators_used": [
+      "AddOneOperator",
+      "BaseOperator",
+      "SumItOperator"
+    ],
+    "decorators_used": [],
+    "schedule": "None",
+    "n_tasks_observed": 1,
+    "spec": "Example DAG demonstrating the usage of dynamic task mapping with non-TaskFlow operators. Используй операторы: AddOneOperator, BaseOperator, SumItOperator. Расписание: None. Сгенерируй валидный Airflow DAG и проверь его в sandbox.",
+    "invariants": [
+      "valid_python_ast",
+      {
+        "has_operator": [
+          "AddOneOperator",
+          "BaseOperator",
+          "SumItOperator"
+        ]
+      }
+    ],
+    "must_artifact_type": "dag"
+  },
+  {
+    "id": "19_example_assets",
+    "source_file": "D12_real_dags/19_example_assets.py",
+    "source_repo": "apache/airflow",
+    "source_sha": "ea7481d7d59b0eb129f8b39c848a24aa111e7ca3",
+    "source_license": "Apache-2.0",
+    "operators_used": [
+      "BashOperator"
+    ],
+    "decorators_used": [],
+    "schedule": "@daily",
+    "n_tasks_observed": 0,
+    "spec": "Example DAG for demonstrating the behavior of the Assets feature in Airflow, including conditional and\nasset expression-based scheduling. Используй операторы: BashOperator. Расписание: @daily. Сгенерируй валидный Airflow DAG и проверь его в sandbox.",
+    "invariants": [
+      "valid_python_ast",
+      {
+        "has_operator": [
+          "BashOperator"
+        ]
+      },
+      {
+        "schedule_equals": "@daily"
+      }
+    ],
+    "must_artifact_type": "dag"
+  },
+  {
+    "id": "20_example_asset_decorator",
+    "source_file": "D12_real_dags/20_example_asset_decorator.py",
+    "source_repo": "apache/airflow",
+    "source_sha": "ea7481d7d59b0eb129f8b39c848a24aa111e7ca3",
+    "source_license": "Apache-2.0",
+    "operators_used": [],
+    "decorators_used": [
+      "asset",
+      "dag",
+      "task"
+    ],
+    "schedule": "None",
+    "n_tasks_observed": 1,
+    "spec": "Используй декораторы Airflow: @asset, @dag, @task. Расписание: None. Сгенерируй валидный Airflow DAG и проверь его в sandbox.",
+    "invariants": [
+      "valid_python_ast",
+      "uses_taskflow_task",
+      "uses_dag_decorator"
+    ],
+    "must_artifact_type": "dag"
+  },
+  {
+    "id": "21_example_postgres",
+    "source_file": "D12_real_dags/21_example_postgres.py",
+    "source_repo": "apache/airflow",
+    "source_sha": "ea7481d7d59b0eb129f8b39c848a24aa111e7ca3",
+    "source_license": "Apache-2.0",
+    "operators_used": [
+      "SQLExecuteQueryOperator"
+    ],
+    "decorators_used": [],
+    "schedule": "@once",
+    "n_tasks_observed": 4,
+    "spec": "Используй операторы: SQLExecuteQueryOperator. DAG должен содержать 4 задач(и). Расписание: @once. Сгенерируй валидный Airflow DAG и проверь его в sandbox.",
+    "invariants": [
+      "valid_python_ast",
+      {
+        "has_operator": [
+          "SQLExecuteQueryOperator"
+        ]
+      },
+      {
+        "schedule_equals": "@once"
+      }
+    ],
+    "must_artifact_type": "dag"
+  },
+  {
+    "id": "22_example_s3_to_sql",
+    "source_file": "D12_real_dags/22_example_s3_to_sql.py",
+    "source_repo": "apache/airflow",
+    "source_sha": "ea7481d7d59b0eb129f8b39c848a24aa111e7ca3",
+    "source_license": "Apache-2.0",
+    "operators_used": [
+      "RedshiftCreateClusterOperator",
+      "RedshiftDataOperator",
+      "RedshiftDeleteClusterOperator",
+      "SQLTableCheckOperator"
+    ],
+    "decorators_used": [
+      "task"
+    ],
+    "schedule": "@once",
+    "n_tasks_observed": 6,
+    "spec": "Используй операторы: RedshiftCreateClusterOperator, RedshiftDataOperator, RedshiftDeleteClusterOperator, SQLTableCheckOperator. DAG должен содержать 6 задач(и). Расписание: @once. Сгенерируй валидный Airflow DAG и проверь его в sandbox.",
+    "invariants": [
+      "valid_python_ast",
+      {
+        "has_operator": [
+          "RedshiftCreateClusterOperator",
+          "RedshiftDataOperator",
+          "RedshiftDeleteClusterOperator",
+          "SQLTableCheckOperator"
+        ]
+      },
+      "uses_taskflow_task",
+      {
+        "schedule_equals": "@once"
+      }
+    ],
+    "must_artifact_type": "dag"
+  },
+  {
+    "id": "23_example_http",
+    "source_file": "D12_real_dags/23_example_http.py",
+    "source_repo": "apache/airflow",
+    "source_sha": "ea7481d7d59b0eb129f8b39c848a24aa111e7ca3",
+    "source_license": "Apache-2.0",
+    "operators_used": [
+      "HttpOperator"
+    ],
+    "decorators_used": [],
+    "schedule": "None",
+    "n_tasks_observed": 7,
+    "spec": "Example HTTP operator and sensor Используй операторы: HttpOperator. DAG должен содержать 7 задач(и). Расписание: None. Сгенерируй валидный Airflow DAG и проверь его в sandbox.",
+    "invariants": [
+      "valid_python_ast",
+      {
+        "has_operator": [
+          "HttpOperator"
+        ]
+      }
+    ],
+    "must_artifact_type": "dag"
+  },
+  {
+    "id": "24_example_slack_webhook",
+    "source_file": "D12_real_dags/24_example_slack_webhook.py",
+    "source_repo": "apache/airflow",
+    "source_sha": "ea7481d7d59b0eb129f8b39c848a24aa111e7ca3",
+    "source_license": "Apache-2.0",
+    "operators_used": [
+      "SlackWebhookOperator"
+    ],
+    "decorators_used": [],
+    "schedule": "None",
+    "n_tasks_observed": 2,
+    "spec": "Используй операторы: SlackWebhookOperator. DAG должен содержать 2 задач(и). Расписание: None. Сгенерируй валидный Airflow DAG и проверь его в sandbox.",
+    "invariants": [
+      "valid_python_ast",
+      {
+        "has_operator": [
+          "SlackWebhookOperator"
+        ]
+      }
+    ],
+    "must_artifact_type": "dag"
+  },
+  {
+    "id": "25_example_spark_dag",
+    "source_file": "D12_real_dags/25_example_spark_dag.py",
+    "source_repo": "apache/airflow",
+    "source_sha": "ea7481d7d59b0eb129f8b39c848a24aa111e7ca3",
+    "source_license": "Apache-2.0",
+    "operators_used": [
+      "PySparkOperator",
+      "SparkJDBCOperator",
+      "SparkSqlOperator",
+      "SparkSubmitOperator"
+    ],
+    "decorators_used": [],
+    "schedule": "None",
+    "n_tasks_observed": 5,
+    "spec": "Example Airflow DAG to submit Apache Spark applications using\n`SparkSubmitOperator`, `SparkJDBCOperator` and `SparkSqlOperator`. Используй операторы: PySparkOperator, SparkJDBCOperator, SparkSqlOperator, SparkSubmitOperator. DAG должен содержать 5 задач(и). Расписание: None. Сгенерируй валидный Airflow DAG и проверь его в sandbox.",
+    "invariants": [
+      "valid_python_ast",
+      {
+        "has_operator": [
+          "PySparkOperator",
+          "SparkJDBCOperator",
+          "SparkSqlOperator",
+          "SparkSubmitOperator"
+        ]
+      }
+    ],
+    "must_artifact_type": "dag"
+  },
+  {
+    "id": "26_example_bigquery_queries",
+    "source_file": "D12_real_dags/26_example_bigquery_queries.py",
+    "source_repo": "apache/airflow",
+    "source_sha": "ea7481d7d59b0eb129f8b39c848a24aa111e7ca3",
+    "source_license": "Apache-2.0",
+    "operators_used": [
+      "BashOperator",
+      "BigQueryCheckOperator",
+      "BigQueryColumnCheckOperator",
+      "BigQueryCreateEmptyDatasetOperator",
+      "BigQueryCreateTableOperator",
+      "BigQueryDeleteDatasetOperator",
+      "BigQueryGetDataOperator",
+      "BigQueryInsertJobOperator",
+      "BigQueryIntervalCheckOperator",
+      "BigQueryTableCheckOperator",
+      "BigQueryValueCheckOperator",
+      "OpenLineageTestOperator"
+    ],
+    "decorators_used": [],
+    "schedule": "@once",
+    "n_tasks_observed": 17,
+    "spec": "Example Airflow DAG for Google BigQuery service. Используй операторы: BashOperator, BigQueryCheckOperator, BigQueryColumnCheckOperator, BigQueryCreateEmptyDatasetOperator, BigQueryCreateTableOperator, BigQueryDeleteDatasetOperator. DAG должен содержать 17 задач(и). Расписание: @once. Сгенерируй валидный Airflow DAG и проверь его в sandbox.",
+    "invariants": [
+      "valid_python_ast",
+      {
+        "has_operator": [
+          "BashOperator",
+          "BigQueryCheckOperator",
+          "BigQueryColumnCheckOperator",
+          "BigQueryCreateEmptyDatasetOperator"
+        ]
+      },
+      {
+        "schedule_equals": "@once"
+      }
+    ],
+    "must_artifact_type": "dag"
+  },
+  {
+    "id": "27_example_gcs_to_bigquery",
+    "source_file": "D12_real_dags/27_example_gcs_to_bigquery.py",
+    "source_repo": "apache/airflow",
+    "source_sha": "ea7481d7d59b0eb129f8b39c848a24aa111e7ca3",
+    "source_license": "Apache-2.0",
+    "operators_used": [
+      "BigQueryCreateEmptyDatasetOperator",
+      "BigQueryDeleteDatasetOperator",
+      "GCSToBigQueryOperator",
+      "OpenLineageTestOperator"
+    ],
+    "decorators_used": [],
+    "schedule": "@once",
+    "n_tasks_observed": 4,
+    "spec": "Example DAG using GCSToBigQueryOperator. Используй операторы: BigQueryCreateEmptyDatasetOperator, BigQueryDeleteDatasetOperator, GCSToBigQueryOperator, OpenLineageTestOperator. DAG должен содержать 4 задач(и). Расписание: @once. Сгенерируй валидный Airflow DAG и проверь его в sandbox.",
+    "invariants": [
+      "valid_python_ast",
+      {
+        "has_operator": [
+          "BigQueryCreateEmptyDatasetOperator",
+          "BigQueryDeleteDatasetOperator",
+          "GCSToBigQueryOperator",
+          "OpenLineageTestOperator"
+        ]
+      },
+      {
+        "schedule_equals": "@once"
+      }
+    ],
+    "must_artifact_type": "dag"
+  },
+  {
+    "id": "28_example_bigquery_tables",
+    "source_file": "D12_real_dags/28_example_bigquery_tables.py",
+    "source_repo": "apache/airflow",
+    "source_sha": "ea7481d7d59b0eb129f8b39c848a24aa111e7ca3",
+    "source_license": "Apache-2.0",
+    "operators_used": [
+      "BigQueryCreateEmptyDatasetOperator",
+      "BigQueryCreateTableOperator",
+      "BigQueryDeleteDatasetOperator",
+      "BigQueryDeleteTableOperator",
+      "BigQueryGetDatasetTablesOperator",
+      "BigQueryUpdateDatasetOperator",
+      "BigQueryUpdateTableOperator",
+      "BigQueryUpdateTableSchemaOperator",
+      "BigQueryUpsertTableOperator",
+      "GCSCreateBucketOperator",
+      "GCSDeleteBucketOperator",
+      "LocalFilesystemToGCSOperator",
+      "OpenLineageTestOperator"
+    ],
+    "decorators_used": [],
+    "schedule": "@once",
+    "n_tasks_observed": 20,
+    "spec": "Example Airflow DAG for Google BigQuery service testing tables. Используй операторы: BigQueryCreateEmptyDatasetOperator, BigQueryCreateTableOperator, BigQueryDeleteDatasetOperator, BigQueryDeleteTableOperator, BigQueryGetDatasetTablesOperator, BigQueryUpdateDatasetOperator. DAG должен содержать 20 задач(и). Расписание: @once. Сгенерируй валидный Airflow DAG и проверь его в sandbox.",
+    "invariants": [
+      "valid_python_ast",
+      {
+        "has_operator": [
+          "BigQueryCreateEmptyDatasetOperator",
+          "BigQueryCreateTableOperator",
+          "BigQueryDeleteDatasetOperator",
+          "BigQueryDeleteTableOperator"
+        ]
+      },
+      {
+        "schedule_equals": "@once"
+      }
+    ],
+    "must_artifact_type": "dag"
+  },
+  {
+    "id": "29_example_snowflake",
+    "source_file": "D12_real_dags/29_example_snowflake.py",
+    "source_repo": "apache/airflow",
+    "source_sha": "ea7481d7d59b0eb129f8b39c848a24aa111e7ca3",
+    "source_license": "Apache-2.0",
+    "operators_used": [
+      "SQLExecuteQueryOperator",
+      "SnowflakeCheckOperator",
+      "SnowflakeIntervalCheckOperator",
+      "SnowflakeSqlApiOperator",
+      "SnowflakeValueCheckOperator"
+    ],
+    "decorators_used": [],
+    "schedule": "@once",
+    "n_tasks_observed": 11,
+    "spec": "Example use of Snowflake related operators. Используй операторы: SQLExecuteQueryOperator, SnowflakeCheckOperator, SnowflakeIntervalCheckOperator, SnowflakeSqlApiOperator, SnowflakeValueCheckOperator. DAG должен содержать 11 задач(и). Расписание: @once. Сгенерируй валидный Airflow DAG и проверь его в sandbox.",
+    "invariants": [
+      "valid_python_ast",
+      {
+        "has_operator": [
+          "SQLExecuteQueryOperator",
+          "SnowflakeCheckOperator",
+          "SnowflakeIntervalCheckOperator",
+          "SnowflakeSqlApiOperator"
+        ]
+      },
+      {
+        "schedule_equals": "@once"
+      }
+    ],
+    "must_artifact_type": "dag"
+  },
+  {
+    "id": "30_example_databricks",
+    "source_file": "D12_real_dags/30_example_databricks.py",
+    "source_repo": "apache/airflow",
+    "source_sha": "ea7481d7d59b0eb129f8b39c848a24aa111e7ca3",
+    "source_license": "Apache-2.0",
+    "operators_used": [
+      "DatabricksCreateJobsOperator",
+      "DatabricksNotebookOperator",
+      "DatabricksRunNowOperator",
+      "DatabricksSQLStatementsOperator",
+      "DatabricksSubmitRunOperator",
+      "DatabricksTaskOperator"
+    ],
+    "decorators_used": [],
+    "schedule": "@daily",
+    "n_tasks_observed": 10,
+    "spec": "This is an example DAG which uses the DatabricksSubmitRunOperator.\nIn this example, we create two tasks which execute sequentially.\nThe first task is to run a notebook at the workspace path \"/test\"\nand the second task is to run a JAR uploaded to DBFS. Both,\ntasks use new clusters. Используй операторы: DatabricksCreateJobsOperator, DatabricksNotebookOperator, DatabricksRunNowOperator, DatabricksSQLStatementsOperator, DatabricksSubmitRunOperator, DatabricksTaskOperator. DAG должен содержать 10 задач(и). Расписание: @daily. Сгенерируй валидный Airflow DAG и проверь его в sandbox.",
+    "invariants": [
+      "valid_python_ast",
+      {
+        "has_operator": [
+          "DatabricksCreateJobsOperator",
+          "DatabricksNotebookOperator",
+          "DatabricksRunNowOperator",
+          "DatabricksSQLStatementsOperator"
+        ]
+      },
+      {
+        "schedule_equals": "@daily"
+      }
+    ],
+    "must_artifact_type": "dag"
+  },
+  {
+    "id": "31_example_mysql",
+    "source_file": "D12_real_dags/31_example_mysql.py",
+    "source_repo": "apache/airflow",
+    "source_sha": "ea7481d7d59b0eb129f8b39c848a24aa111e7ca3",
+    "source_license": "Apache-2.0",
+    "operators_used": [
+      "SQLExecuteQueryOperator"
+    ],
+    "decorators_used": [],
+    "schedule": "None",
+    "n_tasks_observed": 2,
+    "spec": "Example use of MySql related operators. Используй операторы: SQLExecuteQueryOperator. DAG должен содержать 2 задач(и). Расписание: None. Сгенерируй валидный Airflow DAG и проверь его в sandbox.",
+    "invariants": [
+      "valid_python_ast",
+      {
+        "has_operator": [
+          "SQLExecuteQueryOperator"
+        ]
+      }
+    ],
+    "must_artifact_type": "dag"
+  },
+  {
+    "id": "32_example_dag_event_listener",
+    "source_file": "D12_real_dags/32_example_dag_event_listener.py",
+    "source_repo": "apache/airflow",
+    "source_sha": "ea7481d7d59b0eb129f8b39c848a24aa111e7ca3",
+    "source_license": "Apache-2.0",
+    "operators_used": [
+      "ProduceToTopicOperator",
+      "PythonOperator"
+    ],
+    "decorators_used": [],
+    "schedule": "None",
+    "n_tasks_observed": 2,
+    "spec": "Используй операторы: ProduceToTopicOperator, PythonOperator. DAG должен содержать 2 задач(и). Расписание: None. Сгенерируй валидный Airflow DAG и проверь его в sandbox.",
+    "invariants": [
+      "valid_python_ast",
+      {
+        "has_operator": [
+          "ProduceToTopicOperator",
+          "PythonOperator"
+        ]
+      }
+    ],
+    "must_artifact_type": "dag"
+  },
+  {
+    "id": "33_example_redis_publish",
+    "source_file": "D12_real_dags/33_example_redis_publish.py",
+    "source_repo": "apache/airflow",
+    "source_sha": "ea7481d7d59b0eb129f8b39c848a24aa111e7ca3",
+    "source_license": "Apache-2.0",
+    "operators_used": [
+      "RedisPublishOperator"
+    ],
+    "decorators_used": [],
+    "schedule": "None",
+    "n_tasks_observed": 1,
+    "spec": "This is an example DAG which uses RedisPublishOperator, RedisPubSubSensor and RedisKeySensor.\nIn this example, we create 3 tasks which execute sequentially.\nThe first task is to publish a particular message to redis using the RedisPublishOperator.\nThe second task is to wait for a particular message at a particular channel to arrive in redis\nusing the RedisPubSubSensor, and the third task is to wait for a particular key to arrive in\nredis using the RedisKeySensor. Используй операторы: RedisPublishOperator. Расписание: None. Сгенерируй валидный Airflow DAG и проверь его в sandbox.",
+    "invariants": [
+      "valid_python_ast",
+      {
+        "has_operator": [
+          "RedisPublishOperator"
+        ]
+      }
+    ],
+    "must_artifact_type": "dag"
+  }
+]

@@ -1,0 +1,148 @@
+[
+  {
+    "id": "SPARK-01",
+    "real_source_file": "01_tpch_functional_queries.py",
+    "source_repo": "dotnet/spark",
+    "source_path": "benchmark/python/tpch_functional_queries.py",
+    "source_commit": "dabe85b685886901da9707f728da1974a33d44e7",
+    "source_license": "MIT (Microsoft / .NET Foundation)",
+    "spec": "All 22 TPC-H queries implemented via PySpark DataFrame functional API (Microsoft's official benchmark). Includes pandas_udf optimisations (q1a, q1b variants).",
+    "invariants": [
+      "valid_python_ast",
+      "uses DataFrame API (col, filter, groupBy, agg)",
+      "implements at least 22 query methods",
+      "imports pyspark.sql.functions"
+    ]
+  },
+  {
+    "id": "SPARK-02",
+    "real_source_file": "02_tpch_sql_queries.py",
+    "source_repo": "dotnet/spark",
+    "source_path": "benchmark/python/tpch_sql_queries.py",
+    "source_commit": "dabe85b685886901da9707f728da1974a33d44e7",
+    "source_license": "MIT (Microsoft / .NET Foundation)",
+    "spec": "All 22 TPC-H queries implemented via PySpark SQL strings (spark.sql) — companion to functional API version for benchmark comparison.",
+    "invariants": [
+      "valid_python_ast",
+      "uses spark.sql()",
+      "implements at least 22 query methods"
+    ]
+  },
+  {
+    "id": "SPARK-03",
+    "real_source_file": "03_tpch_base.py",
+    "source_repo": "dotnet/spark",
+    "source_path": "benchmark/python/tpch_base.py",
+    "source_commit": "dabe85b685886901da9707f728da1974a33d44e7",
+    "source_license": "MIT (Microsoft / .NET Foundation)",
+    "spec": "Base class for loading all 8 TPC-H tables (customer, lineitem, nation, orders, part, partsupp, region, supplier) from disk into Spark DataFrames.",
+    "invariants": [
+      "valid_python_ast",
+      "loads 8 tables",
+      "uses spark.read"
+    ]
+  },
+  {
+    "id": "SPARK-04",
+    "real_source_file": "04_tpch_runner.py",
+    "source_repo": "dotnet/spark",
+    "source_path": "benchmark/python/tpch.py",
+    "source_commit": "dabe85b685886901da9707f728da1974a33d44e7",
+    "source_license": "MIT (Microsoft / .NET Foundation)",
+    "spec": "Driver script: parses argv (data root, query num, iterations, SQL/functional flag) and runs the chosen TPC-H query.",
+    "invariants": [
+      "valid_python_ast",
+      "uses SparkSession.builder",
+      "creates SparkSession",
+      "iterates query execution"
+    ]
+  },
+  {
+    "id": "SPARK-05",
+    "real_source_file": "05_wordcount.py",
+    "source_repo": "apache/spark",
+    "source_path": "examples/src/main/python/wordcount.py",
+    "source_commit": "b2c2a8d68dcbbaca715adc74c0dd543582c9ff02",
+    "source_license": "Apache-2.0",
+    "spec": "Canonical wordcount: read text, flatMap to words, count distinct — the 'hello world' of Spark.",
+    "invariants": [
+      "valid_python_ast",
+      "uses SparkSession",
+      "uses flatMap or split",
+      "uses reduceByKey or count"
+    ]
+  },
+  {
+    "id": "SPARK-06",
+    "real_source_file": "06_sort.py",
+    "source_repo": "apache/spark",
+    "source_path": "examples/src/main/python/sort.py",
+    "source_commit": "b2c2a8d68dcbbaca715adc74c0dd543582c9ff02",
+    "source_license": "Apache-2.0",
+    "spec": "Distributed sort of input text using sortByKey — demonstrates shuffle-heavy operations.",
+    "invariants": [
+      "valid_python_ast",
+      "uses sortByKey or orderBy"
+    ]
+  },
+  {
+    "id": "SPARK-07",
+    "real_source_file": "07_sql_basic.py",
+    "source_repo": "apache/spark",
+    "source_path": "examples/src/main/python/sql/basic.py",
+    "source_commit": "b2c2a8d68dcbbaca715adc74c0dd543582c9ff02",
+    "source_license": "Apache-2.0",
+    "spec": "Apache Spark official Spark SQL tutorial: DataFrames, RDD-to-DataFrame, programmatic schemas, JSON/Parquet I/O.",
+    "invariants": [
+      "valid_python_ast",
+      "uses SparkSession",
+      "uses spark.read",
+      "uses spark.sql",
+      "uses createOrReplaceTempView"
+    ]
+  },
+  {
+    "id": "SPARK-08",
+    "real_source_file": "08_sql_jdbc.py",
+    "source_repo": "apache/spark",
+    "source_path": "examples/src/main/python/sql/jdbc.py",
+    "source_commit": "b2c2a8d68dcbbaca715adc74c0dd543582c9ff02",
+    "source_license": "Apache-2.0",
+    "spec": "JDBC source/sink: read from external RDBMS via spark.read.jdbc, write back via DataFrame.write.jdbc — production pattern for integration with PostgreSQL/MySQL.",
+    "invariants": [
+      "valid_python_ast",
+      "uses .read.jdbc or .write.jdbc",
+      "uses 'jdbc' format string"
+    ]
+  },
+  {
+    "id": "SPARK-09",
+    "real_source_file": "09_structured_kafka_streaming.py",
+    "source_repo": "apache/spark",
+    "source_path": "examples/src/main/python/sql/streaming/structured_kafka_wordcount.py",
+    "source_commit": "b2c2a8d68dcbbaca715adc74c0dd543582c9ff02",
+    "source_license": "Apache-2.0",
+    "spec": "Structured Streaming from Kafka: subscribe to topic, wordcount over micro-batches, write to console sink — canonical streaming pattern.",
+    "invariants": [
+      "valid_python_ast",
+      "uses readStream",
+      "uses format kafka",
+      "uses writeStream"
+    ]
+  },
+  {
+    "id": "SPARK-10",
+    "real_source_file": "10_structured_sessionization.py",
+    "source_repo": "apache/spark",
+    "source_path": "examples/src/main/python/sql/streaming/structured_sessionization.py",
+    "source_commit": "b2c2a8d68dcbbaca715adc74c0dd543582c9ff02",
+    "source_license": "Apache-2.0",
+    "spec": "Sessionization on streaming events using flatMapGroupsWithState (stateful processing) — advanced streaming pattern for behavioral analytics.",
+    "invariants": [
+      "valid_python_ast",
+      "uses readStream",
+      "uses flatMapGroupsWithState or groupBy with watermark",
+      "uses writeStream"
+    ]
+  }
+]

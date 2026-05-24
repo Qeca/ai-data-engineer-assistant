@@ -1,0 +1,8 @@
+Backend: http://localhost:18000
+Logged in. Categories: ['D12_v2']
+
+--- D12_v2 ---
+  saved → D12_v2.json  (278.2s)
+  {'category': 'D12_v2', 'source': 'apache/airflow @ ea7481d', 'metric': 'M-21 real DAG generation (Airflow examples)', 'target': 0.8, 'n': 33, 'passed_count': 30, 'rate': 0.9091, 'wilson_lo': 0.7643, 'wilson_hi': 0.9686, 'passed': False, '_runtime_s': 278.2}
+
+Summary → /Users/sharonov_dv/projects/diplom/test_dataset_v3/results/summary.json

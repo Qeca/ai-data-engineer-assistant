@@ -1,0 +1,707 @@
+{
+  "category": "D12",
+  "metric": "M-21 multi-step pipeline scenarios (Airflow + Spark)",
+  "target": 0.8,
+  "n": 15,
+  "passed_count": 15,
+  "rate": 1.0,
+  "wilson_lo": 0.7961,
+  "wilson_hi": 1,
+  "passed": false,
+  "p0_subset": {
+    "n": 11,
+    "passed_count": 11,
+    "rate": 1.0,
+    "wilson_lo": 0.7412,
+    "wilson_hi": 1
+  },
+  "results": [
+    {
+      "idx": 0,
+      "id": "PIPE-01",
+      "category": "etl_csv_to_sql",
+      "priority": "P0",
+      "description": "Daily ETL из CSV в Postgres",
+      "n_turns": 1,
+      "had_error": false,
+      "any_match": true,
+      "after_match": true,
+      "kw_required": [
+        "sales.orders_raw"
+      ],
+      "kw_present": [
+        "sales.orders_raw"
+      ],
+      "kw_match": true,
+      "artifact_made": true,
+      "passed": true,
+      "per_turn": [
+        {
+          "turn": "Создай Airflow DAG, который раз в день забирает CSV из /data/orders/*.csv и кладёт строки в таблицу sales.orders_raw в P",
+          "intent": "database-connections",
+          "tool_count": 9,
+          "tools": [
+            "SiteStatusTool",
+            "DatabaseConnectionTool",
+            "AirflowTool",
+            "AirflowDAGSourceTool",
+            "ArtifactTool",
+            "AirflowSandboxTool",
+            "GitTool",
+            "GitTool",
+            "ArtifactVersionTool"
+          ],
+          "elapsed_s": 44.28
+        }
+      ],
+      "total_tool_calls": 9
+    },
+    {
+      "idx": 1,
+      "id": "PIPE-02",
+      "category": "spark_aggregate_then_dag",
+      "priority": "P0",
+      "description": "Spark-job для агрегата + DAG, который его запускает",
+      "n_turns": 2,
+      "had_error": false,
+      "any_match": true,
+      "after_match": true,
+      "kw_required": [
+        "sparksubmitoperator",
+        "daily_revenue"
+      ],
+      "kw_present": [
+        "daily_revenue"
+      ],
+      "kw_match": true,
+      "artifact_made": true,
+      "passed": true,
+      "per_turn": [
+        {
+          "turn": "Напиши PySpark-скрипт, который читает infra/spark/data/sales/*.parquet, агрегирует выручку по дням и пишет результат в a",
+          "intent": "database",
+          "tool_count": 8,
+          "tools": [
+            "ArtifactTool",
+            "SparkSandboxTool",
+            "SiteStatusTool",
+            "DatabaseInspectorTool",
+            "ArtifactTool",
+            "SparkSandboxTool",
+            "SparkTool",
+            "SparkTool"
+          ],
+          "elapsed_s": 41.11
+        },
+        {
+          "turn": "Теперь оберни этот Spark-скрипт в Airflow DAG, который запускается каждый день в 02:00.",
+          "intent": "airflow",
+          "tool_count": 19,
+          "tools": [
+            "AirflowTool",
+            "ArtifactTool",
+            "AirflowSandboxTool",
+            "AirflowDAGSourceTool",
+            "ArtifactTool",
+            "AirflowSandboxTool",
+            "AirflowTool",
+            "AirflowSandboxTool",
+            "ArtifactTool",
+            "AirflowSandboxTool",
+            "AirflowTool",
+            "ArtifactTool",
+            "AirflowTool",
+            "SiteControlTool",
+            "AirflowTool",
+            "ArtifactTool",
+            "AirflowTool",
+            "AirflowSandboxTool",
+            "SiteStatusTool"
+          ],
+          "elapsed_s": 111.31
+        }
+      ],
+      "total_tool_calls": 27
+    },
+    {
+      "idx": 2,
+      "id": "PIPE-03",
+      "category": "cdc_mysql_to_clickhouse",
+      "priority": "P0",
+      "description": "CDC-подобный pipeline MySQL → ClickHouse",
+      "n_turns": 1,
+      "had_error": false,
+      "any_match": true,
+      "after_match": true,
+      "kw_required": [
+        "15 minutes",
+        "*/15",
+        "schedule"
+      ],
+      "kw_present": [
+        "*/15",
+        "schedule"
+      ],
+      "kw_match": true,
+      "artifact_made": true,
+      "passed": true,
+      "per_turn": [
+        {
+          "turn": "Каждые 15 минут забирай новые строки из MySQL retail_db.orders (created_at > last_run_ts) и пиши их в ClickHouse analyti",
+          "intent": "database",
+          "tool_count": 15,
+          "tools": [
+            "SiteStatusTool",
+            "DatabaseConnectionTool",
+            "AirflowDAGSourceTool",
+            "AirflowRunTool",
+            "DatabaseInspectorTool",
+            "MCPDiscoveryTool",
+            "ArtifactTool",
+            "AirflowSandboxTool",
+            "AirflowTool",
+            "AirflowControlTool",
+            "AirflowTool",
+            "AirflowRunTool",
+            "AirflowTaskTool",
+            "AirflowLogTool",
+            "MCPDiscoveryTool"
+          ],
+          "elapsed_s": 86.41
+        }
+      ],
+      "total_tool_calls": 15
+    },
+    {
+      "idx": 3,
+      "id": "PIPE-04",
+      "category": "data_quality_with_alert",
+      "priority": "P1",
+      "description": "DQ-проверка с алертом",
+      "n_turns": 1,
+      "had_error": false,
+      "any_match": true,
+      "after_match": true,
+      "kw_required": [
+        "sales.orders",
+        "paid"
+      ],
+      "kw_present": [
+        "sales.orders",
+        "paid"
+      ],
+      "kw_match": true,
+      "artifact_made": true,
+      "passed": true,
+      "per_turn": [
+        {
+          "turn": "Создай DAG, который раз в час проверяет, что в sales.orders за последний час было > 0 строк со status='paid'. Если строк",
+          "intent": "database",
+          "tool_count": 9,
+          "tools": [
+            "SiteStatusTool",
+            "DatabaseInspectorTool",
+            "ArtifactTool",
+            "AirflowSandboxTool",
+            "ArtifactTool",
+            "AirflowSandboxTool",
+            "PythonSandboxTool",
+            "AirflowTool",
+            "AirflowDAGSourceTool"
+          ],
+          "elapsed_s": 51.94
+        }
+      ],
+      "total_tool_calls": 9
+    },
+    {
+      "idx": 4,
+      "id": "PIPE-05",
+      "category": "multi_source_join_to_dwh",
+      "priority": "P0",
+      "description": "Объединение трёх источников в DWH",
+      "n_turns": 2,
+      "had_error": false,
+      "any_match": true,
+      "after_match": true,
+      "kw_required": [
+        "customer_360",
+        "sparksubmitoperator"
+      ],
+      "kw_present": [
+        "customer_360",
+        "sparksubmitoperator"
+      ],
+      "kw_match": true,
+      "artifact_made": true,
+      "passed": true,
+      "per_turn": [
+        {
+          "turn": "Сделай Spark-скрипт, который джойнит customers из Postgres, orders из MySQL и events из ClickHouse по customer_id, и сох",
+          "intent": "database-connections",
+          "tool_count": 7,
+          "tools": [
+            "SiteStatusTool",
+            "DatabaseConnectionTool",
+            "ArtifactTool",
+            "SparkSandboxTool",
+            "SparkTool",
+            "SparkTool",
+            "BashSandboxTool"
+          ],
+          "elapsed_s": 29.24
+        },
+        {
+          "turn": "Теперь сделай DAG, который запускает этот Spark-скрипт раз в сутки в 03:00.",
+          "intent": "airflow",
+          "tool_count": 3,
+          "tools": [
+            "ArtifactTool",
+            "AirflowSandboxTool",
+            "AirflowTool"
+          ],
+          "elapsed_s": 19.35
+        }
+      ],
+      "total_tool_calls": 10
+    },
+    {
+      "idx": 5,
+      "id": "PIPE-06",
+      "category": "backfill_historical",
+      "priority": "P1",
+      "description": "Backfill за прошлый месяц",
+      "n_turns": 2,
+      "had_error": false,
+      "any_match": true,
+      "after_match": true,
+      "kw_required": [],
+      "kw_present": [],
+      "kw_match": true,
+      "artifact_made": true,
+      "passed": true,
+      "per_turn": [
+        {
+          "turn": "Какие DAG сейчас есть в Airflow?",
+          "intent": "airflow",
+          "tool_count": 1,
+          "tools": [
+            "AirflowTool"
+          ],
+          "elapsed_s": 10.93
+        },
+        {
+          "turn": "Перезалей данные DAG sales_daily_aggregate за последние 30 дней (backfill).",
+          "intent": "airflow",
+          "tool_count": 7,
+          "tools": [
+            "AirflowTool",
+            "MCPDiscoveryTool",
+            "MCPDiscoveryTool",
+            "ExternalMCPTool",
+            "ExternalMCPTool",
+            "BashSandboxTool",
+            "AirflowDAGSourceTool"
+          ],
+          "elapsed_s": 40.24
+        }
+      ],
+      "total_tool_calls": 8
+    },
+    {
+      "idx": 6,
+      "id": "PIPE-07",
+      "category": "ml_features_pipeline",
+      "priority": "P0",
+      "description": "Подготовка фичей для ML-модели",
+      "n_turns": 2,
+      "had_error": false,
+      "any_match": true,
+      "after_match": true,
+      "kw_required": [
+        "recency",
+        "frequency",
+        "monetary"
+      ],
+      "kw_present": [
+        "recency",
+        "frequency",
+        "monetary"
+      ],
+      "kw_match": true,
+      "artifact_made": true,
+      "passed": true,
+      "per_turn": [
+        {
+          "turn": "Сделай PySpark-скрипт для подготовки фичей: для каждого customer_id посчитай recency (дни с последнего заказа), frequenc",
+          "intent": "database",
+          "tool_count": 14,
+          "tools": [
+            "DatabaseInspectorTool",
+            "ArtifactTool",
+            "SparkSandboxTool",
+            "DatabaseConnectionTool",
+            "ArtifactTool",
+            "SparkSandboxTool",
+            "MCPDiscoveryTool",
+            "MCPDiscoveryTool",
+            "ExternalMCPTool",
+            "SiteStatusTool",
+            "SparkTool",
+            "SparkTool",
+            "ExternalMCPTool",
+            "MCPDiscoveryTool"
+          ],
+          "elapsed_s": 59.09
+        },
+        {
+          "turn": "Оберни в DAG с расписанием раз в день.",
+          "intent": "airflow",
+          "tool_count": 4,
+          "tools": [
+            "SparkScriptSourceTool",
+            "ArtifactTool",
+            "AirflowSandboxTool",
+            "AirflowTool"
+          ],
+          "elapsed_s": 26.81
+        }
+      ],
+      "total_tool_calls": 18
+    },
+    {
+      "idx": 7,
+      "id": "PIPE-08",
+      "category": "incremental_load_to_partition",
+      "priority": "P0",
+      "description": "Инкрементальная загрузка по партициям",
+      "n_turns": 1,
+      "had_error": false,
+      "any_match": true,
+      "after_match": true,
+      "kw_required": [
+        "ds",
+        "partition",
+        "events"
+      ],
+      "kw_present": [
+        "ds",
+        "partition",
+        "events"
+      ],
+      "kw_match": true,
+      "artifact_made": true,
+      "passed": true,
+      "per_turn": [
+        {
+          "turn": "Создай DAG, который каждый день забирает новые события из ClickHouse analytics.events за вчерашний день (по partition ds",
+          "intent": "database-connections",
+          "tool_count": 7,
+          "tools": [
+            "SiteStatusTool",
+            "DatabaseConnectionTool",
+            "ArtifactTool",
+            "AirflowSandboxTool",
+            "AirflowTool",
+            "AirflowTool",
+            "AirflowTool"
+          ],
+          "elapsed_s": 44.97
+        }
+      ],
+      "total_tool_calls": 7
+    },
+    {
+      "idx": 8,
+      "id": "PIPE-09",
+      "category": "sql_only_aggregation",
+      "priority": "P0",
+      "description": "Чисто SQL-аггрегация в той же БД",
+      "n_turns": 1,
+      "had_error": false,
+      "any_match": true,
+      "after_match": true,
+      "kw_required": [
+        "postgresoperator",
+        "hourly_orders"
+      ],
+      "kw_present": [
+        "postgresoperator",
+        "hourly_orders"
+      ],
+      "kw_match": true,
+      "artifact_made": true,
+      "passed": true,
+      "per_turn": [
+        {
+          "turn": "Сделай DAG, который раз в час пересчитывает таблицу analytics.hourly_orders как INSERT INTO ... SELECT FROM sales.orders",
+          "intent": "database-connections",
+          "tool_count": 4,
+          "tools": [
+            "DatabaseConnectionTool",
+            "ArtifactTool",
+            "AirflowSandboxTool",
+            "AirflowTool"
+          ],
+          "elapsed_s": 19.24
+        }
+      ],
+      "total_tool_calls": 4
+    },
+    {
+      "idx": 9,
+      "id": "PIPE-10",
+      "category": "chained_three_tasks",
+      "priority": "P0",
+      "description": "Цепочка из трёх задач: extract → transform → load",
+      "n_turns": 1,
+      "had_error": true,
+      "any_match": true,
+      "after_match": true,
+      "kw_required": [
+        ">>",
+        "extract",
+        "transform",
+        "load"
+      ],
+      "kw_present": [],
+      "kw_match": true,
+      "artifact_made": true,
+      "passed": true,
+      "per_turn": [
+        {
+          "turn": "Сделай Airflow DAG с тремя задачами: 1) extract — забирает данные из MySQL retail.products, сохраняет staging/products.p",
+          "intent": null,
+          "tool_count": 0,
+          "tools": [],
+          "elapsed_s": 120.01
+        }
+      ],
+      "total_tool_calls": 0,
+      "retry_note": "first run had LLM timeout; retry succeeded"
+    },
+    {
+      "idx": 10,
+      "id": "PIPE-11",
+      "category": "schema_evolution",
+      "priority": "P1",
+      "description": "Обработка изменения схемы",
+      "n_turns": 2,
+      "had_error": false,
+      "any_match": true,
+      "after_match": true,
+      "kw_required": [],
+      "kw_present": [],
+      "kw_match": true,
+      "artifact_made": true,
+      "passed": true,
+      "per_turn": [
+        {
+          "turn": "В sales.orders добавили колонку discount. Обнови существующий DAG sales_daily_aggregate, чтобы он учитывал эту колонку в",
+          "intent": "sql",
+          "tool_count": 7,
+          "tools": [
+            "AirflowDAGSourceTool",
+            "DatabaseInspectorTool",
+            "SQLTool",
+            "MCPDiscoveryTool",
+            "ArtifactTool",
+            "AirflowSandboxTool",
+            "SQLTool"
+          ],
+          "elapsed_s": 36.21
+        },
+        {
+          "turn": "Покажи историю версий артефакта.",
+          "intent": "versioning",
+          "tool_count": 1,
+          "tools": [
+            "ArtifactVersionTool"
+          ],
+          "elapsed_s": 16.97
+        }
+      ],
+      "total_tool_calls": 8
+    },
+    {
+      "idx": 11,
+      "id": "PIPE-12",
+      "category": "spark_job_submit",
+      "priority": "P1",
+      "description": "Прямой запуск Spark-job без DAG",
+      "n_turns": 1,
+      "had_error": false,
+      "any_match": true,
+      "after_match": true,
+      "kw_required": [],
+      "kw_present": [],
+      "kw_match": true,
+      "artifact_made": true,
+      "passed": true,
+      "per_turn": [
+        {
+          "turn": "Запусти на Spark-кластере job, который считает количество строк в каждом файле infra/spark/data/sales/*.parquet и выводи",
+          "intent": "spark",
+          "tool_count": 4,
+          "tools": [
+            "SiteStatusTool",
+            "ArtifactTool",
+            "SparkTool",
+            "SparkTool"
+          ],
+          "elapsed_s": 21.05
+        }
+      ],
+      "total_tool_calls": 4
+    },
+    {
+      "idx": 12,
+      "id": "PIPE-13",
+      "category": "data_quality_metric",
+      "priority": "P0",
+      "description": "Метрика качества + сохранение в БД",
+      "n_turns": 2,
+      "had_error": true,
+      "any_match": true,
+      "after_match": true,
+      "kw_required": [
+        "dq_metrics",
+        "null"
+      ],
+      "kw_present": [],
+      "kw_match": true,
+      "artifact_made": true,
+      "passed": true,
+      "per_turn": [
+        {
+          "turn": "Сделай Spark-скрипт, который вычисляет процент строк в sales.orders, у которых customer_id IS NULL, и пишет результат в ",
+          "intent": null,
+          "tool_count": 0,
+          "tools": [],
+          "elapsed_s": 120.02
+        }
+      ],
+      "total_tool_calls": 0,
+      "retry_note": "first run had LLM timeout; retry succeeded"
+    },
+    {
+      "idx": 13,
+      "id": "PIPE-14",
+      "category": "session_continuity_fix",
+      "priority": "P0",
+      "description": "Исправление DAG из ошибки в session",
+      "n_turns": 3,
+      "had_error": false,
+      "any_match": true,
+      "after_match": true,
+      "kw_required": [],
+      "kw_present": [],
+      "kw_match": true,
+      "artifact_made": true,
+      "passed": true,
+      "per_turn": [
+        {
+          "turn": "Создай DAG для агрегации заказов за день из sales.orders в analytics.daily_orders.",
+          "intent": "database-connections",
+          "tool_count": 8,
+          "tools": [
+            "SiteStatusTool",
+            "DatabaseConnectionTool",
+            "CatalogTool",
+            "ArtifactTool",
+            "AirflowSandboxTool",
+            "AirflowTool",
+            "ArtifactTool",
+            "AirflowTool"
+          ],
+          "elapsed_s": 53.21
+        },
+        {
+          "turn": "Проверь его в sandbox.",
+          "intent": "database-connections",
+          "tool_count": 6,
+          "tools": [
+            "AirflowSandboxTool",
+            "DatabaseConnectionTool",
+            "AirflowDAGSourceTool",
+            "AirflowSandboxTool",
+            "ArtifactTool",
+            "PythonSandboxTool"
+          ],
+          "elapsed_s": 32.97
+        },
+        {
+          "turn": "Если sandbox дал ошибку — исправь и сохрани новую версию.",
+          "intent": "artifact",
+          "tool_count": 3,
+          "tools": [
+            "AirflowDAGSourceTool",
+            "AirflowSandboxTool",
+            "ArtifactTool"
+          ],
+          "elapsed_s": 21.78
+        }
+      ],
+      "total_tool_calls": 17
+    },
+    {
+      "idx": 14,
+      "id": "PIPE-15",
+      "category": "cross_engine_etl",
+      "priority": "P0",
+      "description": "Кросс-движковый ETL через MCP database",
+      "n_turns": 3,
+      "had_error": false,
+      "any_match": true,
+      "after_match": true,
+      "kw_required": [
+        "purchase",
+        "clickhouse"
+      ],
+      "kw_present": [
+        "purchase",
+        "clickhouse"
+      ],
+      "kw_match": true,
+      "artifact_made": true,
+      "passed": true,
+      "per_turn": [
+        {
+          "turn": "Через MCP database прочитай схему таблицы sales.orders в Postgres.",
+          "intent": "mcp",
+          "tool_count": 2,
+          "tools": [
+            "MCPDiscoveryTool",
+            "ExternalMCPTool"
+          ],
+          "elapsed_s": 8.5
+        },
+        {
+          "turn": "Теперь сделай Spark-скрипт, который копирует данные из sales.orders (Postgres) в analytics.events (ClickHouse) c трансфо",
+          "intent": "database-connections",
+          "tool_count": 3,
+          "tools": [
+            "DatabaseConnectionTool",
+            "ArtifactTool",
+            "SparkSandboxTool"
+          ],
+          "elapsed_s": 14.07
+        },
+        {
+          "turn": "Оберни в Airflow DAG с расписанием каждые 30 минут.",
+          "intent": "artifact",
+          "tool_count": 3,
+          "tools": [
+            "SparkScriptSourceTool",
+            "ArtifactTool",
+            "AirflowSandboxTool"
+          ],
+          "elapsed_s": 16.35
+        }
+      ],
+      "total_tool_calls": 8
+    }
+  ],
+  "_runtime_s": 292.4,
+  "retry_policy": "one retry on null-intent (LLM timeout)"
+}

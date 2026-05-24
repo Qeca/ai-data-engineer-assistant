@@ -1,0 +1,248 @@
+[
+  {
+    "id": "SES-01",
+    "turns": [
+      "Покажи топ-10 клиентов по выручке",
+      "А теперь только из России",
+      "Сохрани этот запрос как DAG для ежедневного отчёта"
+    ],
+    "expected": "На 3-м ходу: SQL из 1-го + фильтр из 2-го + write_airflow_dag"
+  },
+  {
+    "id": "SES-02",
+    "turns": [
+      "Какие DAG сейчас на паузе?",
+      "Запусти первый из них"
+    ],
+    "expected": "На 2-м ходу резолвится конкретный dag_id из ответа 1-го"
+  },
+  {
+    "id": "SES-03",
+    "turns": [
+      "Создай Spark job для расчёта LTV",
+      "Покажи его исходный код",
+      "Откати на предыдущую версию"
+    ],
+    "expected": "write_spark_script → read_spark_script → list_artifact_versions"
+  },
+  {
+    "id": "SES-04",
+    "turns": [
+      "Покажи каталог таблиц",
+      "Какая самая большая?"
+    ],
+    "expected": "На 2-м ходу inspect_database с использованием списка из 1-го"
+  },
+  {
+    "id": "SES-05",
+    "turns": [
+      "Запусти DAG orders_sync",
+      "Какой у него статус?",
+      "Если упал — покажи логи"
+    ],
+    "expected": "trigger_airflow_dag → get_airflow_run → get_airflow_task_log"
+  },
+  {
+    "id": "SES-06",
+    "turns": [
+      "Сгенерируй DAG для загрузки CSV",
+      "Добавь retry 3 раза",
+      "Сохрани и закоммить"
+    ],
+    "expected": "Итеративная правка одного артефакта; 1-2 git commit через run_git_command"
+  },
+  {
+    "id": "SES-07",
+    "turns": [
+      "Покажи список Spark джобов",
+      "Возьми третий и покажи логи"
+    ],
+    "expected": "list_spark_jobs → get_spark_job(id из позиции 3)"
+  },
+  {
+    "id": "SES-08",
+    "turns": [
+      "Какие столбцы в sales.orders в Postgres?",
+      "Найди строки за вчера"
+    ],
+    "expected": "inspect_database → execute_sql с фильтром по order_ts"
+  },
+  {
+    "id": "SES-09",
+    "turns": [
+      "Подключи новую БД MySQL на host db.local",
+      "Проверь подключение",
+      "Покажи список таблиц"
+    ],
+    "expected": "upsert_database_connection → test_database_connection → list_catalog"
+  },
+  {
+    "id": "SES-10",
+    "turns": [
+      "DAG-и которые упали сегодня",
+      "Объясни причину первого",
+      "Сгенерируй фикс"
+    ],
+    "expected": "list_airflow_runs(state=failed) → get_airflow_task_log → write_airflow_dag"
+  },
+  {
+    "id": "SES-11",
+    "turns": [
+      "Покажи топ-5 продуктов по выручке",
+      "А теперь только за последний месяц"
+    ],
+    "expected": "фильтр по периоду от 1-го"
+  },
+  {
+    "id": "SES-12",
+    "turns": [
+      "Какие DAGs созданы?",
+      "Покажи последний по дате"
+    ],
+    "expected": "выбор последнего из списка"
+  },
+  {
+    "id": "SES-13",
+    "turns": [
+      "Создай Spark job для подсчёта строк в orders",
+      "Запусти его"
+    ],
+    "expected": "execute предыдущего"
+  },
+  {
+    "id": "SES-14",
+    "turns": [
+      "Покажи аномалии заказов",
+      "Сохрани этот SQL как DAG ежедневно"
+    ],
+    "expected": "write_airflow_dag c SQL"
+  },
+  {
+    "id": "SES-15",
+    "turns": [
+      "Список таблиц в БД sales",
+      "Какие колонки у orders?"
+    ],
+    "expected": "inspect_database продолжает контекст"
+  },
+  {
+    "id": "SES-16",
+    "turns": [
+      "Сколько подключений к БД настроено?",
+      "Удали Postgres demo"
+    ],
+    "expected": "удаление по контексту"
+  },
+  {
+    "id": "SES-17",
+    "turns": [
+      "Какие версии артефактов для dag.py?",
+      "Откати на предыдущую"
+    ],
+    "expected": "revert по контексту"
+  },
+  {
+    "id": "SES-18",
+    "turns": [
+      "Покажи метрики продаж",
+      "Сравни с прошлым годом"
+    ],
+    "expected": "агрегация с разными периодами"
+  },
+  {
+    "id": "SES-19",
+    "turns": [
+      "Сделай SQL запрос: top-10 клиентов",
+      "Сохрани результат в csv"
+    ],
+    "expected": "export-стиль"
+  },
+  {
+    "id": "SES-20",
+    "turns": [
+      "Список airflow DAGs",
+      "Поставь на паузу sales_daily"
+    ],
+    "expected": "airflow_control по имени из списка"
+  },
+  {
+    "id": "SES-21",
+    "turns": [
+      "Покажи Spark кластер",
+      "Сколько работников?"
+    ],
+    "expected": "детализация из 1-го"
+  },
+  {
+    "id": "SES-22",
+    "turns": [
+      "Какой статус DAG retail_daily?",
+      "Покажи логи последнего запуска"
+    ],
+    "expected": "logs предыдущего run"
+  },
+  {
+    "id": "SES-23",
+    "turns": [
+      "Сделай DAG для CSV в orders_raw",
+      "Добавь email-уведомление при ошибке"
+    ],
+    "expected": "модификация артефакта"
+  },
+  {
+    "id": "SES-24",
+    "turns": [
+      "Покажи MCP инструменты для git",
+      "Сделай git log через MCP"
+    ],
+    "expected": "выбор инструмента из списка"
+  },
+  {
+    "id": "SES-25",
+    "turns": [
+      "Какие demo подключения активны?",
+      "Тестируй MySQL"
+    ],
+    "expected": "test_database_connection mysql"
+  },
+  {
+    "id": "SES-26",
+    "turns": [
+      "Какие БД подключены?",
+      "Покажи таблицы в первой"
+    ],
+    "expected": "inspect 1-й connection"
+  },
+  {
+    "id": "SES-27",
+    "turns": [
+      "Создай Spark скрипт для агрегации",
+      "Запусти в sandbox"
+    ],
+    "expected": "run_spark_script_sandbox"
+  },
+  {
+    "id": "SES-28",
+    "turns": [
+      "Покажи schema sales.orders",
+      "Сделай SELECT count(*) с фильтром по сегодня"
+    ],
+    "expected": "SQL с использованием schema"
+  },
+  {
+    "id": "SES-29",
+    "turns": [
+      "Какие активные сессии у меня?",
+      "Открой последнюю"
+    ],
+    "expected": "выбор из истории"
+  },
+  {
+    "id": "SES-30",
+    "turns": [
+      "Список pipelines в Airflow",
+      "Триггер первого"
+    ],
+    "expected": "trigger_airflow_dag по индексу"
+  }
+]

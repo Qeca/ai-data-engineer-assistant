@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<archimate:model xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:archimate="http://www.archimatetool.com/archimate" name="AI Data Engineer Assistant - Physical Architecture" id="id-model-aida-physical" version="5.0.0">
+<archimate:model xmlns:archimate="http://www.archimatetool.com/archimate" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="AI Data Engineer Assistant - Physical Architecture" id="id-model-aida-physical" version="5.0.0">
   <folder name="Strategy" id="id-folder-strategy" type="strategy"/>
   <folder name="Business" id="id-folder-business" type="business">
     <element xsi:type="archimate:BusinessActor" name="Data Engineer" id="id-actor-de"/>
@@ -7,11 +7,11 @@
     <element xsi:type="archimate:BusinessRole" name="Пользователь LLM-агента" id="id-role-user"/>
     <element xsi:type="archimate:BusinessService" name="AI Data Engineer Assistant" id="id-bs-main"/>
     <element xsi:type="archimate:BusinessProcess" name="Отправка запроса" id="id-bp-send"/>
-    <element xsi:type="archimate:BusinessProcess" name="Получение ответа и&#xA;отображение в UI" id="id-bp-display"/>
+    <element xsi:type="archimate:BusinessProcess" name="Получение ответа и&#10;отображение в UI" id="id-bp-display"/>
     <element xsi:type="archimate:BusinessProcess" name="Получение запроса" id="id-bp-internal-recv"/>
-    <element xsi:type="archimate:BusinessProcess" name="Анализ намерения и&#xA;выбор инструмента" id="id-bp-intent"/>
-    <element xsi:type="archimate:BusinessProcess" name="Обработка запроса в LLM&#xA;(tool calling)" id="id-bp-llm-proc"/>
-    <element xsi:type="archimate:BusinessProcess" name="Выполнение инструмента&#xA;(SQL / Airflow / Spark / Sandbox / MCP)" id="id-bp-exec"/>
+    <element xsi:type="archimate:BusinessProcess" name="Анализ намерения и&#10;выбор инструмента" id="id-bp-intent"/>
+    <element xsi:type="archimate:BusinessProcess" name="Обработка запроса в LLM&#10;(tool calling)" id="id-bp-llm-proc"/>
+    <element xsi:type="archimate:BusinessProcess" name="Выполнение инструмента&#10;(SQL / Airflow / Spark / Sandbox / MCP)" id="id-bp-exec"/>
     <element xsi:type="archimate:BusinessProcess" name="Формирование ответа" id="id-bp-form"/>
   </folder>
   <folder name="Application" id="id-folder-application" type="application">
@@ -22,19 +22,19 @@
     <element xsi:type="archimate:ApplicationFunction" name="Pipelines UI" id="id-af-pipe-ui"/>
     <element xsi:type="archimate:ApplicationFunction" name="Catalog / Connections UI" id="id-af-catalog-ui"/>
     <element xsi:type="archimate:ApplicationFunction" name="Settings / Profile UI" id="id-af-settings-ui"/>
-    <element xsi:type="archimate:ApplicationFunction" name="Получение запроса&#xA;(REST API)" id="id-af-recv"/>
+    <element xsi:type="archimate:ApplicationFunction" name="Получение запроса&#10;(REST API)" id="id-af-recv"/>
     <element xsi:type="archimate:ApplicationFunction" name="Авторизация (JWT)" id="id-af-auth"/>
-    <element xsi:type="archimate:ApplicationFunction" name="Agent Orchestrator&#xA;(LangGraph)" id="id-af-agent"/>
-    <element xsi:type="archimate:ApplicationFunction" name="Обработка запроса в LLM&#xA;(tool calling)" id="id-af-llm"/>
+    <element xsi:type="archimate:ApplicationFunction" name="Agent Orchestrator&#10;(LangGraph)" id="id-af-agent"/>
+    <element xsi:type="archimate:ApplicationFunction" name="Обработка запроса в LLM&#10;(tool calling)" id="id-af-llm"/>
     <element xsi:type="archimate:ApplicationFunction" name="Tool Registry" id="id-af-tools"/>
-    <element xsi:type="archimate:ApplicationFunction" name="SQL Executor&#xA;(read-only)" id="id-af-sql-exec"/>
+    <element xsi:type="archimate:ApplicationFunction" name="SQL Executor&#10;(read-only)" id="id-af-sql-exec"/>
     <element xsi:type="archimate:ApplicationFunction" name="Airflow Client" id="id-af-airflow"/>
     <element xsi:type="archimate:ApplicationFunction" name="Spark Client" id="id-af-spark"/>
     <element xsi:type="archimate:ApplicationFunction" name="MCP Client" id="id-af-mcp"/>
     <element xsi:type="archimate:ApplicationFunction" name="Artifact Writer + Git" id="id-af-artifact"/>
     <element xsi:type="archimate:ApplicationFunction" name="Sandbox Client" id="id-af-sandbox"/>
-    <element xsi:type="archimate:ApplicationFunction" name="Формирование ответа&#xA;(intent + ui_actions)" id="id-af-resp"/>
-    <element xsi:type="archimate:ApplicationFunction" name="Сохранение сессии,&#xA;сообщений и tool_runs" id="id-af-persist"/>
+    <element xsi:type="archimate:ApplicationFunction" name="Формирование ответа&#10;(intent + ui_actions)" id="id-af-resp"/>
+    <element xsi:type="archimate:ApplicationFunction" name="Сохранение сессии,&#10;сообщений и tool_runs" id="id-af-persist"/>
     <element xsi:type="archimate:DataObject" name="Пользователи, сессии, сообщения" id="id-do-users"/>
     <element xsi:type="archimate:DataObject" name="Tool runs, версии артефактов" id="id-do-runs"/>
     <element xsi:type="archimate:DataObject" name="Метаданные Airflow" id="id-do-airflow-meta"/>
@@ -61,7 +61,7 @@
     <element xsi:type="archimate:Node" name="Sandbox: apache/airflow:2.10.4" id="id-node-sbx-af"/>
     <element xsi:type="archimate:Node" name="Sandbox: apache/spark:3.5.4" id="id-node-sbx-sp"/>
     <element xsi:type="archimate:Node" name="LLM Provider (MagnitGPT / OpenAI / OpenRouter)" id="id-node-llm"/>
-    <element xsi:type="archimate:Node" name="Внешние БД пользователей  (1..N)&#xA;PostgreSQL / MySQL / ClickHouse / MongoDB / Redis / ..." id="id-node-user-dbs"/>
+    <element xsi:type="archimate:Node" name="Внешние БД пользователей  (1..N)&#10;PostgreSQL / MySQL / ClickHouse / MongoDB / Redis / ..." id="id-node-user-dbs"/>
     <element xsi:type="archimate:SystemSoftware" name="Node.js 20" id="id-ss-node"/>
     <element xsi:type="archimate:SystemSoftware" name="Python 3.12 + Uvicorn" id="id-ss-python"/>
     <element xsi:type="archimate:SystemSoftware" name="PostgreSQL 16" id="id-ss-pg"/>
@@ -152,7 +152,7 @@
     <element xsi:type="archimate:CompositionRelationship" id="id-rel-0052" source="id-af-tools" target="id-af-mcp"/>
     <element xsi:type="archimate:CompositionRelationship" id="id-rel-0053" source="id-af-tools" target="id-af-artifact"/>
     <element xsi:type="archimate:CompositionRelationship" id="id-rel-0054" source="id-af-tools" target="id-af-sandbox"/>
-    <element xsi:type="archimate:AccessRelationship" name="read" id="id-rel-auth-users" source="id-af-auth" target="id-do-users"/>
+    <element xsi:type="archimate:AccessRelationship" id="id-rel-auth-users" source="id-af-auth" target="id-do-users" name="read"/>
     <element xsi:type="archimate:AccessRelationship" id="id-rel-persist-runs" source="id-af-persist" target="id-do-runs"/>
     <element xsi:type="archimate:AccessRelationship" id="id-rel-persist-users" source="id-af-persist" target="id-do-users"/>
     <element xsi:type="archimate:AccessRelationship" id="id-rel-afcli-meta" source="id-af-airflow" target="id-do-airflow-meta"/>
@@ -193,24 +193,24 @@
     <element xsi:type="archimate:AssociationRelationship" id="id-rel-admin-browser" source="id-actor-admin" target="id-node-browser"/>
     <element xsi:type="archimate:AssociationRelationship" id="id-rel-0078" source="id-node-host" target="id-cn-docker"/>
     <element xsi:type="archimate:AssignmentRelationship" id="id-rel-0079" source="id-node-host" target="id-art-jobs"/>
-    <element xsi:type="archimate:FlowRelationship" name="HTTPS :3000" id="id-rel-browser-fe" source="id-node-browser" target="id-node-frontend"/>
-    <element xsi:type="archimate:FlowRelationship" name="HTTP :8000" id="id-rel-fe-be-flow" source="id-node-frontend" target="id-node-backend"/>
-    <element xsi:type="archimate:FlowRelationship" name="TCP :5432" id="id-rel-be-pg" source="id-node-backend" target="id-node-pg"/>
-    <element xsi:type="archimate:FlowRelationship" name="HTTP :8080" id="id-rel-be-afw" source="id-node-backend" target="id-node-af-web"/>
-    <element xsi:type="archimate:FlowRelationship" name="TCP :5432" id="id-rel-afw-afp" source="id-node-af-web" target="id-node-af-pg"/>
-    <element xsi:type="archimate:FlowRelationship" name="TCP :5432" id="id-rel-afs-afp" source="id-node-af-sch" target="id-node-af-pg"/>
-    <element xsi:type="archimate:FlowRelationship" name="Spark :7077" id="id-rel-be-spm" source="id-node-backend" target="id-node-sp-m"/>
-    <element xsi:type="archimate:FlowRelationship" name="Spark :7077" id="id-rel-spw-spm" source="id-node-sp-w" target="id-node-sp-m"/>
-    <element xsi:type="archimate:FlowRelationship" name="HTTP :8090" id="id-rel-be-dbg" source="id-node-backend" target="id-node-dbg"/>
-    <element xsi:type="archimate:FlowRelationship" name="Docker API" id="id-rel-dbg-sbxpy" source="id-node-dbg" target="id-node-sbx-py"/>
-    <element xsi:type="archimate:FlowRelationship" name="Docker API" id="id-rel-dbg-sbxaf" source="id-node-dbg" target="id-node-sbx-af"/>
-    <element xsi:type="archimate:FlowRelationship" name="Docker API" id="id-rel-dbg-sbxsp" source="id-node-dbg" target="id-node-sbx-sp"/>
-    <element xsi:type="archimate:FlowRelationship" name="HTTPS (tool calling)" id="id-rel-be-llm" source="id-node-backend" target="id-node-llm"/>
-    <element xsi:type="archimate:FlowRelationship" name="TCP (engine-specific)" id="id-rel-be-user-dbs" source="id-node-backend" target="id-node-user-dbs"/>
-    <element xsi:type="archimate:FlowRelationship" name="enqueue task :6379" id="id-rel-be-redis" source="id-node-backend" target="id-node-redis"/>
-    <element xsi:type="archimate:FlowRelationship" name="consume :6379" id="id-rel-bw-redis" source="id-node-bworker" target="id-node-redis"/>
-    <element xsi:type="archimate:FlowRelationship" name="schedule :6379" id="id-rel-bb-redis" source="id-node-bbeat" target="id-node-redis"/>
-    <element xsi:type="archimate:FlowRelationship" name="TCP :5432" id="id-rel-bw-pg" source="id-node-bworker" target="id-node-pg"/>
+    <element xsi:type="archimate:FlowRelationship" id="id-rel-browser-fe" source="id-node-browser" target="id-node-frontend" name="HTTPS :3000"/>
+    <element xsi:type="archimate:FlowRelationship" id="id-rel-fe-be-flow" source="id-node-frontend" target="id-node-backend" name="HTTP :8000"/>
+    <element xsi:type="archimate:FlowRelationship" id="id-rel-be-pg" source="id-node-backend" target="id-node-pg" name="TCP :5432"/>
+    <element xsi:type="archimate:FlowRelationship" id="id-rel-be-afw" source="id-node-backend" target="id-node-af-web" name="HTTP :8080"/>
+    <element xsi:type="archimate:FlowRelationship" id="id-rel-afw-afp" source="id-node-af-web" target="id-node-af-pg" name="TCP :5432"/>
+    <element xsi:type="archimate:FlowRelationship" id="id-rel-afs-afp" source="id-node-af-sch" target="id-node-af-pg" name="TCP :5432"/>
+    <element xsi:type="archimate:FlowRelationship" id="id-rel-be-spm" source="id-node-backend" target="id-node-sp-m" name="Spark :7077"/>
+    <element xsi:type="archimate:FlowRelationship" id="id-rel-spw-spm" source="id-node-sp-w" target="id-node-sp-m" name="Spark :7077"/>
+    <element xsi:type="archimate:FlowRelationship" id="id-rel-be-dbg" source="id-node-backend" target="id-node-dbg" name="HTTP :8090"/>
+    <element xsi:type="archimate:FlowRelationship" id="id-rel-dbg-sbxpy" source="id-node-dbg" target="id-node-sbx-py" name="Docker API"/>
+    <element xsi:type="archimate:FlowRelationship" id="id-rel-dbg-sbxaf" source="id-node-dbg" target="id-node-sbx-af" name="Docker API"/>
+    <element xsi:type="archimate:FlowRelationship" id="id-rel-dbg-sbxsp" source="id-node-dbg" target="id-node-sbx-sp" name="Docker API"/>
+    <element xsi:type="archimate:FlowRelationship" id="id-rel-be-llm" source="id-node-backend" target="id-node-llm" name="HTTPS (tool calling)"/>
+    <element xsi:type="archimate:FlowRelationship" id="id-rel-be-user-dbs" source="id-node-backend" target="id-node-user-dbs" name="TCP (engine-specific)"/>
+    <element xsi:type="archimate:FlowRelationship" id="id-rel-be-redis" source="id-node-backend" target="id-node-redis" name="enqueue task :6379"/>
+    <element xsi:type="archimate:FlowRelationship" id="id-rel-bw-redis" source="id-node-bworker" target="id-node-redis" name="consume :6379"/>
+    <element xsi:type="archimate:FlowRelationship" id="id-rel-bb-redis" source="id-node-bbeat" target="id-node-redis" name="schedule :6379"/>
+    <element xsi:type="archimate:FlowRelationship" id="id-rel-bw-pg" source="id-node-bworker" target="id-node-pg" name="TCP :5432"/>
     <element xsi:type="archimate:CompositionRelationship" id="id-rel-0080" source="id-node-host" target="id-node-frontend"/>
     <element xsi:type="archimate:CompositionRelationship" id="id-rel-0081" source="id-node-host" target="id-node-backend"/>
     <element xsi:type="archimate:CompositionRelationship" id="id-rel-0082" source="id-node-host" target="id-node-pg"/>
@@ -229,102 +229,95 @@
   </folder>
   <folder name="Views" id="id-folder-diagrams" type="diagrams">
     <element xsi:type="archimate:ArchimateDiagramModel" name="3.1.a Бизнес-слой и сервис AI Data Engineer" id="id-view-a-business">
-      <child xsi:type="archimate:DiagramObject" id="id-do-id-actor-de-vss-1" fillColor="#FFE7AB" archimateElement="id-actor-de">
+      <child xsi:type="archimate:DiagramObject" id="id-do-id-actor-de-vss-1" archimateElement="id-actor-de" fillColor="#FFE7AB">
         <bounds x="20" y="30" width="130" height="60"/>
         <sourceConnection xsi:type="archimate:Connection" id="id-conn-0001" source="id-do-id-actor-de-vss-1" target="id-do-id-role-user-vss-3" archimateRelationship="id-rel-0001"/>
       </child>
-      <child xsi:type="archimate:DiagramObject" id="id-do-id-actor-admin-vss-2" fillColor="#FFE7AB" archimateElement="id-actor-admin">
+      <child xsi:type="archimate:DiagramObject" id="id-do-id-actor-admin-vss-2" archimateElement="id-actor-admin" fillColor="#FFE7AB">
         <bounds x="20" y="100" width="130" height="60"/>
         <sourceConnection xsi:type="archimate:Connection" id="id-conn-0002" source="id-do-id-actor-admin-vss-2" target="id-do-id-role-user-vss-3" archimateRelationship="id-rel-0002"/>
       </child>
-      <child xsi:type="archimate:DiagramObject" id="id-do-id-role-user-vss-3" targetConnections="id-conn-0001 id-conn-0002" fillColor="#FFE7AB" archimateElement="id-role-user">
+      <child xsi:type="archimate:DiagramObject" id="id-do-id-role-user-vss-3" archimateElement="id-role-user" fillColor="#FFE7AB" targetConnections="id-conn-0001 id-conn-0002">
         <bounds x="170" y="65" width="150" height="60"/>
         <sourceConnection xsi:type="archimate:Connection" id="id-conn-0003" source="id-do-id-role-user-vss-3" target="id-do-id-bp-send-vss-5" archimateRelationship="id-rel-0003"/>
         <sourceConnection xsi:type="archimate:Connection" id="id-conn-0004" source="id-do-id-role-user-vss-3" target="id-do-id-bp-display-vss-6" archimateRelationship="id-rel-0004"/>
       </child>
-      <child xsi:type="archimate:DiagramObject" id="id-do-id-grp-user-side-vss-4" fillColor="#FFE7AB" archimateElement="id-grp-user-side">
-        <bounds x="340" y="20" width="280" height="243"/>
-        <child xsi:type="archimate:DiagramObject" id="id-do-id-bp-send-vss-5" targetConnections="id-conn-0003" fillColor="#FFE7AB" archimateElement="id-bp-send">
+      <child xsi:type="archimate:DiagramObject" id="id-do-id-grp-user-side-vss-4" archimateElement="id-grp-user-side" fillColor="#FFE7AB">
+        <bounds x="340" y="20" width="280" height="200"/>
+        <child xsi:type="archimate:DiagramObject" id="id-do-id-bp-send-vss-5" archimateElement="id-bp-send" fillColor="#FFE7AB" targetConnections="id-conn-0003">
           <bounds x="20" y="50" width="240" height="60"/>
           <sourceConnection xsi:type="archimate:Connection" id="id-conn-0005" source="id-do-id-bp-send-vss-5" target="id-do-id-bp-internal-recv-vss-8" archimateRelationship="id-rel-0005"/>
         </child>
-        <child xsi:type="archimate:DiagramObject" id="id-do-id-bp-display-vss-6" targetConnections="id-conn-0004 id-conn-0011" fillColor="#FFE7AB" archimateElement="id-bp-display">
+        <child xsi:type="archimate:DiagramObject" id="id-do-id-bp-display-vss-6" archimateElement="id-bp-display" fillColor="#FFE7AB" targetConnections="id-conn-0004 id-conn-0011">
           <bounds x="20" y="120" width="240" height="70"/>
         </child>
       </child>
-      <child xsi:type="archimate:DiagramObject" id="id-do-id-grp-internal-vss-7" fillColor="#FFE7AB" archimateElement="id-grp-internal">
-        <bounds x="640" y="20" width="760" height="244"/>
-        <child xsi:type="archimate:DiagramObject" id="id-do-id-bp-internal-recv-vss-8" targetConnections="id-conn-0005" fillColor="#FFE7AB" archimateElement="id-bp-internal-recv">
+      <child xsi:type="archimate:DiagramObject" id="id-do-id-grp-internal-vss-7" archimateElement="id-grp-internal" fillColor="#FFE7AB">
+        <bounds x="640" y="20" width="760" height="200"/>
+        <child xsi:type="archimate:DiagramObject" id="id-do-id-bp-internal-recv-vss-8" archimateElement="id-bp-internal-recv" fillColor="#FFE7AB" targetConnections="id-conn-0005">
           <bounds x="20" y="50" width="180" height="60"/>
           <sourceConnection xsi:type="archimate:Connection" id="id-conn-0006" source="id-do-id-bp-internal-recv-vss-8" target="id-do-id-bp-intent-vss-9" archimateRelationship="id-rel-0006"/>
           <sourceConnection xsi:type="archimate:Connection" id="id-conn-0012" source="id-do-id-bp-internal-recv-vss-8" target="id-do-id-bs-main-vss-13" archimateRelationship="id-rel-0012"/>
         </child>
-        <child xsi:type="archimate:DiagramObject" id="id-do-id-bp-intent-vss-9" targetConnections="id-conn-0006" fillColor="#FFE7AB" archimateElement="id-bp-intent">
+        <child xsi:type="archimate:DiagramObject" id="id-do-id-bp-intent-vss-9" archimateElement="id-bp-intent" fillColor="#FFE7AB" targetConnections="id-conn-0006">
           <bounds x="220" y="50" width="200" height="60"/>
           <sourceConnection xsi:type="archimate:Connection" id="id-conn-0007" source="id-do-id-bp-intent-vss-9" target="id-do-id-bp-llm-proc-vss-10" archimateRelationship="id-rel-0007"/>
-          <sourceConnection xsi:type="archimate:Connection" id="id-conn-0013" source="id-do-id-bp-intent-vss-9" target="id-do-id-bs-main-vss-13" archimateRelationship="id-rel-0013">
-            <bendpoint startX="48" startY="187" endX="167" endY="-186"/>
-          </sourceConnection>
+          <sourceConnection xsi:type="archimate:Connection" id="id-conn-0013" source="id-do-id-bp-intent-vss-9" target="id-do-id-bs-main-vss-13" archimateRelationship="id-rel-0013"/>
         </child>
-        <child xsi:type="archimate:DiagramObject" id="id-do-id-bp-llm-proc-vss-10" targetConnections="id-conn-0007 id-conn-0009" fillColor="#FFE7AB" archimateElement="id-bp-llm-proc">
+        <child xsi:type="archimate:DiagramObject" id="id-do-id-bp-llm-proc-vss-10" archimateElement="id-bp-llm-proc" fillColor="#FFE7AB" targetConnections="id-conn-0007 id-conn-0009">
           <bounds x="440" y="50" width="200" height="60"/>
           <sourceConnection xsi:type="archimate:Connection" id="id-conn-0008" source="id-do-id-bp-llm-proc-vss-10" target="id-do-id-bp-exec-vss-11" archimateRelationship="id-rel-0008"/>
           <sourceConnection xsi:type="archimate:Connection" id="id-conn-0010" source="id-do-id-bp-llm-proc-vss-10" target="id-do-id-bp-form-vss-12" archimateRelationship="id-rel-0010"/>
           <sourceConnection xsi:type="archimate:Connection" id="id-conn-0014" source="id-do-id-bp-llm-proc-vss-10" target="id-do-id-bs-main-vss-13" archimateRelationship="id-rel-0014"/>
         </child>
-        <child xsi:type="archimate:DiagramObject" id="id-do-id-bp-exec-vss-11" targetConnections="id-conn-0008" fillColor="#FFE7AB" archimateElement="id-bp-exec">
-          <bounds x="456" y="180" width="300" height="60"/>
-          <sourceConnection xsi:type="archimate:Connection" id="id-conn-0009" source="id-do-id-bp-exec-vss-11" target="id-do-id-bp-llm-proc-vss-10" archimateRelationship="id-rel-0009">
-            <bendpoint startX="3" startY="-85" endX="69" endY="44"/>
-          </sourceConnection>
+        <child xsi:type="archimate:DiagramObject" id="id-do-id-bp-exec-vss-11" archimateElement="id-bp-exec" fillColor="#FFE7AB" targetConnections="id-conn-0008">
+          <bounds x="440" y="125" width="300" height="60"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-conn-0009" source="id-do-id-bp-exec-vss-11" target="id-do-id-bp-llm-proc-vss-10" archimateRelationship="id-rel-0009"/>
           <sourceConnection xsi:type="archimate:Connection" id="id-conn-0015" source="id-do-id-bp-exec-vss-11" target="id-do-id-bs-main-vss-13" archimateRelationship="id-rel-0015"/>
         </child>
-        <child xsi:type="archimate:DiagramObject" id="id-do-id-bp-form-vss-12" targetConnections="id-conn-0010" fillColor="#FFE7AB" archimateElement="id-bp-form">
-          <bounds x="120" y="180" width="200" height="60"/>
+        <child xsi:type="archimate:DiagramObject" id="id-do-id-bp-form-vss-12" archimateElement="id-bp-form" fillColor="#FFE7AB" targetConnections="id-conn-0010">
+          <bounds x="220" y="125" width="200" height="60"/>
           <sourceConnection xsi:type="archimate:Connection" id="id-conn-0011" source="id-do-id-bp-form-vss-12" target="id-do-id-bp-display-vss-6" archimateRelationship="id-rel-0011"/>
           <sourceConnection xsi:type="archimate:Connection" id="id-conn-0016" source="id-do-id-bp-form-vss-12" target="id-do-id-bs-main-vss-13" archimateRelationship="id-rel-0016"/>
         </child>
       </child>
-      <child xsi:type="archimate:DiagramObject" id="id-do-id-bs-main-vss-13" targetConnections="id-conn-0012 id-conn-0013 id-conn-0014 id-conn-0015 id-conn-0016 id-conn-0017" fillColor="#FFE7AB" archimateElement="id-bs-main">
-        <bounds x="312" y="448" width="1060" height="50"/>
+      <child xsi:type="archimate:DiagramObject" id="id-do-id-bs-main-vss-13" archimateElement="id-bs-main" fillColor="#FFE7AB" targetConnections="id-conn-0012 id-conn-0013 id-conn-0014 id-conn-0015 id-conn-0016 id-conn-0017">
+        <bounds x="340" y="240" width="1060" height="50"/>
       </child>
-      <child xsi:type="archimate:DiagramObject" id="id-do-id-as-api-vss-14" fillColor="#B5E0E2" archimateElement="id-as-api">
-        <bounds x="312" y="528" width="1060" height="60"/>
+      <child xsi:type="archimate:DiagramObject" id="id-do-id-as-api-vss-14" archimateElement="id-as-api" fillColor="#B5E0E2">
+        <bounds x="340" y="320" width="1060" height="60"/>
         <sourceConnection xsi:type="archimate:Connection" id="id-conn-0017" source="id-do-id-as-api-vss-14" target="id-do-id-bs-main-vss-13" archimateRelationship="id-rel-0017"/>
       </child>
     </element>
     <element xsi:type="archimate:ArchimateDiagramModel" name="3.1.b Слой приложения и платформенный узел" id="id-view-b-application">
-      <child xsi:type="archimate:DiagramObject" id="id-do-id-bs-main-von-1" targetConnections="id-conn-0019" fillColor="#FFE7AB" archimateElement="id-bs-main">
+      <child xsi:type="archimate:DiagramObject" id="id-do-id-bs-main-von-1" archimateElement="id-bs-main" fillColor="#FFE7AB" targetConnections="id-conn-0019">
         <bounds x="20" y="30" width="1240" height="50"/>
       </child>
-      <child xsi:type="archimate:DiagramObject" id="id-do-id-as-api-von-2" targetConnections="id-conn-0018" fillColor="#B5E0E2" archimateElement="id-as-api">
+      <child xsi:type="archimate:DiagramObject" id="id-do-id-as-api-von-2" archimateElement="id-as-api" fillColor="#B5E0E2" targetConnections="id-conn-0018">
         <bounds x="20" y="110" width="1240" height="50"/>
         <sourceConnection xsi:type="archimate:Connection" id="id-conn-0019" source="id-do-id-as-api-von-2" target="id-do-id-bs-main-von-1" archimateRelationship="id-rel-0017"/>
       </child>
-      <child xsi:type="archimate:DiagramObject" id="id-do-id-ac-frontend-von-3" fillColor="#B5E0E2" archimateElement="id-ac-frontend">
-        <bounds x="120" y="396" width="179" height="405"/>
-        <sourceConnection xsi:type="archimate:Connection" id="id-e55e10b09a79480ca48623e4e9e61532" source="id-do-id-ac-frontend-von-3" target="id-do-id-af-catalog-ui-von-7" archimateRelationship="id-rel-0033"/>
-        <sourceConnection xsi:type="archimate:Connection" id="id-9b962936c0d644eeb778033276e9d66b" source="id-do-id-ac-frontend-von-3" target="id-do-id-af-sql-ui-von-5" archimateRelationship="id-rel-0031"/>
-        <child xsi:type="archimate:DiagramObject" id="id-do-id-af-chat-von-4" targetConnections="id-conn-0033 id-conn-0038" fillColor="#B5E0E2" archimateElement="id-af-chat">
-          <bounds x="34" y="336" width="130" height="55"/>
+      <child xsi:type="archimate:DiagramObject" id="id-do-id-ac-frontend-von-3" archimateElement="id-ac-frontend" fillColor="#B5E0E2" targetConnections="id-conn-0043">
+        <bounds x="20" y="200" width="300" height="260"/>
+        <child xsi:type="archimate:DiagramObject" id="id-do-id-af-chat-von-4" archimateElement="id-af-chat" fillColor="#B5E0E2" targetConnections="id-conn-0033 id-conn-0038">
+          <bounds x="20" y="50" width="130" height="55"/>
         </child>
-        <child xsi:type="archimate:DiagramObject" id="id-do-id-af-pipe-ui-von-6" targetConnections="id-conn-0035" fillColor="#B5E0E2" archimateElement="id-af-pipe-ui">
-          <bounds x="34" y="192" width="130" height="55"/>
+        <child xsi:type="archimate:DiagramObject" id="id-do-id-af-sql-ui-von-5" archimateElement="id-af-sql-ui" fillColor="#B5E0E2" targetConnections="id-conn-0034">
+          <bounds x="160" y="50" width="130" height="55"/>
         </child>
-        <child xsi:type="archimate:DiagramObject" id="id-do-id-af-settings-ui-von-8" targetConnections="id-conn-0037" fillColor="#B5E0E2" archimateElement="id-af-settings-ui">
-          <bounds x="34" y="264" width="129" height="55"/>
+        <child xsi:type="archimate:DiagramObject" id="id-do-id-af-pipe-ui-von-6" archimateElement="id-af-pipe-ui" fillColor="#B5E0E2" targetConnections="id-conn-0035">
+          <bounds x="20" y="115" width="130" height="55"/>
         </child>
-        <child xsi:type="archimate:DiagramObject" id="id-do-id-af-catalog-ui-von-7" targetConnections="id-conn-0036 id-e55e10b09a79480ca48623e4e9e61532" fillColor="#B5E0E2" archimateElement="id-af-catalog-ui">
-          <bounds x="34" y="132" width="130" height="55"/>
+        <child xsi:type="archimate:DiagramObject" id="id-do-id-af-catalog-ui-von-7" archimateElement="id-af-catalog-ui" fillColor="#B5E0E2" targetConnections="id-conn-0036">
+          <bounds x="160" y="115" width="130" height="55"/>
         </child>
-        <child xsi:type="archimate:DiagramObject" id="id-do-id-af-sql-ui-von-5" targetConnections="id-conn-0034 id-9b962936c0d644eeb778033276e9d66b" fillColor="#B5E0E2" archimateElement="id-af-sql-ui">
-          <bounds x="34" y="60" width="130" height="55"/>
+        <child xsi:type="archimate:DiagramObject" id="id-do-id-af-settings-ui-von-8" archimateElement="id-af-settings-ui" fillColor="#B5E0E2" targetConnections="id-conn-0037">
+          <bounds x="20" y="180" width="270" height="55"/>
         </child>
       </child>
-      <child xsi:type="archimate:DiagramObject" id="id-do-id-ac-backend-von-9" targetConnections="id-conn-0044" fillColor="#B5E0E2" archimateElement="id-ac-backend">
-        <bounds x="684" y="288" width="700" height="637"/>
-        <sourceConnection xsi:type="archimate:Connection" id="id-conn-0018" source="id-do-id-ac-backend-von-9" target="id-do-id-as-api-von-2" archimateRelationship="id-rel-be-api"/>
-        <child xsi:type="archimate:DiagramObject" id="id-do-id-af-recv-von-10" fillColor="#B5E0E2" archimateElement="id-af-recv">
+      <child xsi:type="archimate:DiagramObject" id="id-do-id-ac-backend-von-9" archimateElement="id-ac-backend" fillColor="#B5E0E2" targetConnections="id-conn-0044">
+        <bounds x="340" y="200" width="700" height="460"/>
+        <child xsi:type="archimate:DiagramObject" id="id-do-id-af-recv-von-10" archimateElement="id-af-recv" fillColor="#B5E0E2">
           <bounds x="20" y="40" width="200" height="70"/>
           <sourceConnection xsi:type="archimate:Connection" id="id-conn-0020" source="id-do-id-af-recv-von-10" target="id-do-id-af-auth-von-11" archimateRelationship="id-rel-recv-auth"/>
           <sourceConnection xsi:type="archimate:Connection" id="id-conn-0033" source="id-do-id-af-recv-von-10" target="id-do-id-af-chat-von-4" archimateRelationship="id-rel-recv-chat"/>
@@ -333,25 +326,23 @@
           <sourceConnection xsi:type="archimate:Connection" id="id-conn-0036" source="id-do-id-af-recv-von-10" target="id-do-id-af-catalog-ui-von-7" archimateRelationship="id-rel-recv-catui"/>
           <sourceConnection xsi:type="archimate:Connection" id="id-conn-0037" source="id-do-id-af-recv-von-10" target="id-do-id-af-settings-ui-von-8" archimateRelationship="id-rel-recv-setui"/>
         </child>
-        <child xsi:type="archimate:DiagramObject" id="id-do-id-af-auth-von-11" targetConnections="id-conn-0020" fillColor="#B5E0E2" archimateElement="id-af-auth">
-          <bounds x="372" y="40" width="200" height="70"/>
+        <child xsi:type="archimate:DiagramObject" id="id-do-id-af-auth-von-11" archimateElement="id-af-auth" fillColor="#B5E0E2" targetConnections="id-conn-0020">
+          <bounds x="250" y="40" width="200" height="70"/>
           <sourceConnection xsi:type="archimate:Connection" id="id-conn-0021" source="id-do-id-af-auth-von-11" target="id-do-id-af-agent-von-12" archimateRelationship="id-rel-auth-agent"/>
           <sourceConnection xsi:type="archimate:Connection" id="id-conn-0039" source="id-do-id-af-auth-von-11" target="id-do-id-do-users-von-23" archimateRelationship="id-rel-auth-users"/>
         </child>
-        <child xsi:type="archimate:DiagramObject" id="id-do-id-af-agent-von-12" targetConnections="id-conn-0021 id-conn-0023" fillColor="#B5E0E2" archimateElement="id-af-agent">
+        <child xsi:type="archimate:DiagramObject" id="id-do-id-af-agent-von-12" archimateElement="id-af-agent" fillColor="#B5E0E2" targetConnections="id-conn-0021 id-conn-0023">
           <bounds x="20" y="130" width="200" height="80"/>
-          <sourceConnection xsi:type="archimate:Connection" id="id-conn-0022" source="id-do-id-af-agent-von-12" target="id-do-id-af-llm-von-13" archimateRelationship="id-rel-agent-llm">
-            <bendpoint startX="181" startY="22" endX="-172" endY="21"/>
-          </sourceConnection>
+          <sourceConnection xsi:type="archimate:Connection" id="id-conn-0022" source="id-do-id-af-agent-von-12" target="id-do-id-af-llm-von-13" archimateRelationship="id-rel-agent-llm"/>
           <sourceConnection xsi:type="archimate:Connection" id="id-conn-0024" source="id-do-id-af-agent-von-12" target="id-do-id-af-tools-von-14" archimateRelationship="id-rel-agent-tools"/>
           <sourceConnection xsi:type="archimate:Connection" id="id-conn-0025" source="id-do-id-af-agent-von-12" target="id-do-id-af-resp-von-21" archimateRelationship="id-rel-agent-resp"/>
         </child>
-        <child xsi:type="archimate:DiagramObject" id="id-do-id-af-llm-von-13" targetConnections="id-conn-0022" fillColor="#B5E0E2" archimateElement="id-af-llm">
-          <bounds x="372" y="132" width="200" height="80"/>
+        <child xsi:type="archimate:DiagramObject" id="id-do-id-af-llm-von-13" archimateElement="id-af-llm" fillColor="#B5E0E2" targetConnections="id-conn-0022">
+          <bounds x="250" y="130" width="200" height="80"/>
           <sourceConnection xsi:type="archimate:Connection" id="id-conn-0023" source="id-do-id-af-llm-von-13" target="id-do-id-af-agent-von-12" archimateRelationship="id-rel-llm-agent"/>
         </child>
-        <child xsi:type="archimate:DiagramObject" id="id-do-id-af-tools-von-14" targetConnections="id-conn-0024" fillColor="#B5E0E2" archimateElement="id-af-tools">
-          <bounds x="20" y="264" width="660" height="50"/>
+        <child xsi:type="archimate:DiagramObject" id="id-do-id-af-tools-von-14" archimateElement="id-af-tools" fillColor="#B5E0E2" targetConnections="id-conn-0024">
+          <bounds x="20" y="230" width="660" height="50"/>
           <sourceConnection xsi:type="archimate:Connection" id="id-conn-0027" source="id-do-id-af-tools-von-14" target="id-do-id-af-sql-exec-von-15" archimateRelationship="id-rel-0049"/>
           <sourceConnection xsi:type="archimate:Connection" id="id-conn-0028" source="id-do-id-af-tools-von-14" target="id-do-id-af-airflow-von-16" archimateRelationship="id-rel-0050"/>
           <sourceConnection xsi:type="archimate:Connection" id="id-conn-0029" source="id-do-id-af-tools-von-14" target="id-do-id-af-spark-von-17" archimateRelationship="id-rel-0051"/>
@@ -359,47 +350,49 @@
           <sourceConnection xsi:type="archimate:Connection" id="id-conn-0031" source="id-do-id-af-tools-von-14" target="id-do-id-af-artifact-von-19" archimateRelationship="id-rel-0053"/>
           <sourceConnection xsi:type="archimate:Connection" id="id-conn-0032" source="id-do-id-af-tools-von-14" target="id-do-id-af-sandbox-von-20" archimateRelationship="id-rel-0054"/>
         </child>
-        <child xsi:type="archimate:DiagramObject" id="id-do-id-af-sql-exec-von-15" targetConnections="id-conn-0027" fillColor="#B5E0E2" archimateElement="id-af-sql-exec">
-          <bounds x="12" y="408" width="105" height="55"/>
+        <child xsi:type="archimate:DiagramObject" id="id-do-id-af-sql-exec-von-15" archimateElement="id-af-sql-exec" fillColor="#B5E0E2" targetConnections="id-conn-0027">
+          <bounds x="20" y="290" width="105" height="55"/>
         </child>
-        <child xsi:type="archimate:DiagramObject" id="id-do-id-af-airflow-von-16" targetConnections="id-conn-0028" fillColor="#B5E0E2" archimateElement="id-af-airflow">
-          <bounds x="588" y="408" width="105" height="55"/>
+        <child xsi:type="archimate:DiagramObject" id="id-do-id-af-airflow-von-16" archimateElement="id-af-airflow" fillColor="#B5E0E2" targetConnections="id-conn-0028">
+          <bounds x="130" y="290" width="105" height="55"/>
           <sourceConnection xsi:type="archimate:Connection" id="id-conn-0042" source="id-do-id-af-airflow-von-16" target="id-do-id-do-airflow-meta-von-25" archimateRelationship="id-rel-afcli-meta"/>
         </child>
-        <child xsi:type="archimate:DiagramObject" id="id-do-id-af-spark-von-17" targetConnections="id-conn-0029" fillColor="#B5E0E2" archimateElement="id-af-spark">
-          <bounds x="264" y="408" width="105" height="55"/>
+        <child xsi:type="archimate:DiagramObject" id="id-do-id-af-spark-von-17" archimateElement="id-af-spark" fillColor="#B5E0E2" targetConnections="id-conn-0029">
+          <bounds x="240" y="290" width="105" height="55"/>
         </child>
-        <child xsi:type="archimate:DiagramObject" id="id-do-id-af-mcp-von-18" targetConnections="id-conn-0030" fillColor="#B5E0E2" archimateElement="id-af-mcp">
-          <bounds x="372" y="408" width="105" height="55"/>
+        <child xsi:type="archimate:DiagramObject" id="id-do-id-af-mcp-von-18" archimateElement="id-af-mcp" fillColor="#B5E0E2" targetConnections="id-conn-0030">
+          <bounds x="350" y="290" width="105" height="55"/>
         </child>
-        <child xsi:type="archimate:DiagramObject" id="id-do-id-af-artifact-von-19" targetConnections="id-conn-0031" fillColor="#B5E0E2" archimateElement="id-af-artifact">
-          <bounds x="146" y="408" width="105" height="55"/>
+        <child xsi:type="archimate:DiagramObject" id="id-do-id-af-artifact-von-19" archimateElement="id-af-artifact" fillColor="#B5E0E2" targetConnections="id-conn-0031">
+          <bounds x="460" y="290" width="105" height="55"/>
         </child>
-        <child xsi:type="archimate:DiagramObject" id="id-do-id-af-sandbox-von-20" targetConnections="id-conn-0032" fillColor="#B5E0E2" archimateElement="id-af-sandbox">
-          <bounds x="480" y="408" width="105" height="55"/>
+        <child xsi:type="archimate:DiagramObject" id="id-do-id-af-sandbox-von-20" archimateElement="id-af-sandbox" fillColor="#B5E0E2" targetConnections="id-conn-0032">
+          <bounds x="570" y="290" width="105" height="55"/>
         </child>
-        <child xsi:type="archimate:DiagramObject" id="id-do-id-af-resp-von-21" targetConnections="id-conn-0025" fillColor="#B5E0E2" archimateElement="id-af-resp">
-          <bounds x="23" y="540" width="320" height="70"/>
+        <child xsi:type="archimate:DiagramObject" id="id-do-id-af-resp-von-21" archimateElement="id-af-resp" fillColor="#B5E0E2" targetConnections="id-conn-0025">
+          <bounds x="20" y="365" width="320" height="70"/>
           <sourceConnection xsi:type="archimate:Connection" id="id-conn-0026" source="id-do-id-af-resp-von-21" target="id-do-id-af-persist-von-22" archimateRelationship="id-rel-resp-persist"/>
           <sourceConnection xsi:type="archimate:Connection" id="id-conn-0038" source="id-do-id-af-resp-von-21" target="id-do-id-af-chat-von-4" archimateRelationship="id-rel-resp-chat"/>
         </child>
-        <child xsi:type="archimate:DiagramObject" id="id-do-id-af-persist-von-22" targetConnections="id-conn-0026" fillColor="#B5E0E2" archimateElement="id-af-persist">
-          <bounds x="360" y="540" width="320" height="70"/>
+        <child xsi:type="archimate:DiagramObject" id="id-do-id-af-persist-von-22" archimateElement="id-af-persist" fillColor="#B5E0E2" targetConnections="id-conn-0026">
+          <bounds x="360" y="365" width="320" height="70"/>
           <sourceConnection xsi:type="archimate:Connection" id="id-conn-0040" source="id-do-id-af-persist-von-22" target="id-do-id-do-users-von-23" archimateRelationship="id-rel-persist-users"/>
           <sourceConnection xsi:type="archimate:Connection" id="id-conn-0041" source="id-do-id-af-persist-von-22" target="id-do-id-do-runs-von-24" archimateRelationship="id-rel-persist-runs"/>
         </child>
+        <sourceConnection xsi:type="archimate:Connection" id="id-conn-0018" source="id-do-id-ac-backend-von-9" target="id-do-id-as-api-von-2" archimateRelationship="id-rel-be-api"/>
       </child>
-      <child xsi:type="archimate:DiagramObject" id="id-do-id-do-users-von-23" targetConnections="id-conn-0039 id-conn-0040 id-conn-0045" fillColor="#B5E0E2" archimateElement="id-do-users">
-        <bounds x="1556" y="288" width="200" height="60"/>
+      <child xsi:type="archimate:DiagramObject" id="id-do-id-do-users-von-23" archimateElement="id-do-users" fillColor="#B5E0E2" targetConnections="id-conn-0039 id-conn-0040 id-conn-0045">
+        <bounds x="1060" y="260" width="200" height="60"/>
       </child>
-      <child xsi:type="archimate:DiagramObject" id="id-do-id-do-runs-von-24" targetConnections="id-conn-0041 id-conn-0046" fillColor="#B5E0E2" archimateElement="id-do-runs">
-        <bounds x="1556" y="652" width="200" height="60"/>
+      <child xsi:type="archimate:DiagramObject" id="id-do-id-do-runs-von-24" archimateElement="id-do-runs" fillColor="#B5E0E2" targetConnections="id-conn-0041 id-conn-0046">
+        <bounds x="1060" y="340" width="200" height="60"/>
       </child>
-      <child xsi:type="archimate:DiagramObject" id="id-do-id-do-airflow-meta-von-25" targetConnections="id-conn-0042 id-conn-0047" fillColor="#B5E0E2" archimateElement="id-do-airflow-meta">
-        <bounds x="1556" y="479" width="200" height="60"/>
+      <child xsi:type="archimate:DiagramObject" id="id-do-id-do-airflow-meta-von-25" archimateElement="id-do-airflow-meta" fillColor="#B5E0E2" targetConnections="id-conn-0042 id-conn-0047">
+        <bounds x="1060" y="420" width="200" height="60"/>
       </child>
-      <child xsi:type="archimate:DiagramObject" id="id-do-id-node-platform-von-26" fillColor="#E1A340" archimateElement="id-node-platform">
-        <bounds x="1344" y="936" width="108" height="40"/>
+      <child xsi:type="archimate:DiagramObject" id="id-do-id-node-platform-von-26" archimateElement="id-node-platform" fillColor="#E1A340">
+        <bounds x="1320" y="260" width="220" height="280"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-conn-0043" source="id-do-id-node-platform-von-26" target="id-do-id-ac-frontend-von-3" archimateRelationship="id-rel-platform-fe"/>
         <sourceConnection xsi:type="archimate:Connection" id="id-conn-0044" source="id-do-id-node-platform-von-26" target="id-do-id-ac-backend-von-9" archimateRelationship="id-rel-platform-be"/>
         <sourceConnection xsi:type="archimate:Connection" id="id-conn-0045" source="id-do-id-node-platform-von-26" target="id-do-id-do-users-von-23" archimateRelationship="id-rel-platform-do-users"/>
         <sourceConnection xsi:type="archimate:Connection" id="id-conn-0046" source="id-do-id-node-platform-von-26" target="id-do-id-do-runs-von-24" archimateRelationship="id-rel-platform-do-runs"/>
@@ -407,45 +400,52 @@
       </child>
     </element>
     <element xsi:type="archimate:ArchimateDiagramModel" name="3.1.в Инфраструктура (технологический слой)" id="id-view-c-technology">
-      <child xsi:type="archimate:DiagramObject" id="id-do-id-actor-de-vgy-1" fillColor="#FFE7AB" archimateElement="id-actor-de">
+      <child xsi:type="archimate:DiagramObject" id="id-do-id-actor-de-vgy-1" archimateElement="id-actor-de" fillColor="#FFE7AB">
         <bounds x="20" y="30" width="130" height="60"/>
         <sourceConnection xsi:type="archimate:Connection" id="id-conn-0048" source="id-do-id-actor-de-vgy-1" target="id-do-id-node-browser-vgy-3" archimateRelationship="id-rel-de-browser"/>
       </child>
-      <child xsi:type="archimate:DiagramObject" id="id-do-id-actor-admin-vgy-2" fillColor="#FFE7AB" archimateElement="id-actor-admin">
+      <child xsi:type="archimate:DiagramObject" id="id-do-id-actor-admin-vgy-2" archimateElement="id-actor-admin" fillColor="#FFE7AB">
         <bounds x="20" y="100" width="130" height="60"/>
         <sourceConnection xsi:type="archimate:Connection" id="id-conn-0049" source="id-do-id-actor-admin-vgy-2" target="id-do-id-node-browser-vgy-3" archimateRelationship="id-rel-admin-browser"/>
       </child>
-      <child xsi:type="archimate:DiagramObject" id="id-do-id-node-browser-vgy-3" targetConnections="id-conn-0048 id-conn-0049" fillColor="#C5E0B4" archimateElement="id-node-browser">
+      <child xsi:type="archimate:DiagramObject" id="id-do-id-node-browser-vgy-3" archimateElement="id-node-browser" fillColor="#C5E0B4" targetConnections="id-conn-0048 id-conn-0049">
         <bounds x="170" y="60" width="160" height="70"/>
         <sourceConnection xsi:type="archimate:Connection" id="id-conn-0050" source="id-do-id-node-browser-vgy-3" target="id-do-id-node-frontend-vgy-9" archimateRelationship="id-rel-browser-fe"/>
       </child>
-      <child xsi:type="archimate:DiagramObject" id="id-do-id-ac-frontend-vgy-4" targetConnections="id-conn-0068" fillColor="#B5E0E2" archimateElement="id-ac-frontend">
+      <child xsi:type="archimate:DiagramObject" id="id-do-id-ac-frontend-vgy-4" archimateElement="id-ac-frontend" fillColor="#B5E0E2" targetConnections="id-conn-0068">
         <bounds x="360" y="60" width="220" height="70"/>
       </child>
-      <child xsi:type="archimate:DiagramObject" id="id-do-id-ac-backend-vgy-5" targetConnections="id-conn-0069" fillColor="#B5E0E2" archimateElement="id-ac-backend">
+      <child xsi:type="archimate:DiagramObject" id="id-do-id-ac-backend-vgy-5" archimateElement="id-ac-backend" fillColor="#B5E0E2" targetConnections="id-conn-0069">
         <bounds x="600" y="60" width="220" height="70"/>
       </child>
-      <child xsi:type="archimate:DiagramObject" id="id-do-id-node-llm-vgy-6" targetConnections="id-conn-0062" fillColor="#C5E0B4" archimateElement="id-node-llm">
-        <bounds x="1236" y="20" width="220" height="80"/>
+      <child xsi:type="archimate:DiagramObject" id="id-do-id-node-llm-vgy-6" archimateElement="id-node-llm" fillColor="#C5E0B4" targetConnections="id-conn-0062">
+        <bounds x="1690" y="60" width="220" height="80"/>
       </child>
-      <child xsi:type="archimate:DiagramObject" id="id-do-id-node-user-dbs-vgy-7" targetConnections="id-conn-0063" fillColor="#C5E0B4" archimateElement="id-node-user-dbs">
-        <bounds x="1236" y="120" width="220" height="130"/>
+      <child xsi:type="archimate:DiagramObject" id="id-do-id-node-user-dbs-vgy-7" archimateElement="id-node-user-dbs" fillColor="#C5E0B4" targetConnections="id-conn-0063">
+        <bounds x="1690" y="160" width="220" height="130"/>
       </child>
-      <child xsi:type="archimate:DiagramObject" id="id-do-id-node-host-vgy-8" fillColor="#C5E0B4" archimateElement="id-node-host">
-        <bounds x="60" y="468" width="2138" height="1165"/>
-        <child xsi:type="archimate:DiagramObject" id="id-do-id-node-frontend-vgy-9" targetConnections="id-conn-0050" fillColor="#C5E0B4" archimateElement="id-node-frontend">
-          <bounds x="24" y="36" width="230" height="230"/>
-          <sourceConnection xsi:type="archimate:Connection" id="id-conn-0051" source="id-do-id-node-frontend-vgy-9" target="id-do-id-node-backend-vgy-12" archimateRelationship="id-rel-fe-be-flow"/>
-          <child xsi:type="archimate:DiagramObject" id="id-do-id-ss-node-vgy-10" fillColor="#C5E0B4" archimateElement="id-ss-node">
+      <child xsi:type="archimate:DiagramObject" id="id-do-id-node-host-vgy-8" archimateElement="id-node-host" fillColor="#C5E0B4">
+        <bounds x="20" y="320" width="1640" height="740"/>
+        <child xsi:type="archimate:DiagramObject" id="id-do-id-node-frontend-vgy-9" archimateElement="id-node-frontend" fillColor="#C5E0B4" targetConnections="id-conn-0050">
+          <bounds x="20" y="40" width="230" height="230"/>
+          <child xsi:type="archimate:DiagramObject" id="id-do-id-ss-node-vgy-10" archimateElement="id-ss-node" fillColor="#C5E0B4">
             <bounds x="15" y="45" width="200" height="50"/>
           </child>
-          <child xsi:type="archimate:DiagramObject" id="id-do-id-art-frontend-vgy-11" fillColor="#C5E0B4" archimateElement="id-art-frontend">
+          <child xsi:type="archimate:DiagramObject" id="id-do-id-art-frontend-vgy-11" archimateElement="id-art-frontend" fillColor="#C5E0B4">
             <bounds x="15" y="110" width="200" height="50"/>
             <sourceConnection xsi:type="archimate:Connection" id="id-conn-0068" source="id-do-id-art-frontend-vgy-11" target="id-do-id-ac-frontend-vgy-4" archimateRelationship="id-rel-artfe-ac"/>
           </child>
+          <sourceConnection xsi:type="archimate:Connection" id="id-conn-0051" source="id-do-id-node-frontend-vgy-9" target="id-do-id-node-backend-vgy-12" archimateRelationship="id-rel-fe-be-flow"/>
         </child>
-        <child xsi:type="archimate:DiagramObject" id="id-do-id-node-backend-vgy-12" targetConnections="id-conn-0051" fillColor="#C5E0B4" archimateElement="id-node-backend">
-          <bounds x="504" y="135" width="250" height="230"/>
+        <child xsi:type="archimate:DiagramObject" id="id-do-id-node-backend-vgy-12" archimateElement="id-node-backend" fillColor="#C5E0B4" targetConnections="id-conn-0051">
+          <bounds x="280" y="40" width="250" height="230"/>
+          <child xsi:type="archimate:DiagramObject" id="id-do-id-ss-python-vgy-13" archimateElement="id-ss-python" fillColor="#C5E0B4">
+            <bounds x="15" y="45" width="220" height="50"/>
+          </child>
+          <child xsi:type="archimate:DiagramObject" id="id-do-id-art-backend-vgy-14" archimateElement="id-art-backend" fillColor="#C5E0B4">
+            <bounds x="15" y="110" width="220" height="50"/>
+            <sourceConnection xsi:type="archimate:Connection" id="id-conn-0069" source="id-do-id-art-backend-vgy-14" target="id-do-id-ac-backend-vgy-5" archimateRelationship="id-rel-artbe-ac"/>
+          </child>
           <sourceConnection xsi:type="archimate:Connection" id="id-conn-0052" source="id-do-id-node-backend-vgy-12" target="id-do-id-node-pg-vgy-15" archimateRelationship="id-rel-be-pg"/>
           <sourceConnection xsi:type="archimate:Connection" id="id-conn-0053" source="id-do-id-node-backend-vgy-12" target="id-do-id-node-af-web-vgy-18" archimateRelationship="id-rel-be-afw"/>
           <sourceConnection xsi:type="archimate:Connection" id="id-conn-0056" source="id-do-id-node-backend-vgy-12" target="id-do-id-node-sp-m-vgy-25" archimateRelationship="id-rel-be-spm"/>
@@ -453,109 +453,102 @@
           <sourceConnection xsi:type="archimate:Connection" id="id-conn-0062" source="id-do-id-node-backend-vgy-12" target="id-do-id-node-llm-vgy-6" archimateRelationship="id-rel-be-llm"/>
           <sourceConnection xsi:type="archimate:Connection" id="id-conn-0063" source="id-do-id-node-backend-vgy-12" target="id-do-id-node-user-dbs-vgy-7" archimateRelationship="id-rel-be-user-dbs"/>
           <sourceConnection xsi:type="archimate:Connection" id="id-conn-0064" source="id-do-id-node-backend-vgy-12" target="id-do-id-node-redis-vgy-40" archimateRelationship="id-rel-be-redis"/>
-          <child xsi:type="archimate:DiagramObject" id="id-do-id-ss-python-vgy-13" fillColor="#C5E0B4" archimateElement="id-ss-python">
-            <bounds x="15" y="96" width="220" height="50"/>
-          </child>
-          <child xsi:type="archimate:DiagramObject" id="id-do-id-art-backend-vgy-14" fillColor="#C5E0B4" archimateElement="id-art-backend">
-            <bounds x="15" y="36" width="220" height="50"/>
-            <sourceConnection xsi:type="archimate:Connection" id="id-conn-0069" source="id-do-id-art-backend-vgy-14" target="id-do-id-ac-backend-vgy-5" archimateRelationship="id-rel-artbe-ac"/>
-          </child>
         </child>
-        <child xsi:type="archimate:DiagramObject" id="id-do-id-node-pg-vgy-15" targetConnections="id-conn-0052 id-conn-0067" fillColor="#C5E0B4" archimateElement="id-node-pg">
-          <bounds x="1188" y="168" width="200" height="230"/>
-          <child xsi:type="archimate:DiagramObject" id="id-do-id-ss-pg-vgy-16" fillColor="#C5E0B4" archimateElement="id-ss-pg">
+        <child xsi:type="archimate:DiagramObject" id="id-do-id-node-pg-vgy-15" archimateElement="id-node-pg" fillColor="#C5E0B4" targetConnections="id-conn-0052 id-conn-0067">
+          <bounds x="560" y="40" width="200" height="230"/>
+          <child xsi:type="archimate:DiagramObject" id="id-do-id-ss-pg-vgy-16" archimateElement="id-ss-pg" fillColor="#C5E0B4">
             <bounds x="15" y="45" width="170" height="50"/>
           </child>
-          <child xsi:type="archimate:DiagramObject" id="id-do-id-art-pgvol-vgy-17" fillColor="#C5E0B4" archimateElement="id-art-pgvol">
+          <child xsi:type="archimate:DiagramObject" id="id-do-id-art-pgvol-vgy-17" archimateElement="id-art-pgvol" fillColor="#C5E0B4">
             <bounds x="15" y="110" width="170" height="50"/>
           </child>
         </child>
-        <child xsi:type="archimate:DiagramObject" id="id-do-id-node-af-web-vgy-18" targetConnections="id-conn-0053" fillColor="#C5E0B4" archimateElement="id-node-af-web">
-          <bounds x="408" y="540" width="200" height="100"/>
-          <sourceConnection xsi:type="archimate:Connection" id="id-conn-0054" source="id-do-id-node-af-web-vgy-18" target="id-do-id-node-af-pg-vgy-23" archimateRelationship="id-rel-afw-afp"/>
-          <child xsi:type="archimate:DiagramObject" id="id-do-id-ss-af-vgy-19" fillColor="#C5E0B4" archimateElement="id-ss-af">
+        <child xsi:type="archimate:DiagramObject" id="id-do-id-node-af-web-vgy-18" archimateElement="id-node-af-web" fillColor="#C5E0B4" targetConnections="id-conn-0053">
+          <bounds x="790" y="40" width="200" height="100"/>
+          <child xsi:type="archimate:DiagramObject" id="id-do-id-ss-af-vgy-19" archimateElement="id-ss-af" fillColor="#C5E0B4">
             <bounds x="15" y="50" width="170" height="35"/>
           </child>
+          <sourceConnection xsi:type="archimate:Connection" id="id-conn-0054" source="id-do-id-node-af-web-vgy-18" target="id-do-id-node-af-pg-vgy-23" archimateRelationship="id-rel-afw-afp"/>
         </child>
-        <child xsi:type="archimate:DiagramObject" id="id-do-id-node-af-sch-vgy-20" fillColor="#C5E0B4" archimateElement="id-node-af-sch">
-          <bounds x="408" y="662" width="200" height="120"/>
-          <sourceConnection xsi:type="archimate:Connection" id="id-conn-0055" source="id-do-id-node-af-sch-vgy-20" target="id-do-id-node-af-pg-vgy-23" archimateRelationship="id-rel-afs-afp"/>
-          <child xsi:type="archimate:DiagramObject" id="id-do-id-ss-af-vgy-21" fillColor="#C5E0B4" archimateElement="id-ss-af">
+        <child xsi:type="archimate:DiagramObject" id="id-do-id-node-af-sch-vgy-20" archimateElement="id-node-af-sch" fillColor="#C5E0B4">
+          <bounds x="790" y="150" width="200" height="120"/>
+          <child xsi:type="archimate:DiagramObject" id="id-do-id-ss-af-vgy-21" archimateElement="id-ss-af" fillColor="#C5E0B4">
             <bounds x="15" y="45" width="170" height="35"/>
           </child>
-          <child xsi:type="archimate:DiagramObject" id="id-do-id-art-dags-vgy-22" fillColor="#C5E0B4" archimateElement="id-art-dags">
+          <child xsi:type="archimate:DiagramObject" id="id-do-id-art-dags-vgy-22" archimateElement="id-art-dags" fillColor="#C5E0B4">
             <bounds x="15" y="90" width="170" height="25"/>
           </child>
+          <sourceConnection xsi:type="archimate:Connection" id="id-conn-0055" source="id-do-id-node-af-sch-vgy-20" target="id-do-id-node-af-pg-vgy-23" archimateRelationship="id-rel-afs-afp"/>
         </child>
-        <child xsi:type="archimate:DiagramObject" id="id-do-id-node-af-pg-vgy-23" targetConnections="id-conn-0054 id-conn-0055" fillColor="#C5E0B4" archimateElement="id-node-af-pg">
-          <bounds x="696" y="552" width="200" height="230"/>
-          <child xsi:type="archimate:DiagramObject" id="id-do-id-ss-pg-vgy-24" fillColor="#C5E0B4" archimateElement="id-ss-pg">
+        <child xsi:type="archimate:DiagramObject" id="id-do-id-node-af-pg-vgy-23" archimateElement="id-node-af-pg" fillColor="#C5E0B4" targetConnections="id-conn-0054 id-conn-0055">
+          <bounds x="1020" y="40" width="200" height="230"/>
+          <child xsi:type="archimate:DiagramObject" id="id-do-id-ss-pg-vgy-24" archimateElement="id-ss-pg" fillColor="#C5E0B4">
             <bounds x="15" y="45" width="170" height="50"/>
           </child>
         </child>
-        <child xsi:type="archimate:DiagramObject" id="id-do-id-node-sp-m-vgy-25" targetConnections="id-conn-0056 id-conn-0057" fillColor="#C5E0B4" archimateElement="id-node-sp-m">
-          <bounds x="1827" y="36" width="250" height="100"/>
-          <child xsi:type="archimate:DiagramObject" id="id-do-id-ss-sp-vgy-26" fillColor="#C5E0B4" archimateElement="id-ss-sp">
+        <child xsi:type="archimate:DiagramObject" id="id-do-id-node-sp-m-vgy-25" archimateElement="id-node-sp-m" fillColor="#C5E0B4" targetConnections="id-conn-0056 id-conn-0057">
+          <bounds x="1250" y="40" width="250" height="100"/>
+          <child xsi:type="archimate:DiagramObject" id="id-do-id-ss-sp-vgy-26" archimateElement="id-ss-sp" fillColor="#C5E0B4">
             <bounds x="15" y="50" width="220" height="35"/>
           </child>
         </child>
-        <child xsi:type="archimate:DiagramObject" id="id-do-id-node-sp-w-vgy-27" fillColor="#C5E0B4" archimateElement="id-node-sp-w">
-          <bounds x="1827" y="180" width="250" height="80"/>
-          <sourceConnection xsi:type="archimate:Connection" id="id-conn-0057" source="id-do-id-node-sp-w-vgy-27" target="id-do-id-node-sp-m-vgy-25" archimateRelationship="id-rel-spw-spm"/>
-          <child xsi:type="archimate:DiagramObject" id="id-do-id-ss-sp-vgy-28" fillColor="#C5E0B4" archimateElement="id-ss-sp">
+        <child xsi:type="archimate:DiagramObject" id="id-do-id-node-sp-w-vgy-27" archimateElement="id-node-sp-w" fillColor="#C5E0B4">
+          <bounds x="1250" y="150" width="250" height="80"/>
+          <child xsi:type="archimate:DiagramObject" id="id-do-id-ss-sp-vgy-28" archimateElement="id-ss-sp" fillColor="#C5E0B4">
             <bounds x="15" y="35" width="220" height="35"/>
           </child>
+          <sourceConnection xsi:type="archimate:Connection" id="id-conn-0057" source="id-do-id-node-sp-w-vgy-27" target="id-do-id-node-sp-m-vgy-25" archimateRelationship="id-rel-spw-spm"/>
         </child>
-        <child xsi:type="archimate:DiagramObject" id="id-do-id-art-jobs-vgy-29" fillColor="#C5E0B4" archimateElement="id-art-jobs">
-          <bounds x="1827" y="259" width="250" height="30"/>
+        <child xsi:type="archimate:DiagramObject" id="id-do-id-art-jobs-vgy-29" archimateElement="id-art-jobs" fillColor="#C5E0B4">
+          <bounds x="1250" y="240" width="250" height="30"/>
         </child>
-        <child xsi:type="archimate:DiagramObject" id="id-do-id-node-dbg-vgy-30" targetConnections="id-conn-0058" fillColor="#C5E0B4" archimateElement="id-node-dbg">
-          <bounds x="36" y="660" width="240" height="180"/>
+        <child xsi:type="archimate:DiagramObject" id="id-do-id-node-dbg-vgy-30" archimateElement="id-node-dbg" fillColor="#C5E0B4" targetConnections="id-conn-0058">
+          <bounds x="20" y="320" width="240" height="180"/>
+          <child xsi:type="archimate:DiagramObject" id="id-do-id-ss-python-vgy-31" archimateElement="id-ss-python" fillColor="#C5E0B4">
+            <bounds x="15" y="45" width="210" height="40"/>
+          </child>
+          <child xsi:type="archimate:DiagramObject" id="id-do-id-art-sock-vgy-32" archimateElement="id-art-sock" fillColor="#C5E0B4">
+            <bounds x="15" y="95" width="210" height="50"/>
+          </child>
           <sourceConnection xsi:type="archimate:Connection" id="id-conn-0059" source="id-do-id-node-dbg-vgy-30" target="id-do-id-node-sbx-py-vgy-33" archimateRelationship="id-rel-dbg-sbxpy"/>
           <sourceConnection xsi:type="archimate:Connection" id="id-conn-0060" source="id-do-id-node-dbg-vgy-30" target="id-do-id-node-sbx-af-vgy-34" archimateRelationship="id-rel-dbg-sbxaf"/>
           <sourceConnection xsi:type="archimate:Connection" id="id-conn-0061" source="id-do-id-node-dbg-vgy-30" target="id-do-id-node-sbx-sp-vgy-35" archimateRelationship="id-rel-dbg-sbxsp"/>
-          <child xsi:type="archimate:DiagramObject" id="id-do-id-ss-python-vgy-31" fillColor="#C5E0B4" archimateElement="id-ss-python">
-            <bounds x="15" y="45" width="210" height="40"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-do-id-node-sbx-py-vgy-33" archimateElement="id-node-sbx-py" fillColor="#C5E0B4" targetConnections="id-conn-0059">
+          <bounds x="290" y="320" width="250" height="80"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-do-id-node-sbx-af-vgy-34" archimateElement="id-node-sbx-af" fillColor="#C5E0B4" targetConnections="id-conn-0060">
+          <bounds x="570" y="320" width="250" height="80"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-do-id-node-sbx-sp-vgy-35" archimateElement="id-node-sbx-sp" fillColor="#C5E0B4" targetConnections="id-conn-0061">
+          <bounds x="850" y="320" width="250" height="80"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-do-id-node-bworker-vgy-36" archimateElement="id-node-bworker" fillColor="#C5E0B4">
+          <bounds x="20" y="520" width="280" height="100"/>
+          <child xsi:type="archimate:DiagramObject" id="id-do-id-ss-celery-vgy-37" archimateElement="id-ss-celery" fillColor="#C5E0B4">
+            <bounds x="15" y="45" width="250" height="40"/>
           </child>
-          <child xsi:type="archimate:DiagramObject" id="id-do-id-art-sock-vgy-32" fillColor="#C5E0B4" archimateElement="id-art-sock">
-            <bounds x="15" y="95" width="210" height="50"/>
-          </child>
-        </child>
-        <child xsi:type="archimate:DiagramObject" id="id-do-id-node-sbx-py-vgy-33" targetConnections="id-conn-0059" fillColor="#C5E0B4" archimateElement="id-node-sbx-py">
-          <bounds x="31" y="951" width="250" height="80"/>
-        </child>
-        <child xsi:type="archimate:DiagramObject" id="id-do-id-node-sbx-af-vgy-34" targetConnections="id-conn-0060" fillColor="#C5E0B4" archimateElement="id-node-sbx-af">
-          <bounds x="311" y="951" width="250" height="80"/>
-        </child>
-        <child xsi:type="archimate:DiagramObject" id="id-do-id-node-sbx-sp-vgy-35" targetConnections="id-conn-0061" fillColor="#C5E0B4" archimateElement="id-node-sbx-sp">
-          <bounds x="588" y="951" width="250" height="80"/>
-        </child>
-        <child xsi:type="archimate:DiagramObject" id="id-do-id-node-bworker-vgy-36" fillColor="#C5E0B4" archimateElement="id-node-bworker">
-          <bounds x="1812" y="324" width="280" height="100"/>
           <sourceConnection xsi:type="archimate:Connection" id="id-conn-0065" source="id-do-id-node-bworker-vgy-36" target="id-do-id-node-redis-vgy-40" archimateRelationship="id-rel-bw-redis"/>
           <sourceConnection xsi:type="archimate:Connection" id="id-conn-0067" source="id-do-id-node-bworker-vgy-36" target="id-do-id-node-pg-vgy-15" archimateRelationship="id-rel-bw-pg"/>
-          <child xsi:type="archimate:DiagramObject" id="id-do-id-ss-celery-vgy-37" fillColor="#C5E0B4" archimateElement="id-ss-celery">
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-do-id-node-bbeat-vgy-38" archimateElement="id-node-bbeat" fillColor="#C5E0B4">
+          <bounds x="330" y="520" width="280" height="100"/>
+          <child xsi:type="archimate:DiagramObject" id="id-do-id-ss-celery-vgy-39" archimateElement="id-ss-celery" fillColor="#C5E0B4">
             <bounds x="15" y="45" width="250" height="40"/>
           </child>
-        </child>
-        <child xsi:type="archimate:DiagramObject" id="id-do-id-node-bbeat-vgy-38" fillColor="#C5E0B4" archimateElement="id-node-bbeat">
-          <bounds x="1452" y="864" width="280" height="100"/>
           <sourceConnection xsi:type="archimate:Connection" id="id-conn-0066" source="id-do-id-node-bbeat-vgy-38" target="id-do-id-node-redis-vgy-40" archimateRelationship="id-rel-bb-redis"/>
-          <child xsi:type="archimate:DiagramObject" id="id-do-id-ss-celery-vgy-39" fillColor="#C5E0B4" archimateElement="id-ss-celery">
-            <bounds x="15" y="45" width="250" height="40"/>
-          </child>
         </child>
-        <child xsi:type="archimate:DiagramObject" id="id-do-id-node-redis-vgy-40" targetConnections="id-conn-0064 id-conn-0065 id-conn-0066" fillColor="#C5E0B4" archimateElement="id-node-redis">
-          <bounds x="1822" y="588" width="260" height="100"/>
-          <child xsi:type="archimate:DiagramObject" id="id-do-id-ss-redis-vgy-41" fillColor="#C5E0B4" archimateElement="id-ss-redis">
+        <child xsi:type="archimate:DiagramObject" id="id-do-id-node-redis-vgy-40" archimateElement="id-node-redis" fillColor="#C5E0B4" targetConnections="id-conn-0064 id-conn-0065 id-conn-0066">
+          <bounds x="640" y="520" width="260" height="100"/>
+          <child xsi:type="archimate:DiagramObject" id="id-do-id-ss-redis-vgy-41" archimateElement="id-ss-redis" fillColor="#C5E0B4">
             <bounds x="15" y="45" width="230" height="40"/>
           </child>
         </child>
-        <child xsi:type="archimate:DiagramObject" id="id-do-id-cn-docker-vgy-42" fillColor="#A9D08E" archimateElement="id-cn-docker">
-          <bounds x="12" y="1092" width="1200" height="40"/>
+        <child xsi:type="archimate:DiagramObject" id="id-do-id-cn-docker-vgy-42" archimateElement="id-cn-docker" fillColor="#A9D08E">
+          <bounds x="20" y="660" width="1200" height="40"/>
         </child>
-        <child xsi:type="archimate:DiagramObject" id="id-do-id-ss-docker-vgy-43" fillColor="#A9D08E" archimateElement="id-ss-docker">
-          <bounds x="1250" y="1092" width="360" height="40"/>
+        <child xsi:type="archimate:DiagramObject" id="id-do-id-ss-docker-vgy-43" archimateElement="id-ss-docker" fillColor="#A9D08E">
+          <bounds x="1250" y="660" width="360" height="40"/>
         </child>
       </child>
     </element>

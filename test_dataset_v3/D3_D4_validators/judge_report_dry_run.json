@@ -1,0 +1,211 @@
+{
+  "config": {
+    "judge": "codex exec",
+    "model": "gpt-5-codex",
+    "note": "dry-run, mocked"
+  },
+  "d3": [
+    {
+      "spec_id": "DAG-01",
+      "semantic": 9,
+      "api": 9,
+      "robustness": 6,
+      "style": 8,
+      "verdict": "accept",
+      "critique": "canonical pattern; no explicit retries",
+      "overall": 8.45
+    },
+    {
+      "spec_id": "DAG-02",
+      "semantic": 9,
+      "api": 9,
+      "robustness": 6,
+      "style": 8,
+      "verdict": "accept",
+      "critique": "canonical pattern; no explicit retries",
+      "overall": 8.45
+    },
+    {
+      "spec_id": "DAG-03",
+      "semantic": 9,
+      "api": 9,
+      "robustness": 8,
+      "style": 8,
+      "verdict": "accept",
+      "critique": "canonical pattern; retries present",
+      "overall": 8.75
+    },
+    {
+      "spec_id": "DAG-04",
+      "semantic": 9,
+      "api": 9,
+      "robustness": 6,
+      "style": 8,
+      "verdict": "accept",
+      "critique": "canonical pattern; no explicit retries",
+      "overall": 8.45
+    },
+    {
+      "spec_id": "DAG-05",
+      "semantic": 9,
+      "api": 9,
+      "robustness": 8,
+      "style": 8,
+      "verdict": "accept",
+      "critique": "canonical pattern; retries present",
+      "overall": 8.75
+    },
+    {
+      "spec_id": "DAG-06",
+      "semantic": 9,
+      "api": 9,
+      "robustness": 6,
+      "style": 6,
+      "verdict": "accept",
+      "critique": "canonical pattern; no explicit retries",
+      "overall": 8.25
+    },
+    {
+      "spec_id": "DAG-07",
+      "semantic": 9,
+      "api": 9,
+      "robustness": 6,
+      "style": 8,
+      "verdict": "accept",
+      "critique": "canonical pattern; no explicit retries",
+      "overall": 8.45
+    },
+    {
+      "spec_id": "DAG-08",
+      "semantic": 9,
+      "api": 9,
+      "robustness": 6,
+      "style": 8,
+      "verdict": "accept",
+      "critique": "canonical pattern; no explicit retries",
+      "overall": 8.45
+    },
+    {
+      "spec_id": "DAG-09",
+      "semantic": 9,
+      "api": 9,
+      "robustness": 6,
+      "style": 8,
+      "verdict": "accept",
+      "critique": "canonical pattern; no explicit retries",
+      "overall": 8.45
+    },
+    {
+      "spec_id": "DAG-10",
+      "semantic": 9,
+      "api": 9,
+      "robustness": 6,
+      "style": 8,
+      "verdict": "accept",
+      "critique": "canonical pattern; no explicit retries",
+      "overall": 8.45
+    }
+  ],
+  "d4": [
+    {
+      "spec_id": "SPARK-01",
+      "semantic": 9,
+      "api": 9,
+      "robustness": 6,
+      "style": 6,
+      "verdict": "accept",
+      "critique": "canonical pattern; no explicit retries",
+      "overall": 8.25
+    },
+    {
+      "spec_id": "SPARK-02",
+      "semantic": 9,
+      "api": 9,
+      "robustness": 6,
+      "style": 8,
+      "verdict": "accept",
+      "critique": "canonical pattern; no explicit retries",
+      "overall": 8.45
+    },
+    {
+      "spec_id": "SPARK-03",
+      "semantic": 9,
+      "api": 9,
+      "robustness": 6,
+      "style": 6,
+      "verdict": "accept",
+      "critique": "canonical pattern; no explicit retries",
+      "overall": 8.25
+    },
+    {
+      "spec_id": "SPARK-04",
+      "semantic": 9,
+      "api": 9,
+      "robustness": 6,
+      "style": 6,
+      "verdict": "accept",
+      "critique": "canonical pattern; no explicit retries",
+      "overall": 8.25
+    },
+    {
+      "spec_id": "SPARK-05",
+      "semantic": 6,
+      "api": 6,
+      "robustness": 6,
+      "style": 6,
+      "verdict": "accept_with_minors",
+      "critique": "canonical pattern; no explicit retries",
+      "overall": 6.0
+    },
+    {
+      "spec_id": "SPARK-06",
+      "semantic": 6,
+      "api": 6,
+      "robustness": 6,
+      "style": 6,
+      "verdict": "accept_with_minors",
+      "critique": "canonical pattern; no explicit retries",
+      "overall": 6.0
+    },
+    {
+      "spec_id": "SPARK-07",
+      "semantic": 9,
+      "api": 9,
+      "robustness": 6,
+      "style": 8,
+      "verdict": "accept",
+      "critique": "canonical pattern; no explicit retries",
+      "overall": 8.45
+    },
+    {
+      "spec_id": "SPARK-08",
+      "semantic": 6,
+      "api": 6,
+      "robustness": 6,
+      "style": 8,
+      "verdict": "accept_with_minors",
+      "critique": "canonical pattern; no explicit retries",
+      "overall": 6.2
+    },
+    {
+      "spec_id": "SPARK-09",
+      "semantic": 6,
+      "api": 6,
+      "robustness": 6,
+      "style": 8,
+      "verdict": "accept_with_minors",
+      "critique": "canonical pattern; no explicit retries",
+      "overall": 6.2
+    },
+    {
+      "spec_id": "SPARK-10",
+      "semantic": 6,
+      "api": 6,
+      "robustness": 6,
+      "style": 8,
+      "verdict": "accept_with_minors",
+      "critique": "canonical pattern; no explicit retries",
+      "overall": 6.2
+    }
+  ]
+}

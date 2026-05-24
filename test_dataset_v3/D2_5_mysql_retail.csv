@@ -1,0 +1,7 @@
+question_id,domain,engine,difficulty,question,gold_sql,evidence
+mysql-001,demo-retail,mysql,simple,How many products in stock?,SELECT COUNT(*) FROM retail_products WHERE stock > 0;,
+mysql-002,demo-retail,mysql,moderate,Top product by total sold qty,"SELECT p.name, SUM(s.qty) AS sold FROM retail_products p JOIN retail_sales s ON s.product_id = p.id GROUP BY p.id, p.name ORDER BY sold DESC LIMIT 1;",
+mysql-003,demo-retail,mysql,simple,Average price by category,"SELECT category, AVG(price) AS avg_price FROM retail_products GROUP BY category;",
+mysql-004,demo-retail,mysql,moderate,Sales for last 7 days,"SELECT DATE(sold_at) AS d, SUM(qty * price) AS revenue FROM retail_sales WHERE sold_at >= DATE_SUB(NOW(), INTERVAL 7 DAY) GROUP BY d ORDER BY d;",
+mysql-005,demo-retail,mysql,simple,Products without sales,"SELECT p.id, p.name FROM retail_products p LEFT JOIN retail_sales s ON s.product_id = p.id WHERE s.id IS NULL;",
+mysql-006,demo-retail,mysql,simple,Stock value (sum of stock × price),SELECT SUM(stock * price) AS stock_value FROM retail_products;,

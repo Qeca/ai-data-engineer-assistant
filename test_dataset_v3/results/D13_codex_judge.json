@@ -1,0 +1,12 @@
+[
+  {
+    "id": "16_structured_kafka_wordcount",
+    "source_file": "D13_real_spark_scripts/16_structured_kafka_wordcount.py",
+    "rule_passed": false,
+    "code_chars": 0,
+    "judge_verdict": "reject",
+    "judge_semantic": 0,
+    "judge_api": 0,
+    "judge_reason": "agent did not produce code"
+  }
+]

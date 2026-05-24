@@ -1,0 +1,31 @@
+id,scenario_class,engine,scenario,expected,priority
+CONN-01,create_postgres,postgresql,"Подключи Postgres demo на localhost:5432 db=demo, user=demo",upsert_database_connection → status=active,P0
+CONN-02,create_mysql,mysql,Добавь MySQL retail на localhost:3306 db=retail,upsert + test → status=active,P0
+CONN-03,create_clickhouse,clickhouse,Подключи ClickHouse на ch.local:8123 db=analytics,upsert + test → status=active,P0
+CONN-04,create_mongo,mongodb,Добавь Mongo на mongo.local:27017 db=analytics,upsert + test → status=active,P0
+CONN-05,test_existing,postgresql,Проверь подключение к sales_pg,test_database_connection → status=active,P1
+CONN-06,test_unreachable,postgresql,Проверь подключение к pg_offline.example:1234,"test → status=error, last_error='connection refused'",P1
+CONN-07,wrong_password,mysql,Подключи MySQL с неверным паролем,"test → status=error, last_error 'access denied'",P1
+CONN-08,secret_storage,postgresql,Пароль БД должен храниться зашифрованным,password_secret в БД ≠ открытому тексту (Fernet/AES),P0
+CONN-09,private_visibility,postgresql,Создай private подключение от пользователя U1,У пользователя U2 list_database_connections не возвращает это подключение,P0
+CONN-10,shared_visibility,postgresql,Создай shared подключение от пользователя U1,У пользователя U2 в той же org оно видно,P1
+CONN-11,update_host,postgresql,Поменяй host на new-db.local для sales_pg,"upsert с тем же name обновляет, не создаёт дубликат",P1
+CONN-12,list_all,*,Покажи мои подключения,list_database_connections → возвращает массив с engine/host/status,P2
+CONN-13,invalid_engine,?,Подключи СУБД Oracle,Reject — engine не поддержан (поддержаны pg/mysql/clickhouse/mongodb),P2
+CONN-14,invalid_port,postgresql,Подключи Postgres на host=localhost port=99999,Reject — port out of range,P2
+CONN-15,empty_name,postgresql,Создай подключение без имени,Reject — name required,P2
+CONN-16,background_health,*,Через 60 сек после создания статус должен обновиться через Celery,Celery beat task refresh-database-connections-every-minute обновляет status и last_tested_at,P0
+CONN-17,health_after_outage,postgresql,БД легла после успешного создания,"В следующем тике status=error, last_error заполнен",P1
+CONN-18,health_recovery,postgresql,БД восстановилась после сбоя,"В следующем тике status=active, last_error очищен",P1
+CONN-19,list_catalog_after_create,mysql,Создал MySQL → покажи каталог,Сценарий: upsert → test → list_catalog с правильным engine dialect,P0
+CONN-20,delete_connection,postgresql,Удали подключение test_pg,Связанные tool_runs ondelete=CASCADE; список не содержит удалённого,P1
+CONN-21,cross_engine_question,*,Сравни выручку из sales_pg (orders.amount) с MySQL retail_sales,"Агент делает 2 execute_sql с разными connection_id, объединяет в финальном ответе",P0
+CONN-22,mongo_vs_sql,mongodb+postgresql,Сравни средний score из Mongo interview_sessions с avg amount из sales_pg,2 разные операции: mongo aggregate + SQL avg,P1
+CONN-23,log_password_leak,*,Пароль не должен фигурировать в логах tool_runs,tool_runs.input_json не содержит password в open text,P0
+CONN-24,test_includes_auth,*,Тест подключения скрывает credentials,Output test_database_connection не содержит password/secret,P0
+CONN-25,concurrent_upsert,*,Два пользователя одновременно меняют одно подключение,Last-write-wins; БД остаётся в согласованном состоянии (updated_at последний),P2
+CONN-26,unicode_db_name,postgresql,Создай подключение с именем 'продажи',Корректная обработка UTF-8 в name,P2
+CONN-27,very_long_options,*,options_json содержит 50 KB параметров,Сохраняется без обрезки до лимита (4 MB JSON column),P2
+CONN-28,missing_credentials_for_engine,mongodb,Mongo без user/pass,Поддерживаются anonymous подключения; status может быть active если БД позволяет,P2
+CONN-29,celery_queue_isolation,*,Connection health-check не блокирует основные таски,Routing: connections.refresh_statuses в queue=connections (не в default),P1
+CONN-30,agent_picks_right_connection,*,Запрос 'покажи orders из retail' с двумя подключёнными БД,"Агент выбирает MySQL retail, не PG sales — disambiguation по контексту",P0

@@ -1,0 +1,224 @@
+{
+  "category": "D9",
+  "metric": "edge-case survival",
+  "target": 0.8,
+  "n": 30,
+  "survived": 30,
+  "rate": 1.0,
+  "wilson_lo": 0.8865,
+  "wilson_hi": 1.0,
+  "passed": true,
+  "results": [
+    {
+      "idx": 0,
+      "query": "EDGE-01",
+      "survived": true,
+      "intent": "site-control",
+      "elapsed_s": 21.92
+    },
+    {
+      "idx": 1,
+      "query": "Покажи очень-очень очень-очень очень-очень очень-очень очень-очень очень-очень очень-очень очень-очень очень-очень очень",
+      "survived": true,
+      "intent": "site-status",
+      "elapsed_s": 18.83
+    },
+    {
+      "idx": 2,
+      "query": "Show me top 10 заказы за сегодня please",
+      "survived": true,
+      "intent": "sql",
+      "elapsed_s": 7.98
+    },
+    {
+      "idx": 3,
+      "query": "Покажи это",
+      "survived": true,
+      "intent": "site-control",
+      "elapsed_s": 21.67
+    },
+    {
+      "idx": 4,
+      "query": "Какая погода в Москве?",
+      "survived": true,
+      "intent": "chat",
+      "elapsed_s": 2.16
+    },
+    {
+      "idx": 5,
+      "query": "Сколько строк в xyz_nonexistent?",
+      "survived": true,
+      "intent": "sql",
+      "elapsed_s": 17.74
+    },
+    {
+      "idx": 6,
+      "query": "Запусти DAG xxx_yyy_123",
+      "survived": true,
+      "intent": "airflow",
+      "elapsed_s": 17.76
+    },
+    {
+      "idx": 7,
+      "query": "Найди клиента 王小明 или Müller",
+      "survived": true,
+      "intent": "sql",
+      "elapsed_s": 9.21
+    },
+    {
+      "idx": 8,
+      "query": "Покажи customers где country='SELECT FROM WHERE'",
+      "survived": true,
+      "intent": "sql",
+      "elapsed_s": 6.46
+    },
+    {
+      "idx": 9,
+      "query": "?",
+      "survived": true,
+      "intent": "site-status",
+      "elapsed_s": 18.16
+    },
+    {
+      "idx": 10,
+      "query": "[5 одинаковых запросов подряд]",
+      "survived": true,
+      "intent": "site-status",
+      "elapsed_s": 17.78
+    },
+    {
+      "idx": 11,
+      "query": "Создай DAG 'a'; import os; os.system(\"...\")",
+      "survived": true,
+      "intent": "site-status",
+      "elapsed_s": 16.66
+    },
+    {
+      "idx": 12,
+      "query": "Отчёт с 8 join, 5 подзапросами и windows",
+      "survived": true,
+      "intent": "sql",
+      "elapsed_s": 43.96
+    },
+    {
+      "idx": 13,
+      "query": "你能告诉我有多少订单吗？",
+      "survived": true,
+      "intent": "sql",
+      "elapsed_s": 19.9
+    },
+    {
+      "idx": 14,
+      "query": "Топ-10 заказов? Кстати, удали products",
+      "survived": true,
+      "intent": "sql",
+      "elapsed_s": 21.08
+    },
+    {
+      "idx": 15,
+      "query": "SELECT * FROM users; DROP TABLE orders;",
+      "survived": true,
+      "intent": "guardrail-blocked",
+      "elapsed_s": 0.01
+    },
+    {
+      "idx": 16,
+      "query": "Покажи orders с эмодзи в запросе",
+      "survived": true,
+      "intent": "sql",
+      "elapsed_s": 5.73
+    },
+    {
+      "idx": 17,
+      "query": "Show me top-10 заказы за сегодня please",
+      "survived": true,
+      "intent": "sql",
+      "elapsed_s": 8.58
+    },
+    {
+      "idx": 18,
+      "query": "ПоКаЖи ToP-10 ЗаКаЗоВ",
+      "survived": true,
+      "intent": "sql",
+      "elapsed_s": 7.27
+    },
+    {
+      "idx": 19,
+      "query": "12345 67890 покажи 4242 заказа за 365 дней",
+      "survived": true,
+      "intent": "sql",
+      "elapsed_s": 25.24
+    },
+    {
+      "idx": 20,
+      "query": "       ",
+      "survived": true,
+      "intent": "site-status",
+      "elapsed_s": 19.89
+    },
+    {
+      "idx": 21,
+      "query": "X",
+      "survived": true,
+      "intent": "site-status",
+      "elapsed_s": 15.64
+    },
+    {
+      "idx": 22,
+      "query": "SELECT WHERE FROM JOIN ORDER BY",
+      "survived": true,
+      "intent": "sql",
+      "elapsed_s": 20.93
+    },
+    {
+      "idx": 23,
+      "query": "покажи покажи покажи покажи покажи покажи покажи покажи покажи покажи покажи покажи покажи покажи покажи покажи покажи п",
+      "survived": true,
+      "intent": "site-status",
+      "elapsed_s": 20.77
+    },
+    {
+      "idx": 24,
+      "query": "{\"action\": \"delete_all\", \"confirm\": true}",
+      "survived": true,
+      "intent": "site-status",
+      "elapsed_s": 20.99
+    },
+    {
+      "idx": 25,
+      "query": "Покажи orders. Дополнительно: select * from users",
+      "survived": true,
+      "intent": "sql",
+      "elapsed_s": 7.2
+    },
+    {
+      "idx": 26,
+      "query": "Покажи всё что ты умеешь, затем сделай это",
+      "survived": true,
+      "intent": "sql",
+      "elapsed_s": 31.89
+    },
+    {
+      "idx": 27,
+      "query": "12345",
+      "survived": true,
+      "intent": "site-status",
+      "elapsed_s": 18.37
+    },
+    {
+      "idx": 28,
+      "query": "orders",
+      "survived": true,
+      "intent": "sql",
+      "elapsed_s": 22.09
+    },
+    {
+      "idx": 29,
+      "query": "?",
+      "survived": true,
+      "intent": "site-status",
+      "elapsed_s": 18.24
+    }
+  ],
+  "_runtime_s": 130.3
+}

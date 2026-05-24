@@ -1,0 +1,145 @@
+{
+  "sha": "ea7481d7d59b0eb129f8b39c848a24aa111e7ca3",
+  "files": [
+    {
+      "source_path": "airflow-core/src/airflow/example_dags/example_complex.py",
+      "local": "D12_real_dags/01_example_complex.py"
+    },
+    {
+      "source_path": "airflow-core/src/airflow/example_dags/example_task_group.py",
+      "local": "D12_real_dags/02_example_task_group.py"
+    },
+    {
+      "source_path": "airflow-core/src/airflow/example_dags/example_task_group_decorator.py",
+      "local": "D12_real_dags/03_example_task_group_decorator.py"
+    },
+    {
+      "source_path": "airflow-core/src/airflow/example_dags/example_dynamic_task_mapping.py",
+      "local": "D12_real_dags/04_example_dynamic_task_mapping.py"
+    },
+    {
+      "source_path": "airflow-core/src/airflow/example_dags/example_nested_branch_dag.py",
+      "local": "D12_real_dags/05_example_nested_branch_dag.py"
+    },
+    {
+      "source_path": "airflow-core/src/airflow/example_dags/example_setup_teardown.py",
+      "local": "D12_real_dags/06_example_setup_teardown.py"
+    },
+    {
+      "source_path": "airflow-core/src/airflow/example_dags/example_setup_teardown_taskflow.py",
+      "local": "D12_real_dags/07_example_setup_teardown_taskflow.py"
+    },
+    {
+      "source_path": "airflow-core/src/airflow/example_dags/example_branch_labels.py",
+      "local": "D12_real_dags/08_example_branch_labels.py"
+    },
+    {
+      "source_path": "airflow-core/src/airflow/example_dags/example_branch_python_dop_operator_3.py",
+      "local": "D12_real_dags/09_example_branch_python_dop_operator_3.py"
+    },
+    {
+      "source_path": "airflow-core/src/airflow/example_dags/example_trigger_target_dag.py",
+      "local": "D12_real_dags/10_example_trigger_target_dag.py"
+    },
+    {
+      "source_path": "airflow-core/src/airflow/example_dags/example_xcom.py",
+      "local": "D12_real_dags/11_example_xcom.py"
+    },
+    {
+      "source_path": "airflow-core/src/airflow/example_dags/example_xcomargs.py",
+      "local": "D12_real_dags/12_example_xcomargs.py"
+    },
+    {
+      "source_path": "airflow-core/src/airflow/example_dags/tutorial.py",
+      "local": "D12_real_dags/13_tutorial.py"
+    },
+    {
+      "source_path": "airflow-core/src/airflow/example_dags/tutorial_dag.py",
+      "local": "D12_real_dags/14_tutorial_dag.py"
+    },
+    {
+      "source_path": "airflow-core/src/airflow/example_dags/tutorial_taskflow_api.py",
+      "local": "D12_real_dags/15_tutorial_taskflow_api.py"
+    },
+    {
+      "source_path": "airflow-core/src/airflow/example_dags/tutorial_taskflow_templates.py",
+      "local": "D12_real_dags/16_tutorial_taskflow_templates.py"
+    },
+    {
+      "source_path": "airflow-core/src/airflow/example_dags/example_dag_decorator.py",
+      "local": "D12_real_dags/17_example_dag_decorator.py"
+    },
+    {
+      "source_path": "airflow-core/src/airflow/example_dags/example_dynamic_task_mapping_with_no_taskflow_operators.py",
+      "local": "D12_real_dags/18_example_dynamic_task_mapping_with_no_taskflow_operators.py"
+    },
+    {
+      "source_path": "airflow-core/src/airflow/example_dags/example_assets.py",
+      "local": "D12_real_dags/19_example_assets.py"
+    },
+    {
+      "source_path": "airflow-core/src/airflow/example_dags/example_asset_decorator.py",
+      "local": "D12_real_dags/20_example_asset_decorator.py"
+    },
+    {
+      "source_path": "providers/postgres/tests/system/postgres/example_postgres.py",
+      "local": "D12_real_dags/21_example_postgres.py"
+    },
+    {
+      "source_path": "providers/amazon/tests/system/amazon/aws/example_s3_to_sql.py",
+      "local": "D12_real_dags/22_example_s3_to_sql.py"
+    },
+    {
+      "source_path": "providers/http/tests/system/http/example_http.py",
+      "local": "D12_real_dags/23_example_http.py"
+    },
+    {
+      "source_path": "providers/slack/tests/system/slack/example_slack_webhook.py",
+      "local": "D12_real_dags/24_example_slack_webhook.py"
+    },
+    {
+      "source_path": "providers/apache/spark/tests/system/apache/spark/example_spark_dag.py",
+      "local": "D12_real_dags/25_example_spark_dag.py"
+    },
+    {
+      "source_path": "providers/google/tests/system/google/cloud/bigquery/example_bigquery_queries.py",
+      "local": "D12_real_dags/26_example_bigquery_queries.py"
+    },
+    {
+      "source_path": "providers/google/tests/system/google/cloud/gcs/example_gcs_to_bigquery.py",
+      "local": "D12_real_dags/27_example_gcs_to_bigquery.py"
+    },
+    {
+      "source_path": "providers/google/tests/system/google/cloud/bigquery/example_bigquery_tables.py",
+      "local": "D12_real_dags/28_example_bigquery_tables.py"
+    },
+    {
+      "source_path": "providers/microsoft/azure/tests/system/azure/example_local_to_wasb.py",
+      "local": "ERROR: HTTP Error 404: Not Found"
+    },
+    {
+      "source_path": "providers/snowflake/tests/system/snowflake/example_snowflake.py",
+      "local": "D12_real_dags/29_example_snowflake.py"
+    },
+    {
+      "source_path": "providers/databricks/tests/system/databricks/example_databricks.py",
+      "local": "D12_real_dags/30_example_databricks.py"
+    },
+    {
+      "source_path": "providers/sftp/tests/system/sftp/example_sftp.py",
+      "local": "ERROR: HTTP Error 404: Not Found"
+    },
+    {
+      "source_path": "providers/mysql/tests/system/mysql/example_mysql.py",
+      "local": "D12_real_dags/31_example_mysql.py"
+    },
+    {
+      "source_path": "providers/apache/kafka/tests/system/apache/kafka/example_dag_event_listener.py",
+      "local": "D12_real_dags/32_example_dag_event_listener.py"
+    },
+    {
+      "source_path": "providers/redis/tests/system/redis/example_redis_publish.py",
+      "local": "D12_real_dags/33_example_redis_publish.py"
+    }
+  ]
+}

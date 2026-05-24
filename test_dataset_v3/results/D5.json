@@ -1,0 +1,497 @@
+{
+  "category": "D5",
+  "metric": "MCP discovery trace match",
+  "target": 0.8,
+  "n": 30,
+  "correct": 24,
+  "rate": 0.8,
+  "wilson_lo": 0.6269,
+  "wilson_hi": 0.905,
+  "passed": false,
+  "results": [
+    {
+      "idx": 0,
+      "id": "MCP-01",
+      "query": "Какие MCP-инструменты доступны?",
+      "tools": [
+        "MCPDiscoveryTool",
+        "MCPDiscoveryTool",
+        "MCPDiscoveryTool",
+        "MCPDiscoveryTool",
+        "MCPDiscoveryTool",
+        "MCPDiscoveryTool"
+      ],
+      "expected": [
+        "list_mcp_products",
+        "list_mcp_tools"
+      ],
+      "must_not": [
+        "call_mcp_tool"
+      ],
+      "match": true,
+      "elapsed_s": 18.75
+    },
+    {
+      "idx": 1,
+      "id": "MCP-02",
+      "query": "Через MCP database получи список таблиц",
+      "tools": [
+        "MCPDiscoveryTool",
+        "ExternalMCPTool"
+      ],
+      "expected": [
+        "list_mcp_products",
+        "list_mcp_tools",
+        "call_mcp_tool"
+      ],
+      "must_not": [],
+      "match": true,
+      "elapsed_s": 7.07
+    },
+    {
+      "idx": 2,
+      "id": "MCP-03",
+      "query": "Через MCP airflow посмотри DAG-и",
+      "tools": [
+        "MCPDiscoveryTool",
+        "ExternalMCPTool"
+      ],
+      "expected": [
+        "list_mcp_tools",
+        "call_mcp_tool"
+      ],
+      "must_not": [],
+      "match": true,
+      "elapsed_s": 13.71
+    },
+    {
+      "idx": 3,
+      "id": "MCP-04",
+      "query": "Какие MCP сервера сейчас подключены?",
+      "tools": [
+        "MCPDiscoveryTool"
+      ],
+      "expected": [
+        "list_mcp_products"
+      ],
+      "must_not": [
+        "call_mcp_tool"
+      ],
+      "match": true,
+      "elapsed_s": 4.36
+    },
+    {
+      "idx": 4,
+      "id": "MCP-05",
+      "query": "MCP — расскажи что это вообще такое",
+      "tools": [],
+      "expected": [],
+      "must_not": [],
+      "match": true,
+      "elapsed_s": 3.03
+    },
+    {
+      "idx": 5,
+      "id": "MCP-06",
+      "query": "Через filesystem MCP прочитай /data/manifest.json",
+      "tools": [
+        "MCPDiscoveryTool",
+        "ExternalMCPTool"
+      ],
+      "expected": [
+        "list_mcp_tools",
+        "call_mcp_tool"
+      ],
+      "must_not": [],
+      "match": true,
+      "elapsed_s": 6.27
+    },
+    {
+      "idx": 6,
+      "id": "MCP-07",
+      "query": "Прочитай через MCP filesystem /etc/passwd",
+      "tools": [],
+      "expected": [
+        "list_mcp_tools"
+      ],
+      "must_not": [
+        "call_mcp_tool"
+      ],
+      "match": false,
+      "elapsed_s": 0.01
+    },
+    {
+      "idx": 7,
+      "id": "MCP-08",
+      "query": "Через artifacts_git посмотри статус репозитория",
+      "tools": [
+        "MCPDiscoveryTool",
+        "ExternalMCPTool",
+        "ExternalMCPTool"
+      ],
+      "expected": [
+        "list_mcp_tools",
+        "call_mcp_tool"
+      ],
+      "must_not": [],
+      "match": true,
+      "elapsed_s": 10.96
+    },
+    {
+      "idx": 8,
+      "id": "MCP-09",
+      "query": "Сделай git commit через MCP",
+      "tools": [
+        "MCPDiscoveryTool",
+        "MCPDiscoveryTool",
+        "ExternalMCPTool"
+      ],
+      "expected": [
+        "list_mcp_tools"
+      ],
+      "must_not": [
+        "call_mcp_tool"
+      ],
+      "match": false,
+      "elapsed_s": 9.66
+    },
+    {
+      "idx": 9,
+      "id": "MCP-10",
+      "query": "Через MCP spark получи статус последнего job",
+      "tools": [
+        "MCPDiscoveryTool",
+        "SiteStatusTool",
+        "SparkTool"
+      ],
+      "expected": [
+        "list_mcp_tools",
+        "call_mcp_tool"
+      ],
+      "must_not": [],
+      "match": false,
+      "elapsed_s": 24.6
+    },
+    {
+      "idx": 10,
+      "id": "MCP-11",
+      "query": "Покажи доступные MCP-серверы",
+      "tools": [
+        "MCPDiscoveryTool"
+      ],
+      "expected": [
+        "list_mcp_products"
+      ],
+      "must_not": [],
+      "match": true,
+      "elapsed_s": 4.5
+    },
+    {
+      "idx": 11,
+      "id": "MCP-12",
+      "query": "Через MCP database выполни SELECT 1",
+      "tools": [
+        "MCPDiscoveryTool",
+        "ExternalMCPTool"
+      ],
+      "expected": [
+        "list_mcp_tools",
+        "call_mcp_tool"
+      ],
+      "must_not": [],
+      "match": true,
+      "elapsed_s": 6.7
+    },
+    {
+      "idx": 12,
+      "id": "MCP-13",
+      "query": "Какие операции есть у MCP artifacts_git?",
+      "tools": [
+        "MCPDiscoveryTool"
+      ],
+      "expected": [
+        "list_mcp_tools"
+      ],
+      "must_not": [
+        "call_mcp_tool"
+      ],
+      "match": true,
+      "elapsed_s": 4.73
+    },
+    {
+      "idx": 13,
+      "id": "MCP-14",
+      "query": "Через MCP filesystem прочитай файл /workspace/test.txt",
+      "tools": [
+        "MCPDiscoveryTool",
+        "ExternalMCPTool"
+      ],
+      "expected": [
+        "list_mcp_tools",
+        "call_mcp_tool"
+      ],
+      "must_not": [],
+      "match": true,
+      "elapsed_s": 5.82
+    },
+    {
+      "idx": 14,
+      "id": "MCP-15",
+      "query": "Какие MCP-серверы умеют работать с Airflow?",
+      "tools": [
+        "MCPDiscoveryTool",
+        "MCPDiscoveryTool"
+      ],
+      "expected": [
+        "list_mcp_products"
+      ],
+      "must_not": [
+        "call_mcp_tool"
+      ],
+      "match": true,
+      "elapsed_s": 8.18
+    },
+    {
+      "idx": 15,
+      "id": "MCP-16",
+      "query": "Через MCP spark получи статус кластера",
+      "tools": [],
+      "expected": [
+        "list_mcp_tools",
+        "call_mcp_tool"
+      ],
+      "must_not": [],
+      "match": false,
+      "elapsed_s": 120.01
+    },
+    {
+      "idx": 16,
+      "id": "MCP-17",
+      "query": "Покажи список MCP инструментов сервера database",
+      "tools": [
+        "MCPDiscoveryTool"
+      ],
+      "expected": [
+        "list_mcp_tools"
+      ],
+      "must_not": [
+        "call_mcp_tool"
+      ],
+      "match": true,
+      "elapsed_s": 2.88
+    },
+    {
+      "idx": 17,
+      "id": "MCP-18",
+      "query": "Используй MCP artifacts_filesystem чтобы найти все .py файлы",
+      "tools": [
+        "MCPDiscoveryTool",
+        "ExternalMCPTool",
+        "ExternalMCPTool"
+      ],
+      "expected": [
+        "list_mcp_tools",
+        "call_mcp_tool"
+      ],
+      "must_not": [],
+      "match": true,
+      "elapsed_s": 9.27
+    },
+    {
+      "idx": 18,
+      "id": "MCP-19",
+      "query": "Какие MCP-инструменты есть для git?",
+      "tools": [
+        "MCPDiscoveryTool",
+        "MCPDiscoveryTool"
+      ],
+      "expected": [
+        "list_mcp_tools"
+      ],
+      "must_not": [],
+      "match": true,
+      "elapsed_s": 5.87
+    },
+    {
+      "idx": 19,
+      "id": "MCP-20",
+      "query": "Через MCP database список таблиц в схеме public",
+      "tools": [
+        "MCPDiscoveryTool",
+        "ExternalMCPTool"
+      ],
+      "expected": [
+        "list_mcp_tools",
+        "call_mcp_tool"
+      ],
+      "must_not": [],
+      "match": true,
+      "elapsed_s": 7.59
+    },
+    {
+      "idx": 20,
+      "id": "MCP-21",
+      "query": "Покажи доступные MCP операции",
+      "tools": [],
+      "expected": [
+        "list_mcp_products"
+      ],
+      "must_not": [],
+      "match": false,
+      "elapsed_s": 120.01
+    },
+    {
+      "idx": 21,
+      "id": "MCP-22",
+      "query": "Через MCP artifacts_git сделай git status",
+      "tools": [
+        "MCPDiscoveryTool",
+        "ExternalMCPTool",
+        "ExternalMCPTool"
+      ],
+      "expected": [
+        "list_mcp_tools",
+        "call_mcp_tool"
+      ],
+      "must_not": [],
+      "match": true,
+      "elapsed_s": 9.46
+    },
+    {
+      "idx": 22,
+      "id": "MCP-23",
+      "query": "Какой MCP сервер для работы с базой данных?",
+      "tools": [
+        "MCPDiscoveryTool",
+        "MCPDiscoveryTool"
+      ],
+      "expected": [
+        "list_mcp_products"
+      ],
+      "must_not": [
+        "call_mcp_tool"
+      ],
+      "match": true,
+      "elapsed_s": 5.12
+    },
+    {
+      "idx": 23,
+      "id": "MCP-24",
+      "query": "Через MCP database query: SELECT count(*) FROM users",
+      "tools": [
+        "MCPDiscoveryTool",
+        "ExternalMCPTool",
+        "SQLTool",
+        "DatabaseInspectorTool"
+      ],
+      "expected": [
+        "list_mcp_tools",
+        "call_mcp_tool"
+      ],
+      "must_not": [],
+      "match": true,
+      "elapsed_s": 9.85
+    },
+    {
+      "idx": 24,
+      "id": "MCP-25",
+      "query": "Покажи инструменты MCP сервера spark",
+      "tools": [
+        "MCPDiscoveryTool",
+        "MCPDiscoveryTool",
+        "MCPDiscoveryTool"
+      ],
+      "expected": [
+        "list_mcp_tools"
+      ],
+      "must_not": [
+        "call_mcp_tool"
+      ],
+      "match": true,
+      "elapsed_s": 6.11
+    },
+    {
+      "idx": 25,
+      "id": "MCP-26",
+      "query": "Через MCP artifacts_filesystem прочитай содержимое директории /workspace",
+      "tools": [
+        "MCPDiscoveryTool",
+        "ExternalMCPTool",
+        "ExternalMCPTool"
+      ],
+      "expected": [
+        "list_mcp_tools",
+        "call_mcp_tool"
+      ],
+      "must_not": [],
+      "match": true,
+      "elapsed_s": 8.9
+    },
+    {
+      "idx": 26,
+      "id": "MCP-27",
+      "query": "Какие MCP-инструменты доступны для Airflow?",
+      "tools": [
+        "MCPDiscoveryTool"
+      ],
+      "expected": [
+        "list_mcp_tools"
+      ],
+      "must_not": [],
+      "match": true,
+      "elapsed_s": 7.28
+    },
+    {
+      "idx": 27,
+      "id": "MCP-28",
+      "query": "Через MCP spark получи список приложений",
+      "tools": [
+        "MCPDiscoveryTool",
+        "MCPDiscoveryTool",
+        "SiteStatusTool",
+        "MCPDiscoveryTool"
+      ],
+      "expected": [
+        "list_mcp_tools",
+        "call_mcp_tool"
+      ],
+      "must_not": [],
+      "match": false,
+      "elapsed_s": 21.4
+    },
+    {
+      "idx": 28,
+      "id": "MCP-29",
+      "query": "Покажи схему таблицы orders через MCP database",
+      "tools": [
+        "MCPDiscoveryTool",
+        "ExternalMCPTool"
+      ],
+      "expected": [
+        "list_mcp_tools",
+        "call_mcp_tool"
+      ],
+      "must_not": [],
+      "match": true,
+      "elapsed_s": 7.42
+    },
+    {
+      "idx": 29,
+      "id": "MCP-30",
+      "query": "Через MCP artifacts_git покажи историю коммитов",
+      "tools": [
+        "MCPDiscoveryTool",
+        "ExternalMCPTool",
+        "ExternalMCPTool"
+      ],
+      "expected": [
+        "list_mcp_tools",
+        "call_mcp_tool"
+      ],
+      "must_not": [],
+      "match": true,
+      "elapsed_s": 10.66
+    }
+  ],
+  "_runtime_s": 159.5
+}

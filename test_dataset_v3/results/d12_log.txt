@@ -1,0 +1,8 @@
+Backend: http://localhost:18000
+Logged in. Categories: ['D12']
+
+--- D12 ---
+  saved → D12.json  (307.6s)
+  {'category': 'D12', 'metric': 'M-21 multi-step pipeline scenarios (Airflow + Spark)', 'target': 0.8, 'n': 15, 'passed_count': 0, 'rate': 0.0, 'wilson_lo': 0.0, 'wilson_hi': 0.2039, 'passed': False, 'p0_subset': {'n': 11, 'passed_count': 0, 'rate': 0.0, 'wilson_lo': 0.0, 'wilson_hi': 0.2588}, '_runtime_s': 307.6}
+
+Summary → /Users/sharonov_dv/projects/diplom/test_dataset_v3/results/summary.json

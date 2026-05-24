@@ -1,0 +1,14 @@
+[
+  {
+    "category": "D10",
+    "metric": "M-18 DB connection success",
+    "target": 0.9,
+    "n": 30,
+    "correct": 25,
+    "rate": 0.8333,
+    "wilson_lo": 0.6644,
+    "wilson_hi": 0.9266,
+    "passed": false,
+    "_runtime_s": 175.4
+  }
+]

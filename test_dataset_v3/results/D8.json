@@ -1,0 +1,716 @@
+{
+  "category": "D8",
+  "metric": "session continuity survival",
+  "target": 0.8,
+  "n": 30,
+  "survived": 30,
+  "rate": 1.0,
+  "wilson_lo": 0.8865,
+  "wilson_hi": 1.0,
+  "passed": true,
+  "results": [
+    {
+      "idx": 0,
+      "id": "SES-01",
+      "turns": [
+        {
+          "turn": "Покажи топ-10 клиентов по выручке",
+          "intent": "sql",
+          "tool_count": 2,
+          "elapsed_s": 7.39,
+          "ok": true
+        },
+        {
+          "turn": "А теперь только из России",
+          "intent": "sql",
+          "tool_count": 3,
+          "elapsed_s": 7.78,
+          "ok": true
+        },
+        {
+          "turn": "Сохрани этот запрос как DAG для ежедневного отчёта",
+          "intent": "airflow",
+          "tool_count": 6,
+          "elapsed_s": 45.68,
+          "ok": true
+        }
+      ],
+      "expected": "На 3-м ходу: SQL из 1-го + фильтр из 2-го + write_airflow_dag",
+      "survived": true
+    },
+    {
+      "idx": 1,
+      "id": "SES-02",
+      "turns": [
+        {
+          "turn": "Какие DAG сейчас на паузе?",
+          "intent": "airflow",
+          "tool_count": 1,
+          "elapsed_s": 20.33,
+          "ok": true
+        },
+        {
+          "turn": "Запусти первый из них",
+          "intent": "airflow",
+          "tool_count": 1,
+          "elapsed_s": 3.45,
+          "ok": true
+        }
+      ],
+      "expected": "На 2-м ходу резолвится конкретный dag_id из ответа 1-го",
+      "survived": true
+    },
+    {
+      "idx": 2,
+      "id": "SES-03",
+      "turns": [
+        {
+          "turn": "Создай Spark job для расчёта LTV",
+          "intent": "database",
+          "tool_count": 6,
+          "elapsed_s": 31.9,
+          "ok": true
+        },
+        {
+          "turn": "Покажи его исходный код",
+          "intent": "artifact",
+          "tool_count": 1,
+          "elapsed_s": 8.29,
+          "ok": true
+        },
+        {
+          "turn": "Откати на предыдущую версию",
+          "intent": "versioning",
+          "tool_count": 1,
+          "elapsed_s": 4.84,
+          "ok": true
+        }
+      ],
+      "expected": "write_spark_script → read_spark_script → list_artifact_versions",
+      "survived": true
+    },
+    {
+      "idx": 3,
+      "id": "SES-04",
+      "turns": [
+        {
+          "turn": "Покажи каталог таблиц",
+          "intent": "catalog",
+          "tool_count": 2,
+          "elapsed_s": 17.0,
+          "ok": true
+        },
+        {
+          "turn": "Какая самая большая?",
+          "intent": "sql",
+          "tool_count": 1,
+          "elapsed_s": 2.97,
+          "ok": true
+        }
+      ],
+      "expected": "На 2-м ходу inspect_database с использованием списка из 1-го",
+      "survived": true
+    },
+    {
+      "idx": 4,
+      "id": "SES-05",
+      "turns": [
+        {
+          "turn": "Запусти DAG orders_sync",
+          "intent": "airflow",
+          "tool_count": 1,
+          "elapsed_s": 3.94,
+          "ok": true
+        },
+        {
+          "turn": "Какой у него статус?",
+          "intent": "airflow",
+          "tool_count": 1,
+          "elapsed_s": 3.8,
+          "ok": true
+        },
+        {
+          "turn": "Если упал — покажи логи",
+          "intent": "airflow",
+          "tool_count": 1,
+          "elapsed_s": 4.03,
+          "ok": true
+        }
+      ],
+      "expected": "trigger_airflow_dag → get_airflow_run → get_airflow_task_log",
+      "survived": true
+    },
+    {
+      "idx": 5,
+      "id": "SES-06",
+      "turns": [
+        {
+          "turn": "Сгенерируй DAG для загрузки CSV",
+          "intent": "database",
+          "tool_count": 5,
+          "elapsed_s": 27.5,
+          "ok": true
+        },
+        {
+          "turn": "Добавь retry 3 раза",
+          "intent": "artifact",
+          "tool_count": 3,
+          "elapsed_s": 11.59,
+          "ok": true
+        },
+        {
+          "turn": "Сохрани и закоммить",
+          "intent": "tools",
+          "tool_count": 2,
+          "elapsed_s": 5.58,
+          "ok": true
+        }
+      ],
+      "expected": "Итеративная правка одного артефакта; 1-2 git commit через run_git_command",
+      "survived": true
+    },
+    {
+      "idx": 6,
+      "id": "SES-07",
+      "turns": [
+        {
+          "turn": "Покажи список Spark джобов",
+          "intent": "site-status",
+          "tool_count": 1,
+          "elapsed_s": 19.87,
+          "ok": true
+        },
+        {
+          "turn": "Возьми третий и покажи логи",
+          "intent": "spark",
+          "tool_count": 1,
+          "elapsed_s": 7.18,
+          "ok": true
+        }
+      ],
+      "expected": "list_spark_jobs → get_spark_job(id из позиции 3)",
+      "survived": true
+    },
+    {
+      "idx": 7,
+      "id": "SES-08",
+      "turns": [
+        {
+          "turn": "Какие столбцы в sales.orders в Postgres?",
+          "intent": "database",
+          "tool_count": 1,
+          "elapsed_s": 3.35,
+          "ok": true
+        },
+        {
+          "turn": "Найди строки за вчера",
+          "intent": "sql",
+          "tool_count": 3,
+          "elapsed_s": 9.05,
+          "ok": true
+        }
+      ],
+      "expected": "inspect_database → execute_sql с фильтром по order_ts",
+      "survived": true
+    },
+    {
+      "idx": 8,
+      "id": "SES-09",
+      "turns": [
+        {
+          "turn": "Подключи новую БД MySQL на host db.local",
+          "intent": "database-connections",
+          "tool_count": 3,
+          "elapsed_s": 13.56,
+          "ok": true
+        },
+        {
+          "turn": "Проверь подключение",
+          "intent": "database-connections",
+          "tool_count": 2,
+          "elapsed_s": 9.36,
+          "ok": true
+        },
+        {
+          "turn": "Покажи список таблиц",
+          "intent": "database-connections",
+          "tool_count": 2,
+          "elapsed_s": 4.84,
+          "ok": true
+        }
+      ],
+      "expected": "upsert_database_connection → test_database_connection → list_catalog",
+      "survived": true
+    },
+    {
+      "idx": 9,
+      "id": "SES-10",
+      "turns": [
+        {
+          "turn": "DAG-и которые упали сегодня",
+          "intent": "airflow",
+          "tool_count": 14,
+          "elapsed_s": 38.51,
+          "ok": true
+        },
+        {
+          "turn": "Объясни причину первого",
+          "intent": "database-connections",
+          "tool_count": 5,
+          "elapsed_s": 13.02,
+          "ok": true
+        },
+        {
+          "turn": "Сгенерируй фикс",
+          "intent": "database-connections",
+          "tool_count": 10,
+          "elapsed_s": 45.84,
+          "ok": true
+        }
+      ],
+      "expected": "list_airflow_runs(state=failed) → get_airflow_task_log → write_airflow_dag",
+      "survived": true
+    },
+    {
+      "idx": 10,
+      "id": "SES-11",
+      "turns": [
+        {
+          "turn": "Покажи топ-5 продуктов по выручке",
+          "intent": "sql",
+          "tool_count": 4,
+          "elapsed_s": 10.02,
+          "ok": true
+        },
+        {
+          "turn": "А теперь только за последний месяц",
+          "intent": "sql",
+          "tool_count": 4,
+          "elapsed_s": 10.63,
+          "ok": true
+        }
+      ],
+      "expected": "фильтр по периоду от 1-го",
+      "survived": true
+    },
+    {
+      "idx": 11,
+      "id": "SES-12",
+      "turns": [
+        {
+          "turn": "Какие DAGs созданы?",
+          "intent": "site-status",
+          "tool_count": 1,
+          "elapsed_s": 16.85,
+          "ok": true
+        },
+        {
+          "turn": "Покажи последний по дате",
+          "intent": "airflow",
+          "tool_count": 1,
+          "elapsed_s": 15.6,
+          "ok": true
+        }
+      ],
+      "expected": "выбор последнего из списка",
+      "survived": true
+    },
+    {
+      "idx": 12,
+      "id": "SES-13",
+      "turns": [
+        {
+          "turn": "Создай Spark job для подсчёта строк в orders",
+          "intent": "database",
+          "tool_count": 10,
+          "elapsed_s": 27.88,
+          "ok": true
+        },
+        {
+          "turn": "Запусти его",
+          "intent": "spark",
+          "tool_count": 2,
+          "elapsed_s": 6.31,
+          "ok": true
+        }
+      ],
+      "expected": "execute предыдущего",
+      "survived": true
+    },
+    {
+      "idx": 13,
+      "id": "SES-14",
+      "turns": [
+        {
+          "turn": "Покажи аномалии заказов",
+          "intent": "sql",
+          "tool_count": 7,
+          "elapsed_s": 24.29,
+          "ok": true
+        },
+        {
+          "turn": "Сохрани этот SQL как DAG ежедневно",
+          "intent": "artifact",
+          "tool_count": 4,
+          "elapsed_s": 33.31,
+          "ok": true
+        }
+      ],
+      "expected": "write_airflow_dag c SQL",
+      "survived": true
+    },
+    {
+      "idx": 14,
+      "id": "SES-15",
+      "turns": [
+        {
+          "turn": "Список таблиц в БД sales",
+          "intent": "database",
+          "tool_count": 2,
+          "elapsed_s": 6.82,
+          "ok": true
+        },
+        {
+          "turn": "Какие колонки у orders?",
+          "intent": "catalog",
+          "tool_count": 1,
+          "elapsed_s": 3.71,
+          "ok": true
+        }
+      ],
+      "expected": "inspect_database продолжает контекст",
+      "survived": true
+    },
+    {
+      "idx": 15,
+      "id": "SES-16",
+      "turns": [
+        {
+          "turn": "Сколько подключений к БД настроено?",
+          "intent": "database-connections",
+          "tool_count": 1,
+          "elapsed_s": 4.88,
+          "ok": true
+        },
+        {
+          "turn": "Удали Postgres demo",
+          "intent": "database-connections",
+          "tool_count": 1,
+          "elapsed_s": 16.26,
+          "ok": true
+        }
+      ],
+      "expected": "удаление по контексту",
+      "survived": true
+    },
+    {
+      "idx": 16,
+      "id": "SES-17",
+      "turns": [
+        {
+          "turn": "Какие версии артефактов для dag.py?",
+          "intent": "versioning",
+          "tool_count": 1,
+          "elapsed_s": 3.49,
+          "ok": true
+        },
+        {
+          "turn": "Откати на предыдущую",
+          "intent": "versioning",
+          "tool_count": 1,
+          "elapsed_s": 18.84,
+          "ok": true
+        }
+      ],
+      "expected": "revert по контексту",
+      "survived": true
+    },
+    {
+      "idx": 17,
+      "id": "SES-18",
+      "turns": [
+        {
+          "turn": "Покажи метрики продаж",
+          "intent": "sql",
+          "tool_count": 4,
+          "elapsed_s": 19.71,
+          "ok": true
+        },
+        {
+          "turn": "Сравни с прошлым годом",
+          "intent": "sql",
+          "tool_count": 3,
+          "elapsed_s": 8.15,
+          "ok": true
+        }
+      ],
+      "expected": "агрегация с разными периодами",
+      "survived": true
+    },
+    {
+      "idx": 18,
+      "id": "SES-19",
+      "turns": [
+        {
+          "turn": "Сделай SQL запрос: top-10 клиентов",
+          "intent": "sql",
+          "tool_count": 2,
+          "elapsed_s": 5.51,
+          "ok": true
+        },
+        {
+          "turn": "Сохрани результат в csv",
+          "intent": "sql",
+          "tool_count": 9,
+          "elapsed_s": 17.68,
+          "ok": true
+        }
+      ],
+      "expected": "export-стиль",
+      "survived": true
+    },
+    {
+      "idx": 19,
+      "id": "SES-20",
+      "turns": [
+        {
+          "turn": "Список airflow DAGs",
+          "intent": "site-status",
+          "tool_count": 1,
+          "elapsed_s": 15.13,
+          "ok": true
+        },
+        {
+          "turn": "Поставь на паузу sales_daily",
+          "intent": "airflow-control",
+          "tool_count": 1,
+          "elapsed_s": 28.6,
+          "ok": true
+        }
+      ],
+      "expected": "airflow_control по имени из списка",
+      "survived": true
+    },
+    {
+      "idx": 20,
+      "id": "SES-21",
+      "turns": [
+        {
+          "turn": "Покажи Spark кластер",
+          "intent": "site-control",
+          "tool_count": 2,
+          "elapsed_s": 19.46,
+          "ok": true
+        },
+        {
+          "turn": "Сколько работников?",
+          "intent": "database",
+          "tool_count": 1,
+          "elapsed_s": 5.83,
+          "ok": true
+        }
+      ],
+      "expected": "детализация из 1-го",
+      "survived": true
+    },
+    {
+      "idx": 21,
+      "id": "SES-22",
+      "turns": [
+        {
+          "turn": "Какой статус DAG retail_daily?",
+          "intent": "airflow",
+          "tool_count": 1,
+          "elapsed_s": 15.13,
+          "ok": true
+        },
+        {
+          "turn": "Покажи логи последнего запуска",
+          "intent": "airflow",
+          "tool_count": 3,
+          "elapsed_s": 14.95,
+          "ok": true
+        }
+      ],
+      "expected": "logs предыдущего run",
+      "survived": true
+    },
+    {
+      "idx": 22,
+      "id": "SES-23",
+      "turns": [
+        {
+          "turn": "Сделай DAG для CSV в orders_raw",
+          "intent": "sql",
+          "tool_count": 5,
+          "elapsed_s": 30.51,
+          "ok": true
+        },
+        {
+          "turn": "Добавь email-уведомление при ошибке",
+          "intent": "artifact",
+          "tool_count": 3,
+          "elapsed_s": 15.61,
+          "ok": true
+        }
+      ],
+      "expected": "модификация артефакта",
+      "survived": true
+    },
+    {
+      "idx": 23,
+      "id": "SES-24",
+      "turns": [
+        {
+          "turn": "Покажи MCP инструменты для git",
+          "intent": "mcp",
+          "tool_count": 2,
+          "elapsed_s": 11.07,
+          "ok": true
+        },
+        {
+          "turn": "Сделай git log через MCP",
+          "intent": "mcp",
+          "tool_count": 1,
+          "elapsed_s": 9.08,
+          "ok": true
+        }
+      ],
+      "expected": "выбор инструмента из списка",
+      "survived": true
+    },
+    {
+      "idx": 24,
+      "id": "SES-25",
+      "turns": [
+        {
+          "turn": "Какие demo подключения активны?",
+          "intent": "database-connections",
+          "tool_count": 1,
+          "elapsed_s": 5.52,
+          "ok": true
+        },
+        {
+          "turn": "Тестируй MySQL",
+          "intent": "database-connections",
+          "tool_count": 7,
+          "elapsed_s": 17.24,
+          "ok": true
+        }
+      ],
+      "expected": "test_database_connection mysql",
+      "survived": true
+    },
+    {
+      "idx": 25,
+      "id": "SES-26",
+      "turns": [
+        {
+          "turn": "Какие БД подключены?",
+          "intent": "database-connections",
+          "tool_count": 1,
+          "elapsed_s": 5.93,
+          "ok": true
+        },
+        {
+          "turn": "Покажи таблицы в первой",
+          "intent": "database",
+          "tool_count": 3,
+          "elapsed_s": 23.69,
+          "ok": true
+        }
+      ],
+      "expected": "inspect 1-й connection",
+      "survived": true
+    },
+    {
+      "idx": 26,
+      "id": "SES-27",
+      "turns": [
+        {
+          "turn": "Создай Spark скрипт для агрегации",
+          "intent": "database",
+          "tool_count": 5,
+          "elapsed_s": 20.52,
+          "ok": true
+        },
+        {
+          "turn": "Запусти в sandbox",
+          "intent": "artifact",
+          "tool_count": 2,
+          "elapsed_s": 6.3,
+          "ok": true
+        }
+      ],
+      "expected": "run_spark_script_sandbox",
+      "survived": true
+    },
+    {
+      "idx": 27,
+      "id": "SES-28",
+      "turns": [
+        {
+          "turn": "Покажи schema sales.orders",
+          "intent": "database",
+          "tool_count": 1,
+          "elapsed_s": 3.62,
+          "ok": true
+        },
+        {
+          "turn": "Сделай SELECT count(*) с фильтром по сегодня",
+          "intent": "sql",
+          "tool_count": 1,
+          "elapsed_s": 3.85,
+          "ok": true
+        }
+      ],
+      "expected": "SQL с использованием schema",
+      "survived": true
+    },
+    {
+      "idx": 28,
+      "id": "SES-29",
+      "turns": [
+        {
+          "turn": "Какие активные сессии у меня?",
+          "intent": "database",
+          "tool_count": 2,
+          "elapsed_s": 16.62,
+          "ok": true
+        },
+        {
+          "turn": "Открой последнюю",
+          "intent": "site-status",
+          "tool_count": 1,
+          "elapsed_s": 17.69,
+          "ok": true
+        }
+      ],
+      "expected": "выбор из истории",
+      "survived": true
+    },
+    {
+      "idx": 29,
+      "id": "SES-30",
+      "turns": [
+        {
+          "turn": "Список pipelines в Airflow",
+          "intent": "site-status",
+          "tool_count": 1,
+          "elapsed_s": 23.87,
+          "ok": true
+        },
+        {
+          "turn": "Триггер первого",
+          "intent": "airflow",
+          "tool_count": 1,
+          "elapsed_s": 2.86,
+          "ok": true
+        }
+      ],
+      "expected": "trigger_airflow_dag по индексу",
+      "survived": true
+    }
+  ],
+  "_runtime_s": 243.6
+}

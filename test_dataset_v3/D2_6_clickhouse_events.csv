@@ -1,0 +1,8 @@
+question_id,domain,engine,difficulty,question,gold_sql,evidence
+ch-001,demo-analytics,clickhouse,simple,Number of unique users in last 24h,SELECT uniq(user_id) FROM analytics.events WHERE ts >= now() - INTERVAL 1 DAY;,
+ch-002,demo-analytics,clickhouse,simple,Top 10 event types by volume,"SELECT event_name, count() AS n FROM analytics.events GROUP BY event_name ORDER BY n DESC LIMIT 10;",
+ch-003,demo-analytics,clickhouse,moderate,Events per minute over last hour,"SELECT toStartOfMinute(ts) AS minute, count() FROM analytics.events WHERE ts >= now() - INTERVAL 1 HOUR GROUP BY minute ORDER BY minute;",
+ch-004,demo-analytics,clickhouse,challenging,Funnel: signup → onboard → purchase,"SELECT countIf(event_name='signup') AS s, countIf(event_name='onboard') AS o, countIf(event_name='purchase') AS p FROM analytics.events WHERE ts >= today() - 30;",
+ch-005,demo-analytics,clickhouse,challenging,User retention: cohort by week,"SELECT toMonday(min(ts)) AS cohort, uniq(user_id) FROM analytics.events GROUP BY user_id ORDER BY cohort;",
+ch-006,demo-analytics,clickhouse,moderate,P95 of session duration,SELECT quantile(0.95)(session_duration_ms) FROM analytics.events WHERE event_name = 'session_end';,
+ch-007,demo-analytics,clickhouse,moderate,Top 5 referrers driving conversions,"SELECT referrer, countIf(event_name='purchase') AS conversions FROM analytics.events GROUP BY referrer ORDER BY conversions DESC LIMIT 5;",

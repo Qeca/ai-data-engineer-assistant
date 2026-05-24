@@ -1,0 +1,1 @@
+{"equivalent":"no","reason":"Запрос явно относится к работе с Model Context Protocol, поэтому метка mcp подходит, а agent-error является ошибочным служебным результатом, не описывающим intent."}

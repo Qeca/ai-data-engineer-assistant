@@ -1,0 +1,1 @@
+{"type": "object", "properties": {"verdict": {"type": "string", "enum": ["accept", "accept_with_minors", "reject"]}, "semantic_match": {"type": "number"}, "api_correctness": {"type": "number"}, "reason": {"type": "string"}}, "required": ["verdict", "semantic_match", "api_correctness", "reason"], "additionalProperties": false}

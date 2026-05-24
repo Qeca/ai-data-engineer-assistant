@@ -1,0 +1,866 @@
+{
+  "category": "D12_v2",
+  "source": "apache/airflow @ ea7481d",
+  "metric": "M-21 real DAG generation (Airflow examples)",
+  "target": 0.8,
+  "n": 33,
+  "passed_count": 29,
+  "rate": 0.8788,
+  "wilson_lo": 0.7267,
+  "wilson_hi": 0.9518,
+  "passed": false,
+  "results": [
+    {
+      "idx": 0,
+      "id": "01_example_complex",
+      "source_file": "D12_real_dags/01_example_complex.py",
+      "n_tasks_observed": 37,
+      "operators_used": [
+        "BashOperator"
+      ],
+      "tools_called": [
+        "ArtifactTool",
+        "ArtifactTool",
+        "AirflowSandboxTool",
+        "AirflowSandboxTool",
+        "AirflowSandboxTool",
+        "AirflowTool",
+        "AirflowSandboxTool",
+        "AirflowDAGSourceTool",
+        "AirflowSandboxTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 6741,
+      "invariants_total": 2,
+      "invariants_passed": 2,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 70.27
+    },
+    {
+      "idx": 1,
+      "id": "02_example_task_group",
+      "source_file": "D12_real_dags/02_example_task_group.py",
+      "n_tasks_observed": 9,
+      "operators_used": [
+        "BashOperator",
+        "EmptyOperator"
+      ],
+      "tools_called": [
+        "ArtifactTool",
+        "AirflowSandboxTool",
+        "AirflowSandboxTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 1389,
+      "invariants_total": 2,
+      "invariants_passed": 2,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 19.12
+    },
+    {
+      "idx": 2,
+      "id": "03_example_task_group_decorator",
+      "source_file": "D12_real_dags/03_example_task_group_decorator.py",
+      "n_tasks_observed": 5,
+      "operators_used": [],
+      "tools_called": [
+        "ArtifactTool",
+        "AirflowSandboxTool",
+        "AirflowSandboxTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 1883,
+      "invariants_total": 3,
+      "invariants_passed": 3,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 20.19
+    },
+    {
+      "idx": 3,
+      "id": "04_example_dynamic_task_mapping",
+      "source_file": "D12_real_dags/04_example_dynamic_task_mapping.py",
+      "n_tasks_observed": 7,
+      "operators_used": [],
+      "tools_called": [
+        "ArtifactTool",
+        "AirflowSandboxTool",
+        "AirflowSandboxTool",
+        "ArtifactTool",
+        "AirflowSandboxTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 2504,
+      "invariants_total": 3,
+      "invariants_passed": 3,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 29.74
+    },
+    {
+      "idx": 4,
+      "id": "05_example_nested_branch_dag",
+      "source_file": "D12_real_dags/05_example_nested_branch_dag.py",
+      "n_tasks_observed": 8,
+      "operators_used": [
+        "EmptyOperator"
+      ],
+      "tools_called": [
+        "ArtifactTool",
+        "AirflowSandboxTool",
+        "AirflowSandboxTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 2009,
+      "invariants_total": 4,
+      "invariants_passed": 3,
+      "invariants_failed": [
+        "uses_taskflow_task"
+      ],
+      "invariant_rate": 0.75,
+      "passed": true,
+      "elapsed_s": 23.91
+    },
+    {
+      "idx": 5,
+      "id": "06_example_setup_teardown",
+      "source_file": "D12_real_dags/06_example_setup_teardown.py",
+      "n_tasks_observed": 6,
+      "operators_used": [
+        "BashOperator"
+      ],
+      "tools_called": [
+        "ArtifactTool",
+        "AirflowSandboxTool",
+        "AirflowSandboxTool",
+        "PythonSandboxTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 1772,
+      "invariants_total": 2,
+      "invariants_passed": 2,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 23.43
+    },
+    {
+      "idx": 6,
+      "id": "07_example_setup_teardown_taskflow",
+      "source_file": "D12_real_dags/07_example_setup_teardown_taskflow.py",
+      "n_tasks_observed": 5,
+      "operators_used": [],
+      "tools_called": [
+        "ArtifactTool",
+        "AirflowSandboxTool",
+        "AirflowSandboxTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 1854,
+      "invariants_total": 3,
+      "invariants_passed": 3,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 20.41
+    },
+    {
+      "idx": 7,
+      "id": "08_example_branch_labels",
+      "source_file": "D12_real_dags/08_example_branch_labels.py",
+      "n_tasks_observed": 7,
+      "operators_used": [
+        "EmptyOperator"
+      ],
+      "tools_called": [
+        "ArtifactTool",
+        "AirflowSandboxTool",
+        "AirflowSandboxTool",
+        "AirflowTool",
+        "AirflowSandboxTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 1488,
+      "invariants_total": 3,
+      "invariants_passed": 3,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 33.72
+    },
+    {
+      "idx": 8,
+      "id": "09_example_branch_python_dop_operator_3",
+      "source_file": "D12_real_dags/09_example_branch_python_dop_operator_3.py",
+      "n_tasks_observed": 4,
+      "operators_used": [
+        "EmptyOperator"
+      ],
+      "tools_called": [
+        "ArtifactTool",
+        "AirflowSandboxTool",
+        "AirflowSandboxTool",
+        "AirflowTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 1440,
+      "invariants_total": 4,
+      "invariants_passed": 4,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 30.45
+    },
+    {
+      "idx": 9,
+      "id": "10_example_trigger_target_dag",
+      "source_file": "D12_real_dags/10_example_trigger_target_dag.py",
+      "n_tasks_observed": 2,
+      "operators_used": [
+        "BashOperator",
+        "TriggerDagRunOperator"
+      ],
+      "tools_called": [
+        "ArtifactTool",
+        "ArtifactTool",
+        "AirflowSandboxTool",
+        "AirflowSandboxTool",
+        "AirflowSandboxTool",
+        "AirflowTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 1357,
+      "invariants_total": 3,
+      "invariants_passed": 2,
+      "invariants_failed": [
+        "uses_taskflow_task"
+      ],
+      "invariant_rate": 0.667,
+      "passed": false,
+      "elapsed_s": 33.11
+    },
+    {
+      "idx": 10,
+      "id": "11_example_xcom",
+      "source_file": "D12_real_dags/11_example_xcom.py",
+      "n_tasks_observed": 6,
+      "operators_used": [
+        "BashOperator"
+      ],
+      "tools_called": [
+        "ArtifactTool",
+        "AirflowSandboxTool",
+        "AirflowSandboxTool",
+        "PythonSandboxTool",
+        "AirflowTool",
+        "AirflowSandboxTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 2725,
+      "invariants_total": 4,
+      "invariants_passed": 3,
+      "invariants_failed": [
+        "uses_taskflow_task"
+      ],
+      "invariant_rate": 0.75,
+      "passed": true,
+      "elapsed_s": 50.98
+    },
+    {
+      "idx": 11,
+      "id": "12_example_xcomargs",
+      "source_file": "D12_real_dags/12_example_xcomargs.py",
+      "n_tasks_observed": 4,
+      "operators_used": [
+        "BashOperator"
+      ],
+      "tools_called": [
+        "ArtifactTool",
+        "AirflowSandboxTool",
+        "AirflowSandboxTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 1207,
+      "invariants_total": 3,
+      "invariants_passed": 2,
+      "invariants_failed": [
+        "uses_taskflow_task"
+      ],
+      "invariant_rate": 0.667,
+      "passed": false,
+      "elapsed_s": 17.26
+    },
+    {
+      "idx": 12,
+      "id": "13_tutorial",
+      "source_file": "D12_real_dags/13_tutorial.py",
+      "n_tasks_observed": 3,
+      "operators_used": [
+        "BashOperator"
+      ],
+      "tools_called": [],
+      "used_artifact_tool": false,
+      "used_sandbox_tool": false,
+      "code_chars": 0,
+      "invariants_total": 3,
+      "invariants_passed": 0,
+      "invariants_failed": [
+        "valid_python_ast",
+        {
+          "has_operator": [
+            "BashOperator"
+          ]
+        },
+        {
+          "schedule_equals": "timedelta(days=1"
+        }
+      ],
+      "invariant_rate": 0.0,
+      "passed": false,
+      "elapsed_s": 4.35
+    },
+    {
+      "idx": 13,
+      "id": "14_tutorial_dag",
+      "source_file": "D12_real_dags/14_tutorial_dag.py",
+      "n_tasks_observed": 3,
+      "operators_used": [
+        "PythonOperator"
+      ],
+      "tools_called": [
+        "ArtifactTool",
+        "AirflowSandboxTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 2912,
+      "invariants_total": 2,
+      "invariants_passed": 2,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 21.33
+    },
+    {
+      "idx": 14,
+      "id": "15_tutorial_taskflow_api",
+      "source_file": "D12_real_dags/15_tutorial_taskflow_api.py",
+      "n_tasks_observed": 3,
+      "operators_used": [],
+      "tools_called": [
+        "ArtifactTool",
+        "AirflowSandboxTool",
+        "AirflowSandboxTool",
+        "AirflowTool",
+        "AirflowSandboxTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 1075,
+      "invariants_total": 3,
+      "invariants_passed": 3,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 40.59
+    },
+    {
+      "idx": 15,
+      "id": "16_tutorial_taskflow_templates",
+      "source_file": "D12_real_dags/16_tutorial_taskflow_templates.py",
+      "n_tasks_observed": 1,
+      "operators_used": [],
+      "tools_called": [
+        "ArtifactTool",
+        "AirflowSandboxTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 2705,
+      "invariants_total": 4,
+      "invariants_passed": 4,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 15.16
+    },
+    {
+      "idx": 16,
+      "id": "17_example_dag_decorator",
+      "source_file": "D12_real_dags/17_example_dag_decorator.py",
+      "n_tasks_observed": 2,
+      "operators_used": [
+        "BaseOperator",
+        "BashOperator",
+        "GetRequestOperator"
+      ],
+      "tools_called": [
+        "ArtifactTool",
+        "AirflowSandboxTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 932,
+      "invariants_total": 4,
+      "invariants_passed": 2,
+      "invariants_failed": [
+        "uses_taskflow_task",
+        "uses_dag_decorator"
+      ],
+      "invariant_rate": 0.5,
+      "passed": false,
+      "elapsed_s": 11.45
+    },
+    {
+      "idx": 17,
+      "id": "18_example_dynamic_task_mapping_with_no_taskflow_operators",
+      "source_file": "D12_real_dags/18_example_dynamic_task_mapping_with_no_taskflow_operators.py",
+      "n_tasks_observed": 1,
+      "operators_used": [
+        "AddOneOperator",
+        "BaseOperator",
+        "SumItOperator"
+      ],
+      "tools_called": [
+        "ArtifactTool",
+        "AirflowSandboxTool",
+        "AirflowSandboxTool",
+        "PythonSandboxTool",
+        "SiteControlTool",
+        "AirflowTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 1712,
+      "invariants_total": 2,
+      "invariants_passed": 2,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 37.19
+    },
+    {
+      "idx": 18,
+      "id": "19_example_assets",
+      "source_file": "D12_real_dags/19_example_assets.py",
+      "n_tasks_observed": 0,
+      "operators_used": [
+        "BashOperator"
+      ],
+      "tools_called": [
+        "ArtifactTool",
+        "ArtifactTool",
+        "AirflowSandboxTool",
+        "AirflowSandboxTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 4767,
+      "invariants_total": 3,
+      "invariants_passed": 3,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 26.98
+    },
+    {
+      "idx": 19,
+      "id": "20_example_asset_decorator",
+      "source_file": "D12_real_dags/20_example_asset_decorator.py",
+      "n_tasks_observed": 1,
+      "operators_used": [],
+      "tools_called": [
+        "SiteStatusTool",
+        "ArtifactTool",
+        "AirflowSandboxTool",
+        "AirflowSandboxTool",
+        "AirflowSandboxTool",
+        "PythonSandboxTool",
+        "AirflowTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 2133,
+      "invariants_total": 3,
+      "invariants_passed": 3,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 54.16
+    },
+    {
+      "idx": 20,
+      "id": "21_example_postgres",
+      "source_file": "D12_real_dags/21_example_postgres.py",
+      "n_tasks_observed": 4,
+      "operators_used": [
+        "SQLExecuteQueryOperator"
+      ],
+      "tools_called": [
+        "ArtifactTool",
+        "AirflowSandboxTool",
+        "DatabaseConnectionTool",
+        "ArtifactTool",
+        "AirflowSandboxTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 2101,
+      "invariants_total": 3,
+      "invariants_passed": 3,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 25.67
+    },
+    {
+      "idx": 21,
+      "id": "22_example_s3_to_sql",
+      "source_file": "D12_real_dags/22_example_s3_to_sql.py",
+      "n_tasks_observed": 6,
+      "operators_used": [
+        "RedshiftCreateClusterOperator",
+        "RedshiftDataOperator",
+        "RedshiftDeleteClusterOperator",
+        "SQLTableCheckOperator"
+      ],
+      "tools_called": [
+        "ArtifactTool",
+        "AirflowSandboxTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 2595,
+      "invariants_total": 4,
+      "invariants_passed": 3,
+      "invariants_failed": [
+        "uses_taskflow_task"
+      ],
+      "invariant_rate": 0.75,
+      "passed": true,
+      "elapsed_s": 15.87
+    },
+    {
+      "idx": 22,
+      "id": "23_example_http",
+      "source_file": "D12_real_dags/23_example_http.py",
+      "n_tasks_observed": 7,
+      "operators_used": [
+        "HttpOperator"
+      ],
+      "tools_called": [
+        "ArtifactTool",
+        "AirflowSandboxTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 1723,
+      "invariants_total": 2,
+      "invariants_passed": 2,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 13.28
+    },
+    {
+      "idx": 23,
+      "id": "24_example_slack_webhook",
+      "source_file": "D12_real_dags/24_example_slack_webhook.py",
+      "n_tasks_observed": 2,
+      "operators_used": [
+        "SlackWebhookOperator"
+      ],
+      "tools_called": [
+        "ArtifactTool",
+        "AirflowSandboxTool",
+        "AirflowSandboxTool",
+        "PythonSandboxTool",
+        "SiteControlTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 797,
+      "invariants_total": 2,
+      "invariants_passed": 2,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 24.94
+    },
+    {
+      "idx": 24,
+      "id": "25_example_spark_dag",
+      "source_file": "D12_real_dags/25_example_spark_dag.py",
+      "n_tasks_observed": 5,
+      "operators_used": [
+        "PySparkOperator",
+        "SparkJDBCOperator",
+        "SparkSqlOperator",
+        "SparkSubmitOperator"
+      ],
+      "tools_called": [
+        "SiteStatusTool",
+        "ArtifactTool",
+        "AirflowSandboxTool",
+        "GuardrailTool",
+        "ArtifactTool",
+        "AirflowSandboxTool",
+        "BashSandboxTool",
+        "PythonSandboxTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 5670,
+      "invariants_total": 2,
+      "invariants_passed": 2,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 52.92
+    },
+    {
+      "idx": 25,
+      "id": "26_example_bigquery_queries",
+      "source_file": "D12_real_dags/26_example_bigquery_queries.py",
+      "n_tasks_observed": 17,
+      "operators_used": [
+        "BashOperator",
+        "BigQueryCheckOperator",
+        "BigQueryColumnCheckOperator",
+        "BigQueryCreateEmptyDatasetOperator",
+        "BigQueryCreateTableOperator",
+        "BigQueryDeleteDatasetOperator",
+        "BigQueryGetDataOperator",
+        "BigQueryInsertJobOperator",
+        "BigQueryIntervalCheckOperator",
+        "BigQueryTableCheckOperator",
+        "BigQueryValueCheckOperator",
+        "OpenLineageTestOperator"
+      ],
+      "tools_called": [
+        "ArtifactTool",
+        "AirflowSandboxTool",
+        "AirflowSandboxTool",
+        "PythonSandboxTool",
+        "AirflowSandboxTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 6695,
+      "invariants_total": 3,
+      "invariants_passed": 3,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 45.73
+    },
+    {
+      "idx": 26,
+      "id": "27_example_gcs_to_bigquery",
+      "source_file": "D12_real_dags/27_example_gcs_to_bigquery.py",
+      "n_tasks_observed": 4,
+      "operators_used": [
+        "BigQueryCreateEmptyDatasetOperator",
+        "BigQueryDeleteDatasetOperator",
+        "GCSToBigQueryOperator",
+        "OpenLineageTestOperator"
+      ],
+      "tools_called": [
+        "ArtifactTool",
+        "AirflowSandboxTool",
+        "AirflowSandboxTool",
+        "PythonSandboxTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 2620,
+      "invariants_total": 3,
+      "invariants_passed": 3,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 21.75
+    },
+    {
+      "idx": 27,
+      "id": "28_example_bigquery_tables",
+      "source_file": "D12_real_dags/28_example_bigquery_tables.py",
+      "n_tasks_observed": 20,
+      "operators_used": [
+        "BigQueryCreateEmptyDatasetOperator",
+        "BigQueryCreateTableOperator",
+        "BigQueryDeleteDatasetOperator",
+        "BigQueryDeleteTableOperator",
+        "BigQueryGetDatasetTablesOperator",
+        "BigQueryUpdateDatasetOperator",
+        "BigQueryUpdateTableOperator",
+        "BigQueryUpdateTableSchemaOperator",
+        "BigQueryUpsertTableOperator",
+        "GCSCreateBucketOperator",
+        "GCSDeleteBucketOperator",
+        "LocalFilesystemToGCSOperator",
+        "OpenLineageTestOperator"
+      ],
+      "tools_called": [
+        "ArtifactTool",
+        "AirflowSandboxTool",
+        "AirflowSandboxTool",
+        "AirflowSandboxTool",
+        "PythonSandboxTool",
+        "AirflowSandboxTool",
+        "SiteControlTool",
+        "AirflowTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 7695,
+      "invariants_total": 3,
+      "invariants_passed": 3,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 84.52
+    },
+    {
+      "idx": 28,
+      "id": "29_example_snowflake",
+      "source_file": "D12_real_dags/29_example_snowflake.py",
+      "n_tasks_observed": 11,
+      "operators_used": [
+        "SQLExecuteQueryOperator",
+        "SnowflakeCheckOperator",
+        "SnowflakeIntervalCheckOperator",
+        "SnowflakeSqlApiOperator",
+        "SnowflakeValueCheckOperator"
+      ],
+      "tools_called": [
+        "ArtifactTool",
+        "AirflowSandboxTool",
+        "AirflowTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 3682,
+      "invariants_total": 3,
+      "invariants_passed": 3,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 33.64
+    },
+    {
+      "idx": 29,
+      "id": "30_example_databricks",
+      "source_file": "D12_real_dags/30_example_databricks.py",
+      "n_tasks_observed": 10,
+      "operators_used": [
+        "DatabricksCreateJobsOperator",
+        "DatabricksNotebookOperator",
+        "DatabricksRunNowOperator",
+        "DatabricksSQLStatementsOperator",
+        "DatabricksSubmitRunOperator",
+        "DatabricksTaskOperator"
+      ],
+      "tools_called": [
+        "ArtifactTool",
+        "AirflowSandboxTool",
+        "PythonSandboxTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 4648,
+      "invariants_total": 3,
+      "invariants_passed": 3,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 27.26
+    },
+    {
+      "idx": 30,
+      "id": "31_example_mysql",
+      "source_file": "D12_real_dags/31_example_mysql.py",
+      "n_tasks_observed": 2,
+      "operators_used": [
+        "SQLExecuteQueryOperator"
+      ],
+      "tools_called": [
+        "ArtifactTool",
+        "AirflowSandboxTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 1183,
+      "invariants_total": 2,
+      "invariants_passed": 2,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 11.8
+    },
+    {
+      "idx": 31,
+      "id": "32_example_dag_event_listener",
+      "source_file": "D12_real_dags/32_example_dag_event_listener.py",
+      "n_tasks_observed": 2,
+      "operators_used": [
+        "ProduceToTopicOperator",
+        "PythonOperator"
+      ],
+      "tools_called": [
+        "ArtifactTool",
+        "AirflowSandboxTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 981,
+      "invariants_total": 2,
+      "invariants_passed": 2,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 12.11
+    },
+    {
+      "idx": 32,
+      "id": "33_example_redis_publish",
+      "source_file": "D12_real_dags/33_example_redis_publish.py",
+      "n_tasks_observed": 1,
+      "operators_used": [
+        "RedisPublishOperator"
+      ],
+      "tools_called": [
+        "ArtifactTool",
+        "AirflowSandboxTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 1296,
+      "invariants_total": 2,
+      "invariants_passed": 2,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 15.02
+    }
+  ],
+  "_runtime_s": 259.9
+}

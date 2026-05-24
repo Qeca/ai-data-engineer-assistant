@@ -1,0 +1,698 @@
+{
+  "category": "D13",
+  "source": "apache/spark @ b2c2a8d",
+  "metric": "M-22 real PySpark generation (apache/spark examples)",
+  "target": 0.8,
+  "n": 33,
+  "passed_count": 32,
+  "rate": 0.9697,
+  "wilson_lo": 0.8468,
+  "wilson_hi": 0.9946,
+  "passed": true,
+  "by_topic": {
+    "core": "14/15",
+    "sql": "5/5",
+    "streaming": "2/2",
+    "ml": "11/11"
+  },
+  "results": [
+    {
+      "idx": 0,
+      "id": "01_wordcount",
+      "topic": "core",
+      "source_file": "D13_real_spark_scripts/01_wordcount.py",
+      "tools_called": [
+        "ArtifactTool",
+        "SparkSandboxTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 1525,
+      "invariants_total": 2,
+      "invariants_passed": 2,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 25.79
+    },
+    {
+      "idx": 1,
+      "id": "02_sort",
+      "topic": "core",
+      "source_file": "D13_real_spark_scripts/02_sort.py",
+      "tools_called": [
+        "SparkScriptSourceTool",
+        "ArtifactTool",
+        "SparkSandboxTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 1127,
+      "invariants_total": 2,
+      "invariants_passed": 2,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 25.66
+    },
+    {
+      "idx": 2,
+      "id": "03_pi",
+      "topic": "core",
+      "source_file": "D13_real_spark_scripts/03_pi.py",
+      "tools_called": [
+        "SparkScriptSourceTool",
+        "ArtifactVersionTool",
+        "ArtifactTool",
+        "SparkSandboxTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 2147,
+      "invariants_total": 2,
+      "invariants_passed": 2,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 31.75
+    },
+    {
+      "idx": 3,
+      "id": "04_kmeans",
+      "topic": "core",
+      "source_file": "D13_real_spark_scripts/04_kmeans.py",
+      "tools_called": [
+        "ArtifactTool",
+        "SparkSandboxTool",
+        "SparkTool",
+        "SparkTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 6024,
+      "invariants_total": 2,
+      "invariants_passed": 2,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 28.66
+    },
+    {
+      "idx": 4,
+      "id": "05_logistic_regression",
+      "topic": "core",
+      "source_file": "D13_real_spark_scripts/05_logistic_regression.py",
+      "tools_called": [
+        "SiteStatusTool",
+        "ArtifactTool",
+        "SparkSandboxTool",
+        "SparkTool",
+        "SparkTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 9116,
+      "invariants_total": 2,
+      "invariants_passed": 2,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 35.84
+    },
+    {
+      "idx": 5,
+      "id": "06_pagerank",
+      "topic": "core",
+      "source_file": "D13_real_spark_scripts/06_pagerank.py",
+      "tools_called": [
+        "SiteStatusTool",
+        "ArtifactTool",
+        "SparkSandboxTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 4197,
+      "invariants_total": 3,
+      "invariants_passed": 3,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 34.94
+    },
+    {
+      "idx": 6,
+      "id": "07_transitive_closure",
+      "topic": "core",
+      "source_file": "D13_real_spark_scripts/07_transitive_closure.py",
+      "tools_called": [
+        "SparkScriptSourceTool",
+        "ArtifactTool",
+        "SparkSandboxTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 3845,
+      "invariants_total": 3,
+      "invariants_passed": 3,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 12.44
+    },
+    {
+      "idx": 7,
+      "id": "08_avro_inputformat",
+      "topic": "core",
+      "source_file": "D13_real_spark_scripts/08_avro_inputformat.py",
+      "tools_called": [
+        "ArtifactTool",
+        "SparkSandboxTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 440,
+      "invariants_total": 2,
+      "invariants_passed": 2,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 8.79
+    },
+    {
+      "idx": 8,
+      "id": "09_parquet_inputformat",
+      "topic": "core",
+      "source_file": "D13_real_spark_scripts/09_parquet_inputformat.py",
+      "tools_called": [
+        "SiteStatusTool",
+        "ArtifactTool",
+        "SparkSandboxTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 747,
+      "invariants_total": 2,
+      "invariants_passed": 2,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 22.83
+    },
+    {
+      "idx": 9,
+      "id": "10_status_api_demo",
+      "topic": "core",
+      "source_file": "D13_real_spark_scripts/10_status_api_demo.py",
+      "tools_called": [
+        "SparkScriptSourceTool",
+        "ArtifactTool",
+        "SparkSandboxTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 4246,
+      "invariants_total": 3,
+      "invariants_passed": 3,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 12.06
+    },
+    {
+      "idx": 10,
+      "id": "11_basic",
+      "topic": "sql",
+      "source_file": "D13_real_spark_scripts/11_basic.py",
+      "tools_called": [
+        "SiteStatusTool",
+        "ArtifactTool",
+        "SparkSandboxTool",
+        "SparkTool",
+        "SparkTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 4281,
+      "invariants_total": 4,
+      "invariants_passed": 4,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 29.54
+    },
+    {
+      "idx": 11,
+      "id": "12_arrow",
+      "topic": "sql",
+      "source_file": "D13_real_spark_scripts/12_arrow.py",
+      "tools_called": [
+        "SiteStatusTool",
+        "ArtifactTool",
+        "SparkSandboxTool",
+        "SparkTool",
+        "SparkTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 4062,
+      "invariants_total": 4,
+      "invariants_passed": 4,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 31.3
+    },
+    {
+      "idx": 12,
+      "id": "13_datasource",
+      "topic": "sql",
+      "source_file": "D13_real_spark_scripts/13_datasource.py",
+      "tools_called": [
+        "SiteStatusTool",
+        "ArtifactTool",
+        "SparkSandboxTool",
+        "SparkTool",
+        "SparkTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 8884,
+      "invariants_total": 4,
+      "invariants_passed": 4,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 37.72
+    },
+    {
+      "idx": 13,
+      "id": "14_hive",
+      "topic": "sql",
+      "source_file": "D13_real_spark_scripts/14_hive.py",
+      "tools_called": [
+        "SiteStatusTool",
+        "ArtifactTool",
+        "SparkSandboxTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 7447,
+      "invariants_total": 4,
+      "invariants_passed": 4,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 31.43
+    },
+    {
+      "idx": 14,
+      "id": "15_jdbc",
+      "topic": "sql",
+      "source_file": "D13_real_spark_scripts/15_jdbc.py",
+      "tools_called": [
+        "SiteStatusTool",
+        "GuardrailTool",
+        "GuardrailTool",
+        "GuardrailTool",
+        "ArtifactTool",
+        "SparkSandboxTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 3475,
+      "invariants_total": 3,
+      "invariants_passed": 3,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 40.11
+    },
+    {
+      "idx": 15,
+      "id": "16_structured_kafka_wordcount",
+      "topic": "core",
+      "source_file": "D13_real_spark_scripts/16_structured_kafka_wordcount.py",
+      "tools_called": [
+        "SiteStatusTool",
+        "ArtifactTool",
+        "SparkSandboxTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 3824,
+      "invariants_total": 3,
+      "invariants_passed": 2,
+      "invariants_failed": [
+        "has_class_or_call(CAST)"
+      ],
+      "invariant_rate": 0.667,
+      "passed": false,
+      "elapsed_s": 35.98
+    },
+    {
+      "idx": 16,
+      "id": "17_structured_network_wordcount",
+      "topic": "streaming",
+      "source_file": "D13_real_spark_scripts/17_structured_network_wordcount.py",
+      "tools_called": [
+        "SiteStatusTool",
+        "ArtifactTool",
+        "SparkSandboxTool",
+        "PythonSandboxTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 1576,
+      "invariants_total": 3,
+      "invariants_passed": 3,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 33.34
+    },
+    {
+      "idx": 17,
+      "id": "18_structured_network_wordcount_session_window",
+      "topic": "streaming",
+      "source_file": "D13_real_spark_scripts/18_structured_network_wordcount_session_window.py",
+      "tools_called": [
+        "SiteStatusTool",
+        "ArtifactTool",
+        "SparkSandboxTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 2905,
+      "invariants_total": 4,
+      "invariants_passed": 4,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 29.07
+    },
+    {
+      "idx": 18,
+      "id": "19_structured_network_wordcount_windowed",
+      "topic": "core",
+      "source_file": "D13_real_spark_scripts/19_structured_network_wordcount_windowed.py",
+      "tools_called": [
+        "SiteStatusTool",
+        "ArtifactTool",
+        "SparkSandboxTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 5716,
+      "invariants_total": 2,
+      "invariants_passed": 2,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 48.34
+    },
+    {
+      "idx": 19,
+      "id": "20_structured_sessionization",
+      "topic": "core",
+      "source_file": "D13_real_spark_scripts/20_structured_sessionization.py",
+      "tools_called": [
+        "SiteStatusTool",
+        "ArtifactVersionTool",
+        "SparkScriptSourceTool",
+        "ArtifactTool",
+        "SparkSandboxTool",
+        "PythonSandboxTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 9074,
+      "invariants_total": 3,
+      "invariants_passed": 3,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 66.23
+    },
+    {
+      "idx": 20,
+      "id": "21_als_example",
+      "topic": "ml",
+      "source_file": "D13_real_spark_scripts/21_als_example.py",
+      "tools_called": [
+        "SparkScriptSourceTool",
+        "ArtifactTool",
+        "SparkSandboxTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 5546,
+      "invariants_total": 4,
+      "invariants_passed": 4,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 12.57
+    },
+    {
+      "idx": 21,
+      "id": "22_kmeans_example",
+      "topic": "ml",
+      "source_file": "D13_real_spark_scripts/22_kmeans_example.py",
+      "tools_called": [
+        "SiteStatusTool",
+        "ArtifactTool",
+        "SparkSandboxTool",
+        "SparkTool",
+        "SparkTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 2582,
+      "invariants_total": 4,
+      "invariants_passed": 4,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 44.63
+    },
+    {
+      "idx": 22,
+      "id": "23_linear_regression_with_elastic_net",
+      "topic": "core",
+      "source_file": "D13_real_spark_scripts/23_linear_regression_with_elastic_net.py",
+      "tools_called": [
+        "SparkScriptSourceTool",
+        "ArtifactTool",
+        "SparkSandboxTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 6191,
+      "invariants_total": 4,
+      "invariants_passed": 4,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 25.18
+    },
+    {
+      "idx": 23,
+      "id": "24_decision_tree_classification_example",
+      "topic": "ml",
+      "source_file": "D13_real_spark_scripts/24_decision_tree_classification_example.py",
+      "tools_called": [
+        "SiteStatusTool",
+        "ArtifactTool",
+        "SparkSandboxTool",
+        "SparkTool",
+        "SparkTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 5663,
+      "invariants_total": 4,
+      "invariants_passed": 4,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 30.45
+    },
+    {
+      "idx": 24,
+      "id": "25_random_forest_classifier_example",
+      "topic": "ml",
+      "source_file": "D13_real_spark_scripts/25_random_forest_classifier_example.py",
+      "tools_called": [
+        "ArtifactTool",
+        "SparkSandboxTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 4553,
+      "invariants_total": 4,
+      "invariants_passed": 4,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 11.33
+    },
+    {
+      "idx": 25,
+      "id": "26_gradient_boosted_tree_classifier_example",
+      "topic": "ml",
+      "source_file": "D13_real_spark_scripts/26_gradient_boosted_tree_classifier_example.py",
+      "tools_called": [
+        "ArtifactTool",
+        "SparkSandboxTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 3239,
+      "invariants_total": 4,
+      "invariants_passed": 4,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 9.83
+    },
+    {
+      "idx": 26,
+      "id": "27_naive_bayes_example",
+      "topic": "ml",
+      "source_file": "D13_real_spark_scripts/27_naive_bayes_example.py",
+      "tools_called": [
+        "SparkScriptSourceTool",
+        "ArtifactTool",
+        "SparkSandboxTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 4417,
+      "invariants_total": 4,
+      "invariants_passed": 4,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 13.14
+    },
+    {
+      "idx": 27,
+      "id": "28_pipeline_example",
+      "topic": "ml",
+      "source_file": "D13_real_spark_scripts/28_pipeline_example.py",
+      "tools_called": [
+        "ArtifactTool",
+        "SparkSandboxTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 2665,
+      "invariants_total": 4,
+      "invariants_passed": 4,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 10.04
+    },
+    {
+      "idx": 28,
+      "id": "29_cross_validator",
+      "topic": "core",
+      "source_file": "D13_real_spark_scripts/29_cross_validator.py",
+      "tools_called": [
+        "ArtifactTool",
+        "SparkSandboxTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 3240,
+      "invariants_total": 4,
+      "invariants_passed": 4,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 12.9
+    },
+    {
+      "idx": 29,
+      "id": "30_tf_idf_example",
+      "topic": "ml",
+      "source_file": "D13_real_spark_scripts/30_tf_idf_example.py",
+      "tools_called": [
+        "SparkScriptSourceTool",
+        "ArtifactTool",
+        "SparkSandboxTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 3060,
+      "invariants_total": 4,
+      "invariants_passed": 4,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 13.86
+    },
+    {
+      "idx": 30,
+      "id": "31_word2vec_example",
+      "topic": "ml",
+      "source_file": "D13_real_spark_scripts/31_word2vec_example.py",
+      "tools_called": [
+        "SparkScriptSourceTool",
+        "ArtifactTool",
+        "SparkSandboxTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 3847,
+      "invariants_total": 3,
+      "invariants_passed": 3,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 15.1
+    },
+    {
+      "idx": 31,
+      "id": "32_standard_scaler_example",
+      "topic": "ml",
+      "source_file": "D13_real_spark_scripts/32_standard_scaler_example.py",
+      "tools_called": [
+        "SparkScriptSourceTool",
+        "ArtifactTool",
+        "SparkSandboxTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 3287,
+      "invariants_total": 4,
+      "invariants_passed": 4,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 14.22
+    },
+    {
+      "idx": 32,
+      "id": "33_pca_example",
+      "topic": "ml",
+      "source_file": "D13_real_spark_scripts/33_pca_example.py",
+      "tools_called": [
+        "SparkScriptSourceTool",
+        "ArtifactTool",
+        "SparkSandboxTool"
+      ],
+      "used_artifact_tool": true,
+      "used_sandbox_tool": true,
+      "code_chars": 4038,
+      "invariants_total": 4,
+      "invariants_passed": 4,
+      "invariants_failed": [],
+      "invariant_rate": 1.0,
+      "passed": true,
+      "elapsed_s": 16.35
+    }
+  ],
+  "_runtime_s": 222.1
+}

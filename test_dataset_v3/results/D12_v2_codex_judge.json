@@ -1,0 +1,42 @@
+[
+  {
+    "id": "10_example_trigger_target_dag",
+    "source_file": "D12_real_dags/10_example_trigger_target_dag.py",
+    "rule_passed": false,
+    "code_chars": 1588,
+    "judge_verdict": "reject",
+    "judge_semantic": 0.45,
+    "judge_api": 0.55,
+    "judge_reason": "Код пытается создать оба DAG и использует BashOperator/TriggerDagRunOperator, но в одном модуле дважды присваивает глобальную переменную `dag`. В результате Airflow обычно обнаружит только последний `example_trigger_target_dag`; `example_trigger_controller_dag` с TriggerDagRunOperator не останется глобальным DAG-объектом и может не загрузиться в DagBag. Значит основной сценарий спеки — controller DAG триггерит target DAG — фактически не реализован как валидный пример. Дополнительно TriggerDagRunOperator не передает conf/message как в эталонном примере, хотя это менее критично. Нужно держать оба DAG в разных глобальных переменных или через два `with DAG(...) as ...`."
+  },
+  {
+    "id": "12_example_xcomargs",
+    "source_file": "D12_real_dags/12_example_xcomargs.py",
+    "rule_passed": false,
+    "code_chars": 2536,
+    "judge_verdict": "reject",
+    "judge_semantic": 0.45,
+    "judge_api": 0.55,
+    "judge_reason": "Код формально задает DAG с schedule_interval=None и цепочку из 4 BashOperator задач, но не реализует ключевую часть спеки: он не демонстрирует XComArgs. Вместо XComArg используется ручной Jinja ti.xcom_pull/ti.xcom_push. Также код продублирован целиком с тем же dag_id, что является грубой неряшливостью и может приводить к неоднозначному поведению при парсинге. Для Airflow 2 старые импорты и schedule_interval обычно еще валидны, но для эталонного современного API Airflow 3 это не соответствует стилю apache-примера."
+  },
+  {
+    "id": "13_tutorial",
+    "source_file": "D12_real_dags/13_tutorial.py",
+    "rule_passed": false,
+    "code_chars": 850,
+    "judge_verdict": "accept_with_minors",
+    "judge_semantic": 0.86,
+    "judge_api": 0.78,
+    "judge_reason": "Код выполняет основные требования: DAG содержит 3 задачи, все через BashOperator, расписание задано как timedelta(days=1), зависимости валидны. Миноры: не воспроизведена tutorial/doc_md-документация и используется старый Airflow 2 API: from airflow import DAG, airflow.operators.bash, schedule_interval. В Airflow 3 окружении из эталона это может быть несовместимо, но для Airflow 2 DAG корректен."
+  },
+  {
+    "id": "17_example_dag_decorator",
+    "source_file": "D12_real_dags/17_example_dag_decorator.py",
+    "rule_passed": false,
+    "code_chars": 6579,
+    "judge_verdict": "reject",
+    "judge_semantic": 0.35,
+    "judge_api": 0.45,
+    "judge_reason": "Код не соответствует спеке как единый DAG-файл: он трижды дублирует объявления DAG/class/imports, дважды создает задачи, а затем в конце перезаписывает глобальную переменную dag новым DAG с тем же dag_id, но уже без задач. В итоге при загрузке Airflow есть высокий риск получить DAG без требуемых 2 задач либо дубли/конфликт одного dag_id. Также не выполнена часть спеки про проверку в sandbox: в сгенерированном коде нет результата такой проверки. Отдельные ранние фрагменты близки к требованиям: есть BaseOperator-наследник GetRequestOperator, BashOperator, schedule_interval=None и две задачи, но итоговый сгенерированный файл поврежден дублированием и усеченным последним фрагментом."
+  }
+]

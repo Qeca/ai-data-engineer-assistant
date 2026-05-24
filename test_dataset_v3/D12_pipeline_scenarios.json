@@ -1,0 +1,198 @@
+[
+  {
+    "id": "PIPE-01",
+    "category": "etl_csv_to_sql",
+    "description": "Daily ETL из CSV в Postgres",
+    "turns": [
+      "Создай Airflow DAG, который раз в день забирает CSV из /data/orders/*.csv и кладёт строки в таблицу sales.orders_raw в Postgres. Проверь синтаксис в sandbox и закоммить версию."
+    ],
+    "expected_tools_any": ["write_airflow_dag"],
+    "expected_tools_after": ["check_airflow_dag_sandbox"],
+    "must_artifact_type": "dag",
+    "must_keywords_in_code": ["sales.orders_raw"],
+    "priority": "P0"
+  },
+  {
+    "id": "PIPE-02",
+    "category": "spark_aggregate_then_dag",
+    "description": "Spark-job для агрегата + DAG, который его запускает",
+    "turns": [
+      "Напиши PySpark-скрипт, который читает infra/spark/data/sales/*.parquet, агрегирует выручку по дням и пишет результат в analytics/daily_revenue.parquet.",
+      "Теперь оберни этот Spark-скрипт в Airflow DAG, который запускается каждый день в 02:00."
+    ],
+    "expected_tools_any": ["write_spark_script", "write_airflow_dag"],
+    "expected_tools_after": ["check_airflow_dag_sandbox"],
+    "must_artifact_type": "dag",
+    "must_keywords_in_code": ["SparkSubmitOperator", "daily_revenue"],
+    "priority": "P0"
+  },
+  {
+    "id": "PIPE-03",
+    "category": "cdc_mysql_to_clickhouse",
+    "description": "CDC-подобный pipeline MySQL → ClickHouse",
+    "turns": [
+      "Каждые 15 минут забирай новые строки из MySQL retail_db.orders (created_at > last_run_ts) и пиши их в ClickHouse analytics.orders. Сделай Airflow DAG."
+    ],
+    "expected_tools_any": ["write_airflow_dag"],
+    "expected_tools_after": ["check_airflow_dag_sandbox"],
+    "must_artifact_type": "dag",
+    "must_keywords_in_code": ["15 minutes", "*/15", "schedule"],
+    "priority": "P0"
+  },
+  {
+    "id": "PIPE-04",
+    "category": "data_quality_with_alert",
+    "description": "DQ-проверка с алертом",
+    "turns": [
+      "Создай DAG, который раз в час проверяет, что в sales.orders за последний час было > 0 строк со status='paid'. Если строк нет — задача должна упасть, чтобы Airflow слал алерт."
+    ],
+    "expected_tools_any": ["write_airflow_dag"],
+    "expected_tools_after": ["check_airflow_dag_sandbox"],
+    "must_artifact_type": "dag",
+    "must_keywords_in_code": ["sales.orders", "paid"],
+    "priority": "P1"
+  },
+  {
+    "id": "PIPE-05",
+    "category": "multi_source_join_to_dwh",
+    "description": "Объединение трёх источников в DWH",
+    "turns": [
+      "Сделай Spark-скрипт, который джойнит customers из Postgres, orders из MySQL и events из ClickHouse по customer_id, и сохраняет в parquet файл analytics/customer_360.parquet.",
+      "Теперь сделай DAG, который запускает этот Spark-скрипт раз в сутки в 03:00."
+    ],
+    "expected_tools_any": ["write_spark_script", "write_airflow_dag"],
+    "expected_tools_after": ["check_airflow_dag_sandbox"],
+    "must_artifact_type": "dag",
+    "must_keywords_in_code": ["customer_360", "SparkSubmitOperator"],
+    "priority": "P0"
+  },
+  {
+    "id": "PIPE-06",
+    "category": "backfill_historical",
+    "description": "Backfill за прошлый месяц",
+    "turns": [
+      "Какие DAG сейчас есть в Airflow?",
+      "Перезалей данные DAG sales_daily_aggregate за последние 30 дней (backfill)."
+    ],
+    "expected_tools_any": ["manage_airflow_dags", "trigger_airflow_dag"],
+    "must_artifact_type": null,
+    "priority": "P1"
+  },
+  {
+    "id": "PIPE-07",
+    "category": "ml_features_pipeline",
+    "description": "Подготовка фичей для ML-модели",
+    "turns": [
+      "Сделай PySpark-скрипт для подготовки фичей: для каждого customer_id посчитай recency (дни с последнего заказа), frequency (число заказов за 90 дней) и monetary (сумма за 90 дней). Источник — sales.orders в Postgres. Результат — features/rfm.parquet.",
+      "Оберни в DAG с расписанием раз в день."
+    ],
+    "expected_tools_any": ["write_spark_script", "write_airflow_dag"],
+    "expected_tools_after": ["check_airflow_dag_sandbox"],
+    "must_artifact_type": "dag",
+    "must_keywords_in_code": ["recency", "frequency", "monetary"],
+    "priority": "P0"
+  },
+  {
+    "id": "PIPE-08",
+    "category": "incremental_load_to_partition",
+    "description": "Инкрементальная загрузка по партициям",
+    "turns": [
+      "Создай DAG, который каждый день забирает новые события из ClickHouse analytics.events за вчерашний день (по partition ds={{ ds }}) и сохраняет их как parquet в s3://lake/events/ds=YYYY-MM-DD/. Используй PythonOperator + clickhouse-driver."
+    ],
+    "expected_tools_any": ["write_airflow_dag"],
+    "expected_tools_after": ["check_airflow_dag_sandbox"],
+    "must_artifact_type": "dag",
+    "must_keywords_in_code": ["ds", "partition", "events"],
+    "priority": "P0"
+  },
+  {
+    "id": "PIPE-09",
+    "category": "sql_only_aggregation",
+    "description": "Чисто SQL-аггрегация в той же БД",
+    "turns": [
+      "Сделай DAG, который раз в час пересчитывает таблицу analytics.hourly_orders как INSERT INTO ... SELECT FROM sales.orders WHERE ts >= now() - INTERVAL '1 hour'. Используй PostgresOperator."
+    ],
+    "expected_tools_any": ["write_airflow_dag"],
+    "expected_tools_after": ["check_airflow_dag_sandbox"],
+    "must_artifact_type": "dag",
+    "must_keywords_in_code": ["PostgresOperator", "hourly_orders"],
+    "priority": "P0"
+  },
+  {
+    "id": "PIPE-10",
+    "category": "chained_three_tasks",
+    "description": "Цепочка из трёх задач: extract → transform → load",
+    "turns": [
+      "Сделай Airflow DAG с тремя задачами: 1) extract — забирает данные из MySQL retail.products, сохраняет staging/products.parquet через Spark; 2) transform — добавляет колонку margin_pct через Spark; 3) load — заливает результат в Postgres analytics.products_enriched. Все задачи связаны зависимостями (>>)."
+    ],
+    "expected_tools_any": ["write_airflow_dag"],
+    "expected_tools_after": ["check_airflow_dag_sandbox"],
+    "must_artifact_type": "dag",
+    "must_keywords_in_code": [">>", "extract", "transform", "load"],
+    "priority": "P0"
+  },
+  {
+    "id": "PIPE-11",
+    "category": "schema_evolution",
+    "description": "Обработка изменения схемы",
+    "turns": [
+      "В sales.orders добавили колонку discount. Обнови существующий DAG sales_daily_aggregate, чтобы он учитывал эту колонку в агрегации.",
+      "Покажи историю версий артефакта."
+    ],
+    "expected_tools_any": ["write_airflow_dag", "list_artifact_versions"],
+    "must_artifact_type": "dag",
+    "priority": "P1"
+  },
+  {
+    "id": "PIPE-12",
+    "category": "spark_job_submit",
+    "description": "Прямой запуск Spark-job без DAG",
+    "turns": [
+      "Запусти на Spark-кластере job, который считает количество строк в каждом файле infra/spark/data/sales/*.parquet и выводит результат."
+    ],
+    "expected_tools_any": ["submit_spark_job"],
+    "must_artifact_type": null,
+    "priority": "P1"
+  },
+  {
+    "id": "PIPE-13",
+    "category": "data_quality_metric",
+    "description": "Метрика качества + сохранение в БД",
+    "turns": [
+      "Сделай Spark-скрипт, который вычисляет процент строк в sales.orders, у которых customer_id IS NULL, и пишет результат в quality.dq_metrics (metric_name, value, ts).",
+      "Сделай DAG, который запускает этот скрипт раз в час."
+    ],
+    "expected_tools_any": ["write_spark_script", "write_airflow_dag"],
+    "expected_tools_after": ["check_airflow_dag_sandbox"],
+    "must_artifact_type": "dag",
+    "must_keywords_in_code": ["dq_metrics", "NULL"],
+    "priority": "P0"
+  },
+  {
+    "id": "PIPE-14",
+    "category": "session_continuity_fix",
+    "description": "Исправление DAG из ошибки в session",
+    "turns": [
+      "Создай DAG для агрегации заказов за день из sales.orders в analytics.daily_orders.",
+      "Проверь его в sandbox.",
+      "Если sandbox дал ошибку — исправь и сохрани новую версию."
+    ],
+    "expected_tools_any": ["write_airflow_dag", "check_airflow_dag_sandbox"],
+    "must_artifact_type": "dag",
+    "priority": "P0"
+  },
+  {
+    "id": "PIPE-15",
+    "category": "cross_engine_etl",
+    "description": "Кросс-движковый ETL через MCP database",
+    "turns": [
+      "Через MCP database прочитай схему таблицы sales.orders в Postgres.",
+      "Теперь сделай Spark-скрипт, который копирует данные из sales.orders (Postgres) в analytics.events (ClickHouse) c трансформацией status='paid' → event_type='purchase'.",
+      "Оберни в Airflow DAG с расписанием каждые 30 минут."
+    ],
+    "expected_tools_any": ["write_spark_script", "write_airflow_dag", "call_mcp_tool", "inspect_database"],
+    "must_artifact_type": "dag",
+    "must_keywords_in_code": ["purchase", "ClickHouse"],
+    "priority": "P0"
+  }
+]

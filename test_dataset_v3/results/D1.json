@@ -1,0 +1,444 @@
+{
+  "category": "D1",
+  "metric": "M-01 intent accuracy",
+  "target": 0.8,
+  "n": 43,
+  "correct": 32,
+  "accuracy": 0.7442,
+  "wilson_lo": 0.5976,
+  "wilson_hi": 0.8507,
+  "passed": false,
+  "results": [
+    {
+      "idx": 0,
+      "query": "Покажи топ-10 заказов за последний месяц по сумме",
+      "expected_raw": "sql",
+      "got_raw": "sql",
+      "expected_canon": "sql",
+      "got_canon": "sql",
+      "match": true,
+      "elapsed_s": 7.65
+    },
+    {
+      "idx": 1,
+      "query": "Сколько строк в orders за вчера?",
+      "expected_raw": "sql",
+      "got_raw": "sql",
+      "expected_canon": "sql",
+      "got_canon": "sql",
+      "match": true,
+      "elapsed_s": 13.21
+    },
+    {
+      "idx": 2,
+      "query": "Найди аномалии в выручке за последний квартал",
+      "expected_raw": "sql",
+      "got_raw": "sql",
+      "expected_canon": "sql",
+      "got_canon": "sql",
+      "match": true,
+      "elapsed_s": 32.03
+    },
+    {
+      "idx": 3,
+      "query": "Дай выборку products где stock = 0",
+      "expected_raw": "sql",
+      "got_raw": "database",
+      "expected_canon": "sql",
+      "got_canon": "database",
+      "match": true,
+      "elapsed_s": 6.49
+    },
+    {
+      "idx": 4,
+      "query": "Запусти DAG daily_orders_etl",
+      "expected_raw": "airflow",
+      "got_raw": "airflow",
+      "expected_canon": "airflow",
+      "got_canon": "airflow",
+      "match": true,
+      "elapsed_s": 22.73
+    },
+    {
+      "idx": 5,
+      "query": "Когда последний раз отрабатывал customer_sync?",
+      "expected_raw": "airflow",
+      "got_raw": "airflow",
+      "expected_canon": "airflow",
+      "got_canon": "airflow",
+      "match": true,
+      "elapsed_s": 19.1
+    },
+    {
+      "idx": 6,
+      "query": "Триггерни orders_sync прямо сейчас",
+      "expected_raw": "airflow",
+      "got_raw": "airflow",
+      "expected_canon": "airflow",
+      "got_canon": "airflow",
+      "match": true,
+      "elapsed_s": 3.05
+    },
+    {
+      "idx": 7,
+      "query": "Покажи последний запуск reviews_daily",
+      "expected_raw": "airflow",
+      "got_raw": "airflow",
+      "expected_canon": "airflow",
+      "got_canon": "airflow",
+      "match": true,
+      "elapsed_s": 17.97
+    },
+    {
+      "idx": 8,
+      "query": "Поставь на паузу все DAG",
+      "expected_raw": "airflow_control",
+      "got_raw": "airflow-control",
+      "expected_canon": "airflow_control",
+      "got_canon": "airflow_control",
+      "match": true,
+      "elapsed_s": 63.19
+    },
+    {
+      "idx": 9,
+      "query": "Останови pipeline reviews_daily",
+      "expected_raw": "airflow_control",
+      "got_raw": "airflow-control",
+      "expected_canon": "airflow_control",
+      "got_canon": "airflow_control",
+      "match": true,
+      "elapsed_s": 30.77
+    },
+    {
+      "idx": 10,
+      "query": "Возобнови все остановленные даги",
+      "expected_raw": "airflow_control",
+      "got_raw": "airflow-control",
+      "expected_canon": "airflow_control",
+      "got_canon": "airflow_control",
+      "match": true,
+      "elapsed_s": 64.96
+    },
+    {
+      "idx": 11,
+      "query": "Отправь Spark job для расчёта LTV клиентов",
+      "expected_raw": "spark",
+      "got_raw": "spark",
+      "expected_canon": "spark",
+      "got_canon": "spark",
+      "match": true,
+      "elapsed_s": 21.66
+    },
+    {
+      "idx": 12,
+      "query": "Какой статус у моего последнего spark job?",
+      "expected_raw": "spark",
+      "got_raw": "spark",
+      "expected_canon": "spark",
+      "got_canon": "spark",
+      "match": true,
+      "elapsed_s": 34.02
+    },
+    {
+      "idx": 13,
+      "query": "Перезапусти джоб clickstream_aggregator",
+      "expected_raw": "spark",
+      "got_raw": "airflow",
+      "expected_canon": "spark",
+      "got_canon": "airflow",
+      "match": false,
+      "elapsed_s": 49.0
+    },
+    {
+      "idx": 14,
+      "query": "Создай DAG для ежедневной загрузки CSV из /data в orders_raw",
+      "expected_raw": "artifact_airflow",
+      "got_raw": "database",
+      "expected_canon": "artifact_airflow",
+      "got_canon": "database",
+      "match": false,
+      "elapsed_s": 28.82
+    },
+    {
+      "idx": 15,
+      "query": "Напиши Airflow DAG который раз в час забирает данные из S3",
+      "expected_raw": "artifact_airflow",
+      "got_raw": "artifact",
+      "expected_canon": "artifact_airflow",
+      "got_canon": "artifact",
+      "match": true,
+      "elapsed_s": 32.19
+    },
+    {
+      "idx": 16,
+      "query": "Сгенерируй пайплайн синхронизации с PostgreSQL каждые 30 минут",
+      "expected_raw": "artifact_airflow",
+      "got_raw": "database-connections",
+      "expected_canon": "artifact_airflow",
+      "got_canon": "database-connections",
+      "match": false,
+      "elapsed_s": 37.88
+    },
+    {
+      "idx": 17,
+      "query": "Напиши PySpark который считает median по amount в orders",
+      "expected_raw": "artifact_spark",
+      "got_raw": "database",
+      "expected_canon": "artifact_spark",
+      "got_canon": "database",
+      "match": false,
+      "elapsed_s": 20.01
+    },
+    {
+      "idx": 18,
+      "query": "Создай spark задачу для дедупликации clickstream по user_id",
+      "expected_raw": "artifact_spark",
+      "got_raw": "database",
+      "expected_canon": "artifact_spark",
+      "got_canon": "database",
+      "match": false,
+      "elapsed_s": 47.24
+    },
+    {
+      "idx": 19,
+      "query": "Сгенерируй pyspark код для join orders и customers",
+      "expected_raw": "artifact_spark",
+      "got_raw": "artifact",
+      "expected_canon": "artifact_spark",
+      "got_canon": "artifact",
+      "match": true,
+      "elapsed_s": 31.08
+    },
+    {
+      "idx": 20,
+      "query": "Покажи каталог таблиц",
+      "expected_raw": "catalog",
+      "got_raw": "catalog",
+      "expected_canon": "catalog",
+      "got_canon": "catalog",
+      "match": true,
+      "elapsed_s": 4.48
+    },
+    {
+      "idx": 21,
+      "query": "Какие колонки в products?",
+      "expected_raw": "catalog",
+      "got_raw": "database",
+      "expected_canon": "catalog",
+      "got_canon": "database",
+      "match": true,
+      "elapsed_s": 14.11
+    },
+    {
+      "idx": 22,
+      "query": "Покажи схему БД",
+      "expected_raw": "catalog",
+      "got_raw": "database",
+      "expected_canon": "catalog",
+      "got_canon": "database",
+      "match": true,
+      "elapsed_s": 32.63
+    },
+    {
+      "idx": 23,
+      "query": "Что лежит в нашей базе?",
+      "expected_raw": "database",
+      "got_raw": "database",
+      "expected_canon": "database",
+      "got_canon": "database",
+      "match": true,
+      "elapsed_s": 5.25
+    },
+    {
+      "idx": 24,
+      "query": "Покажи все таблицы и количество строк",
+      "expected_raw": "database",
+      "got_raw": "database",
+      "expected_canon": "database",
+      "got_canon": "database",
+      "match": true,
+      "elapsed_s": 4.39
+    },
+    {
+      "idx": 25,
+      "query": "Что внутри warehouse?",
+      "expected_raw": "database",
+      "got_raw": "database",
+      "expected_canon": "database",
+      "got_canon": "database",
+      "match": true,
+      "elapsed_s": 5.01
+    },
+    {
+      "idx": 26,
+      "query": "Покажи все статусы пайплайнов и джобов",
+      "expected_raw": "site",
+      "got_raw": "airflow",
+      "expected_canon": "site",
+      "got_canon": "airflow",
+      "match": false,
+      "elapsed_s": 72.99
+    },
+    {
+      "idx": 27,
+      "query": "Какое состояние системы сейчас?",
+      "expected_raw": "site",
+      "got_raw": "site-status",
+      "expected_canon": "site",
+      "got_canon": "site",
+      "match": true,
+      "elapsed_s": 32.64
+    },
+    {
+      "idx": 28,
+      "query": "Что сейчас выполняется?",
+      "expected_raw": "site",
+      "got_raw": "site-status",
+      "expected_canon": "site",
+      "got_canon": "site",
+      "match": true,
+      "elapsed_s": 52.97
+    },
+    {
+      "idx": 29,
+      "query": "Покажи историю версий DAG orders_sync",
+      "expected_raw": "versioning",
+      "got_raw": "versioning",
+      "expected_canon": "versioning",
+      "got_canon": "versioning",
+      "match": true,
+      "elapsed_s": 24.26
+    },
+    {
+      "idx": 30,
+      "query": "Какая была предыдущая версия скрипта clickstream_etl?",
+      "expected_raw": "versioning",
+      "got_raw": "versioning",
+      "expected_canon": "versioning",
+      "got_canon": "versioning",
+      "match": true,
+      "elapsed_s": 35.08
+    },
+    {
+      "idx": 31,
+      "query": "Откати артефакт ltv_calculator на версию 3",
+      "expected_raw": "versioning",
+      "got_raw": "versioning",
+      "expected_canon": "versioning",
+      "got_canon": "versioning",
+      "match": true,
+      "elapsed_s": 36.48
+    },
+    {
+      "idx": 32,
+      "query": "Отладь traceback: KeyError 'customer_id'",
+      "expected_raw": "debug",
+      "got_raw": "database",
+      "expected_canon": "debug",
+      "got_canon": "database",
+      "match": false,
+      "elapsed_s": 117.82
+    },
+    {
+      "idx": 33,
+      "query": "Помоги разобраться с OutOfMemoryError в Spark",
+      "expected_raw": "debug",
+      "got_raw": "spark",
+      "expected_canon": "debug",
+      "got_canon": "spark",
+      "match": false,
+      "elapsed_s": 99.17
+    },
+    {
+      "idx": 34,
+      "query": "В чём ошибка в моём DAG?",
+      "expected_raw": "debug",
+      "got_raw": "database-connections",
+      "expected_canon": "debug",
+      "got_canon": "database-connections",
+      "match": false,
+      "elapsed_s": 58.66
+    },
+    {
+      "idx": 35,
+      "query": "Какие MCP инструменты доступны?",
+      "expected_raw": "mcp",
+      "got_raw": "mcp",
+      "expected_canon": "mcp",
+      "got_canon": "mcp",
+      "match": true,
+      "elapsed_s": 20.95
+    },
+    {
+      "idx": 36,
+      "query": "Вызови MCP filesystem чтобы прочитать конфиг",
+      "expected_raw": "mcp",
+      "got_raw": "agent-error",
+      "expected_canon": "mcp",
+      "got_canon": "agent-error",
+      "match": false,
+      "elapsed_s": 32.92
+    },
+    {
+      "idx": 37,
+      "query": "Используй model context protocol для документа",
+      "expected_raw": "mcp",
+      "got_raw": "agent-error",
+      "expected_canon": "mcp",
+      "got_canon": "agent-error",
+      "match": false,
+      "elapsed_s": 24.9
+    },
+    {
+      "idx": 38,
+      "query": "Открой Spark Workspace",
+      "expected_raw": "navigate:spark",
+      "got_raw": "site-control",
+      "expected_canon": "navigate",
+      "got_canon": "navigate",
+      "match": true,
+      "elapsed_s": 3.8
+    },
+    {
+      "idx": 39,
+      "query": "Перейди на Airflow",
+      "expected_raw": "navigate:airflow",
+      "got_raw": "site-control",
+      "expected_canon": "navigate",
+      "got_canon": "navigate",
+      "match": true,
+      "elapsed_s": 7.18
+    },
+    {
+      "idx": 40,
+      "query": "Покажи Settings",
+      "expected_raw": "navigate:settings",
+      "got_raw": "site-control",
+      "expected_canon": "navigate",
+      "got_canon": "navigate",
+      "match": true,
+      "elapsed_s": 6.69
+    },
+    {
+      "idx": 41,
+      "query": "Открой профиль",
+      "expected_raw": "navigate:profile",
+      "got_raw": "site-control",
+      "expected_canon": "navigate",
+      "got_canon": "navigate",
+      "match": true,
+      "elapsed_s": 6.12
+    },
+    {
+      "idx": 42,
+      "query": "Покажи мне dashboard",
+      "expected_raw": "navigate:dashboard",
+      "got_raw": "site-control",
+      "expected_canon": "navigate",
+      "got_canon": "navigate",
+      "match": true,
+      "elapsed_s": 3.04
+    }
+  ],
+  "_runtime_s": 336.8
+}

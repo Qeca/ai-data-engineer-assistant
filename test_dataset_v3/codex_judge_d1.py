@@ -1,0 +1,150 @@
+"""LLM-as-a-Judge для D1: для каждого fail-кейса спрашиваем codex,
+эквивалентны ли expected и got интенты семантически в контексте запроса.
+
+Цель: убрать false-negatives от rule-based matching там, где модель
+дала semantically valid ответ, который не попал в INTENT_GROUPS.
+"""
+
+import json
+import shutil
+import subprocess
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent
+
+JUDGE_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "equivalent": {
+            "type": "string",
+            "enum": ["yes", "no", "partial"],
+            "description": "yes если got — допустимый/более-общий ответ на запрос; "
+                           "partial если got частично верен; no если ошибка",
+        },
+        "reason": {
+            "type": "string",
+            "description": "Одно предложение почему",
+        },
+    },
+    "required": ["equivalent", "reason"],
+    "additionalProperties": False,
+}
+
+
+def judge_one(query: str, expected: str, got: str, intents_help: str) -> dict:
+    """Один запрос codex exec с structured output."""
+    prompt = f"""Ты — судья intent-классификатора для AI-агента data engineer.
+
+Допустимые intent-категории (с описаниями):
+{intents_help}
+
+Запрос пользователя:
+\"\"\"{query}\"\"\"
+
+Эталонная метка (expected): "{expected}"
+Реальный ответ агента (got): "{got}"
+
+Задача: считать ли got допустимым ответом на этот запрос? Учитывай что:
+- got может быть синонимом или более-общей категорией → "yes"
+- got может частично описывать запрос → "partial"
+- got может быть откровенной ошибкой → "no"
+
+Ответь строго по JSON-схеме."""
+
+    schema_path = ROOT / ".codex_d1_schema.json"
+    schema_path.write_text(json.dumps(JUDGE_SCHEMA))
+    out_path = ROOT / ".codex_d1_out.txt"
+    cmd = [
+        "codex", "exec",
+        "--sandbox", "read-only",
+        "--skip-git-repo-check",
+        "--output-schema", str(schema_path),
+        "-o", str(out_path),
+        prompt,
+    ]
+    try:
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=120)
+        last_msg = out_path.read_text() if out_path.exists() else ""
+        last_msg = last_msg.strip()
+        # codex может писать обернутый блок ```json ... ``` — снимем
+        if last_msg.startswith("```"):
+            last_msg = last_msg.strip("`").lstrip("json").strip()
+        try:
+            return json.loads(last_msg)
+        except json.JSONDecodeError:
+            return {"equivalent": "no", "reason": f"parse_error: {last_msg[:100]}"}
+    except subprocess.TimeoutExpired:
+        return {"equivalent": "no", "reason": "codex timeout"}
+    except Exception as e:
+        return {"equivalent": "no", "reason": f"error: {e}"}
+
+
+INTENTS_DESCRIPTION = """- sql: запрос данных через SELECT или подобный read-only SQL
+- catalog: просмотр схемы таблиц, колонок, метаданных каталога
+- database: работа с базой данных в общем смысле (включая sql/catalog)
+- airflow: операции с Airflow DAG (запуск, просмотр, статус)
+- airflow_control: управление состоянием DAG (pause, resume)
+- spark: операции со Spark job (submit, status, logs)
+- artifact_airflow: ГЕНЕРАЦИЯ нового Airflow DAG как артефакта
+- artifact_spark: ГЕНЕРАЦИЯ нового PySpark скрипта
+- artifact: общая категория генерации артефактов
+- mcp: работа с MCP-серверами (discovery, call)
+- catalog: просмотр доступных таблиц/датасетов
+- debug: отладка ошибок, traceback'ов, помощь с исключениями
+- versioning: история версий артефактов
+- site / navigate: навигация по экранам приложения
+- database-connections: управление подключениями к БД"""
+
+
+def main() -> None:
+    if not shutil.which("codex"):
+        raise SystemExit("codex CLI не установлен")
+    d1 = json.load(open(ROOT / "results" / "D1.json"))
+    rows = d1["results"]
+    # Берём только текущие fail-кейсы (после rule-based matching)
+    fails = [r for r in rows if not r["match"]]
+    print(f"D1 fails to judge: {len(fails)}")
+
+    judgements: list[dict] = []
+    for i, r in enumerate(fails, 1):
+        q = r["query"]
+        exp = r["expected_canon"]
+        got = r["got_canon"]
+        print(f"  [{i}/{len(fails)}] judging exp={exp} got={got!r} ...", flush=True)
+        verdict = judge_one(q, exp, got, INTENTS_DESCRIPTION)
+        judgements.append({
+            "idx": r["idx"],
+            "query": q,
+            "expected": exp,
+            "got": got,
+            "rule_match": r["match"],
+            "codex_verdict": verdict.get("equivalent"),
+            "codex_reason": verdict.get("reason"),
+        })
+
+    out = ROOT / "results" / "D1_codex_judge.json"
+    out.write_text(json.dumps(judgements, ensure_ascii=False, indent=2))
+
+    # Aggregate: после судьи fail = (rule_match=False AND codex_verdict='no')
+    promoted = sum(1 for j in judgements if j["codex_verdict"] in ("yes", "partial"))
+    rejected = sum(1 for j in judgements if j["codex_verdict"] == "no")
+    print(f"\nCodex promoted to pass: {promoted}/{len(judgements)}")
+    print(f"Codex confirmed fail:   {rejected}/{len(judgements)}")
+
+    # Recompute D1 with codex-blessing
+    total = len(rows)
+    rule_passed = sum(1 for r in rows if r["match"])
+    final_passed = rule_passed + promoted
+    import math
+    p = final_passed / total
+    z = 1.96
+    denom = 1 + z*z/total
+    center = (p + z*z/(2*total)) / denom
+    half = z * math.sqrt(p*(1-p)/total + z*z/(4*total*total)) / denom
+    lo, hi = max(0, center-half), min(1, center+half)
+    print(f"\nD1 after codex judge: {final_passed}/{total} = {p*100:.1f}%  Wilson [{lo*100:.1f}, {hi*100:.1f}]")
+    print(f"  rule-based was: {rule_passed}/{total} = {rule_passed/total*100:.1f}%")
+
+
+if __name__ == "__main__":
+    main()

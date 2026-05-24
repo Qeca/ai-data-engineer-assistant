@@ -1,0 +1,8 @@
+Backend: http://localhost:18000
+Logged in. Categories: ['D13']
+
+--- D13 ---
+  saved → D13.json  (222.1s)
+  {'category': 'D13', 'source': 'apache/spark @ b2c2a8d', 'metric': 'M-22 real PySpark generation (apache/spark examples)', 'target': 0.8, 'n': 33, 'passed_count': 32, 'rate': 0.9697, 'wilson_lo': 0.8468, 'wilson_hi': 0.9946, 'passed': True, 'by_topic': {'core': '14/15', 'sql': '5/5', 'streaming': '2/2', 'ml': '11/11'}, '_runtime_s': 222.1}
+
+Summary → /Users/sharonov_dv/projects/diplom/test_dataset_v3/results/summary.json

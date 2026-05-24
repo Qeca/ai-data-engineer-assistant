@@ -1,0 +1,152 @@
+[
+  {
+    "id": "DAG-01",
+    "real_source_file": "01_example_postgres.py",
+    "source_repo": "apache/airflow",
+    "source_path": "providers/postgres/tests/system/postgres/example_postgres.py",
+    "source_commit": "ea7481d7d59b0eb129f8b39c848a24aa111e7ca3",
+    "source_license": "Apache-2.0",
+    "spec": "ETL pipeline that creates a PostgreSQL table, inserts data, and updates rows using SQLExecuteQueryOperator (official Airflow Postgres provider example).",
+    "invariants": [
+      "valid_python_ast",
+      "has_operator(SQLExecuteQueryOperator|PostgresOperator)",
+      "schedule '@once' or daily",
+      "no cycles"
+    ]
+  },
+  {
+    "id": "DAG-02",
+    "real_source_file": "02_example_s3_to_sql.py",
+    "source_repo": "apache/airflow",
+    "source_path": "providers/amazon/tests/system/amazon/aws/example_s3_to_sql.py",
+    "source_commit": "ea7481d7d59b0eb129f8b39c848a24aa111e7ca3",
+    "source_license": "Apache-2.0",
+    "spec": "End-to-end pipeline: create S3 bucket, upload CSV, load CSV into SQL table via S3ToSqlOperator, then teardown — the canonical S3→DB ingestion pattern.",
+    "invariants": [
+      "valid_python_ast",
+      "has_operator(S3CreateBucketOperator|S3DeleteBucketOperator|S3ToSqlOperator)",
+      "uses S3Hook or S3 task chain",
+      "no cycles"
+    ]
+  },
+  {
+    "id": "DAG-03",
+    "real_source_file": "03_example_http.py",
+    "source_repo": "apache/airflow",
+    "source_path": "providers/http/tests/system/http/example_http.py",
+    "source_commit": "ea7481d7d59b0eb129f8b39c848a24aa111e7ca3",
+    "source_license": "Apache-2.0",
+    "spec": "Comprehensive HTTP API integration: GET/POST/PUT/DELETE requests, HttpSensor for polling, HttpAsyncOperator, response_check callbacks — covers all HTTP integration patterns.",
+    "invariants": [
+      "valid_python_ast",
+      "has_operator(HttpOperator|HttpSensor|HttpAsyncOperator)",
+      "no cycles"
+    ]
+  },
+  {
+    "id": "DAG-04",
+    "real_source_file": "04_example_complex.py",
+    "source_repo": "apache/airflow",
+    "source_path": "airflow-core/src/airflow/example_dags/example_complex.py",
+    "source_commit": "ea7481d7d59b0eb129f8b39c848a24aa111e7ca3",
+    "source_license": "Apache-2.0",
+    "spec": "Production-scale DAG demonstrating Airflow's TaskGroup feature: three-stage pipeline (section_1, section_2, section_3) with nested task dependencies — flagship example of complex orchestration.",
+    "invariants": [
+      "valid_python_ast",
+      "uses TaskGroup",
+      "depends_on edges between sections",
+      "no cycles"
+    ]
+  },
+  {
+    "id": "DAG-05",
+    "real_source_file": "05_tutorial.py",
+    "source_repo": "apache/airflow",
+    "source_path": "airflow-core/src/airflow/example_dags/tutorial.py",
+    "source_commit": "ea7481d7d59b0eb129f8b39c848a24aa111e7ca3",
+    "source_license": "Apache-2.0",
+    "spec": "Official Apache Airflow tutorial DAG — demonstrates default_args, retries=1, retry_delay=5min, depends_on_past=False, with BashOperator templated commands (canonical reference for new operators).",
+    "invariants": [
+      "valid_python_ast",
+      "has default_args.retries >= 1",
+      "has retry_delay",
+      "has_operator(BashOperator)",
+      "no cycles"
+    ]
+  },
+  {
+    "id": "DAG-06",
+    "real_source_file": "06_example_slack_webhook.py",
+    "source_repo": "apache/airflow",
+    "source_path": "providers/slack/tests/system/slack/example_slack_webhook.py",
+    "source_commit": "ea7481d7d59b0eb129f8b39c848a24aa111e7ca3",
+    "source_license": "Apache-2.0",
+    "spec": "Slack notification pipeline using SlackWebhookOperator and SendSlackWebhookNotification — production pattern for alerting on DAG events.",
+    "invariants": [
+      "valid_python_ast",
+      "has_operator(SlackWebhookOperator|SendSlackWebhookNotification)",
+      "references slack",
+      "no cycles"
+    ]
+  },
+  {
+    "id": "DAG-07",
+    "real_source_file": "07_example_spark_dag.py",
+    "source_repo": "apache/airflow",
+    "source_path": "providers/apache/spark/tests/system/apache/spark/example_spark_dag.py",
+    "source_commit": "ea7481d7d59b0eb129f8b39c848a24aa111e7ca3",
+    "source_license": "Apache-2.0",
+    "spec": "Spark job orchestration: SparkSubmitOperator for JAR submit, SparkJDBCOperator for DB-to-Spark transfer, SparkSqlOperator for SQL workloads — official Apache Spark provider example.",
+    "invariants": [
+      "valid_python_ast",
+      "has_operator(SparkSubmitOperator|SparkJDBCOperator|SparkSqlOperator)",
+      "no cycles"
+    ]
+  },
+  {
+    "id": "DAG-08",
+    "real_source_file": "08_example_dynamic_task_mapping.py",
+    "source_repo": "apache/airflow",
+    "source_path": "airflow-core/src/airflow/example_dags/example_dynamic_task_mapping.py",
+    "source_commit": "ea7481d7d59b0eb129f8b39c848a24aa111e7ca3",
+    "source_license": "Apache-2.0",
+    "spec": "Dynamic Task Mapping via .expand() — Airflow's primary mechanism for parallel processing where the number of tasks is determined at runtime.",
+    "invariants": [
+      "valid_python_ast",
+      "uses_dynamic_task_mapping (.expand)",
+      "no cycles"
+    ]
+  },
+  {
+    "id": "DAG-09",
+    "real_source_file": "09_tutorial_taskflow_api.py",
+    "source_repo": "apache/airflow",
+    "source_path": "airflow-core/src/airflow/example_dags/tutorial_taskflow_api.py",
+    "source_commit": "ea7481d7d59b0eb129f8b39c848a24aa111e7ca3",
+    "source_license": "Apache-2.0",
+    "spec": "Modern TaskFlow API tutorial: ETL pipeline (extract→transform→load) with @task decorators, XCom passing via return values, and @dag decorator — the canonical 2.x+ style.",
+    "invariants": [
+      "valid_python_ast",
+      "uses @task decorator",
+      "uses @dag decorator",
+      "ETL chain extract → transform → load",
+      "no cycles"
+    ]
+  },
+  {
+    "id": "DAG-10",
+    "real_source_file": "10_example_simplest_dag.py",
+    "source_repo": "apache/airflow",
+    "source_path": "airflow-core/src/airflow/example_dags/example_simplest_dag.py",
+    "source_commit": "ea7481d7d59b0eb129f8b39c848a24aa111e7ca3",
+    "source_license": "Apache-2.0",
+    "spec": "Minimal smoke-test DAG demonstrating the @dag decorator at its simplest — one @task with pass body. Used as a baseline for DAG parser tests.",
+    "invariants": [
+      "valid_python_ast",
+      "uses @dag decorator",
+      "has at least one @task",
+      "len(tasks) <= 2",
+      "no cycles"
+    ]
+  }
+]

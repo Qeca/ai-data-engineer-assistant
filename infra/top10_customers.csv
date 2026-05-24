@@ -1,0 +1,4 @@
+customer_id,email,segment,order_count,total_amount
+3,maria@example.com,vip,2,11190.00
+2,ivan@example.com,b2b,1,5600.00
+1,anna@example.com,retail,2,3690.80

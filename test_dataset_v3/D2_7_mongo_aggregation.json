@@ -1,0 +1,146 @@
+[
+  {
+    "id": "mongo-001",
+    "engine": "mongodb",
+    "domain": "demo-interviews",
+    "difficulty": "simple",
+    "question": "How many interview sessions are recorded?",
+    "gold_query": {
+      "collection": "interview_sessions",
+      "operation": "countDocuments",
+      "filter": {}
+    }
+  },
+  {
+    "id": "mongo-002",
+    "engine": "mongodb",
+    "domain": "demo-interviews",
+    "difficulty": "simple",
+    "question": "Average score across all sessions",
+    "gold_query": {
+      "collection": "interview_sessions",
+      "operation": "aggregate",
+      "pipeline": [
+        {
+          "$group": {
+            "_id": null,
+            "avg_score": {
+              "$avg": "$score"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "mongo-003",
+    "engine": "mongodb",
+    "domain": "demo-interviews",
+    "difficulty": "moderate",
+    "question": "Top 3 candidates by score",
+    "gold_query": {
+      "collection": "interview_sessions",
+      "operation": "aggregate",
+      "pipeline": [
+        {
+          "$sort": {
+            "score": -1
+          }
+        },
+        {
+          "$limit": 3
+        },
+        {
+          "$project": {
+            "candidate": 1,
+            "score": 1
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "mongo-004",
+    "engine": "mongodb",
+    "domain": "demo-interviews",
+    "difficulty": "moderate",
+    "question": "Distribution of sessions per track",
+    "gold_query": {
+      "collection": "interview_sessions",
+      "operation": "aggregate",
+      "pipeline": [
+        {
+          "$group": {
+            "_id": "$track",
+            "n": {
+              "$sum": 1
+            }
+          }
+        },
+        {
+          "$sort": {
+            "n": -1
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "mongo-005",
+    "engine": "mongodb",
+    "domain": "demo-interviews",
+    "difficulty": "challenging",
+    "question": "For each candidate, count feedback events of type 'hint_requested'",
+    "gold_query": {
+      "collection": "feedback_events",
+      "operation": "aggregate",
+      "pipeline": [
+        {
+          "$match": {
+            "event_name": "hint_requested"
+          }
+        },
+        {
+          "$lookup": {
+            "from": "interview_sessions",
+            "localField": "session_id",
+            "foreignField": "session_id",
+            "as": "session"
+          }
+        },
+        {
+          "$unwind": "$session"
+        },
+        {
+          "$group": {
+            "_id": "$session.candidate",
+            "hints": {
+              "$sum": 1
+            }
+          }
+        },
+        {
+          "$sort": {
+            "hints": -1
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "mongo-006",
+    "engine": "mongodb",
+    "domain": "demo-interviews",
+    "difficulty": "simple",
+    "question": "Sessions with score above 80",
+    "gold_query": {
+      "collection": "interview_sessions",
+      "operation": "find",
+      "filter": {
+        "score": {
+          "$gt": 80
+        }
+      }
+    }
+  }
+]

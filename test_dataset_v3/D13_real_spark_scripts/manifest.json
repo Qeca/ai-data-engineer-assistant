@@ -1,0 +1,137 @@
+{
+  "sha": "b2c2a8d68dcbbaca715adc74c0dd543582c9ff02",
+  "files": [
+    {
+      "source_path": "examples/src/main/python/wordcount.py",
+      "local": "D13_real_spark_scripts/01_wordcount.py"
+    },
+    {
+      "source_path": "examples/src/main/python/sort.py",
+      "local": "D13_real_spark_scripts/02_sort.py"
+    },
+    {
+      "source_path": "examples/src/main/python/pi.py",
+      "local": "D13_real_spark_scripts/03_pi.py"
+    },
+    {
+      "source_path": "examples/src/main/python/kmeans.py",
+      "local": "D13_real_spark_scripts/04_kmeans.py"
+    },
+    {
+      "source_path": "examples/src/main/python/logistic_regression.py",
+      "local": "D13_real_spark_scripts/05_logistic_regression.py"
+    },
+    {
+      "source_path": "examples/src/main/python/pagerank.py",
+      "local": "D13_real_spark_scripts/06_pagerank.py"
+    },
+    {
+      "source_path": "examples/src/main/python/transitive_closure.py",
+      "local": "D13_real_spark_scripts/07_transitive_closure.py"
+    },
+    {
+      "source_path": "examples/src/main/python/avro_inputformat.py",
+      "local": "D13_real_spark_scripts/08_avro_inputformat.py"
+    },
+    {
+      "source_path": "examples/src/main/python/parquet_inputformat.py",
+      "local": "D13_real_spark_scripts/09_parquet_inputformat.py"
+    },
+    {
+      "source_path": "examples/src/main/python/status_api_demo.py",
+      "local": "D13_real_spark_scripts/10_status_api_demo.py"
+    },
+    {
+      "source_path": "examples/src/main/python/sql/basic.py",
+      "local": "D13_real_spark_scripts/11_basic.py"
+    },
+    {
+      "source_path": "examples/src/main/python/sql/arrow.py",
+      "local": "D13_real_spark_scripts/12_arrow.py"
+    },
+    {
+      "source_path": "examples/src/main/python/sql/datasource.py",
+      "local": "D13_real_spark_scripts/13_datasource.py"
+    },
+    {
+      "source_path": "examples/src/main/python/sql/hive.py",
+      "local": "D13_real_spark_scripts/14_hive.py"
+    },
+    {
+      "source_path": "examples/src/main/python/sql/jdbc.py",
+      "local": "D13_real_spark_scripts/15_jdbc.py"
+    },
+    {
+      "source_path": "examples/src/main/python/sql/streaming/structured_kafka_wordcount.py",
+      "local": "D13_real_spark_scripts/16_structured_kafka_wordcount.py"
+    },
+    {
+      "source_path": "examples/src/main/python/sql/streaming/structured_network_wordcount.py",
+      "local": "D13_real_spark_scripts/17_structured_network_wordcount.py"
+    },
+    {
+      "source_path": "examples/src/main/python/sql/streaming/structured_network_wordcount_session_window.py",
+      "local": "D13_real_spark_scripts/18_structured_network_wordcount_session_window.py"
+    },
+    {
+      "source_path": "examples/src/main/python/sql/streaming/structured_network_wordcount_windowed.py",
+      "local": "D13_real_spark_scripts/19_structured_network_wordcount_windowed.py"
+    },
+    {
+      "source_path": "examples/src/main/python/sql/streaming/structured_sessionization.py",
+      "local": "D13_real_spark_scripts/20_structured_sessionization.py"
+    },
+    {
+      "source_path": "examples/src/main/python/ml/als_example.py",
+      "local": "D13_real_spark_scripts/21_als_example.py"
+    },
+    {
+      "source_path": "examples/src/main/python/ml/kmeans_example.py",
+      "local": "D13_real_spark_scripts/22_kmeans_example.py"
+    },
+    {
+      "source_path": "examples/src/main/python/ml/linear_regression_with_elastic_net.py",
+      "local": "D13_real_spark_scripts/23_linear_regression_with_elastic_net.py"
+    },
+    {
+      "source_path": "examples/src/main/python/ml/decision_tree_classification_example.py",
+      "local": "D13_real_spark_scripts/24_decision_tree_classification_example.py"
+    },
+    {
+      "source_path": "examples/src/main/python/ml/random_forest_classifier_example.py",
+      "local": "D13_real_spark_scripts/25_random_forest_classifier_example.py"
+    },
+    {
+      "source_path": "examples/src/main/python/ml/gradient_boosted_tree_classifier_example.py",
+      "local": "D13_real_spark_scripts/26_gradient_boosted_tree_classifier_example.py"
+    },
+    {
+      "source_path": "examples/src/main/python/ml/naive_bayes_example.py",
+      "local": "D13_real_spark_scripts/27_naive_bayes_example.py"
+    },
+    {
+      "source_path": "examples/src/main/python/ml/pipeline_example.py",
+      "local": "D13_real_spark_scripts/28_pipeline_example.py"
+    },
+    {
+      "source_path": "examples/src/main/python/ml/cross_validator.py",
+      "local": "D13_real_spark_scripts/29_cross_validator.py"
+    },
+    {
+      "source_path": "examples/src/main/python/ml/tf_idf_example.py",
+      "local": "D13_real_spark_scripts/30_tf_idf_example.py"
+    },
+    {
+      "source_path": "examples/src/main/python/ml/word2vec_example.py",
+      "local": "D13_real_spark_scripts/31_word2vec_example.py"
+    },
+    {
+      "source_path": "examples/src/main/python/ml/standard_scaler_example.py",
+      "local": "D13_real_spark_scripts/32_standard_scaler_example.py"
+    },
+    {
+      "source_path": "examples/src/main/python/ml/pca_example.py",
+      "local": "D13_real_spark_scripts/33_pca_example.py"
+    }
+  ]
+}

@@ -1,0 +1,478 @@
+{
+  "category": "D10",
+  "metric": "M-18 DB connection success",
+  "target": 0.9,
+  "n": 30,
+  "correct": 25,
+  "rate": 0.8333,
+  "wilson_lo": 0.6644,
+  "wilson_hi": 0.9266,
+  "passed": false,
+  "results": [
+    {
+      "idx": 0,
+      "id": "CONN-01",
+      "engine": "postgresql",
+      "scenario": "Подключи Postgres demo на localhost:5432 db=demo, user=demo",
+      "expected": "upsert_database_connection → status=active",
+      "tools": [
+        "databaseconnectiontool",
+        "databaseconnectiontool",
+        "databaseconnectiontool"
+      ],
+      "match": true,
+      "matcher_path": "normal",
+      "priority": "P0",
+      "elapsed_s": 14.87
+    },
+    {
+      "idx": 1,
+      "id": "CONN-02",
+      "engine": "mysql",
+      "scenario": "Добавь MySQL retail на localhost:3306 db=retail",
+      "expected": "upsert + test → status=active",
+      "tools": [
+        "databaseconnectiontool"
+      ],
+      "match": true,
+      "matcher_path": "normal",
+      "priority": "P0",
+      "elapsed_s": 9.59
+    },
+    {
+      "idx": 2,
+      "id": "CONN-03",
+      "engine": "clickhouse",
+      "scenario": "Подключи ClickHouse на ch.local:8123 db=analytics",
+      "expected": "upsert + test → status=active",
+      "tools": [
+        "databaseconnectiontool",
+        "databaseconnectiontool",
+        "databaseconnectiontool"
+      ],
+      "match": true,
+      "matcher_path": "normal",
+      "priority": "P0",
+      "elapsed_s": 19.4
+    },
+    {
+      "idx": 3,
+      "id": "CONN-04",
+      "engine": "mongodb",
+      "scenario": "Добавь Mongo на mongo.local:27017 db=analytics",
+      "expected": "upsert + test → status=active",
+      "tools": [
+        "databaseconnectiontool",
+        "databaseconnectiontool",
+        "databaseconnectiontool"
+      ],
+      "match": true,
+      "matcher_path": "normal",
+      "priority": "P0",
+      "elapsed_s": 19.21
+    },
+    {
+      "idx": 4,
+      "id": "CONN-05",
+      "engine": "postgresql",
+      "scenario": "Проверь подключение к sales_pg",
+      "expected": "test_database_connection → status=active",
+      "tools": [
+        "databaseconnectiontool"
+      ],
+      "match": true,
+      "matcher_path": "normal",
+      "priority": "P1",
+      "elapsed_s": 4.41
+    },
+    {
+      "idx": 5,
+      "id": "CONN-06",
+      "engine": "postgresql",
+      "scenario": "Проверь подключение к pg_offline.example:1234",
+      "expected": "test → status=error, last_error='connection refused'",
+      "tools": [
+        "databaseconnectiontool",
+        "databaseconnectiontool"
+      ],
+      "match": true,
+      "matcher_path": "normal",
+      "priority": "P1",
+      "elapsed_s": 5.98
+    },
+    {
+      "idx": 6,
+      "id": "CONN-07",
+      "engine": "mysql",
+      "scenario": "Подключи MySQL с неверным паролем",
+      "expected": "test → status=error, last_error 'access denied'",
+      "tools": [
+        "databaseconnectiontool"
+      ],
+      "match": true,
+      "matcher_path": "normal",
+      "priority": "P1",
+      "elapsed_s": 6.25
+    },
+    {
+      "idx": 7,
+      "id": "CONN-08",
+      "engine": "postgresql",
+      "scenario": "Пароль БД должен храниться зашифрованным",
+      "expected": "password_secret в бд ≠ открытому тексту (fernet/aes)",
+      "tools": [
+        "sitestatustool",
+        "databaseconnectiontool",
+        "sitecontroltool"
+      ],
+      "match": true,
+      "matcher_path": "audit",
+      "priority": "P0",
+      "elapsed_s": 22.56
+    },
+    {
+      "idx": 8,
+      "id": "CONN-09",
+      "engine": "postgresql",
+      "scenario": "Создай private подключение от пользователя U1",
+      "expected": "у пользователя u2 list_database_connections не возвращает это подключение",
+      "tools": [
+        "databaseconnectiontool"
+      ],
+      "match": true,
+      "matcher_path": "normal",
+      "priority": "P0",
+      "elapsed_s": 5.65
+    },
+    {
+      "idx": 9,
+      "id": "CONN-10",
+      "engine": "postgresql",
+      "scenario": "Создай shared подключение от пользователя U1",
+      "expected": "у пользователя u2 в той же org оно видно",
+      "tools": [
+        "databaseconnectiontool"
+      ],
+      "match": true,
+      "matcher_path": "normal",
+      "priority": "P1",
+      "elapsed_s": 7.06
+    },
+    {
+      "idx": 10,
+      "id": "CONN-11",
+      "engine": "postgresql",
+      "scenario": "Поменяй host на new-db.local для sales_pg",
+      "expected": "upsert с тем же name обновляет, не создаёт дубликат",
+      "tools": [
+        "databaseconnectiontool"
+      ],
+      "match": true,
+      "matcher_path": "normal",
+      "priority": "P1",
+      "elapsed_s": 7.99
+    },
+    {
+      "idx": 11,
+      "id": "CONN-12",
+      "engine": "*",
+      "scenario": "Покажи мои подключения",
+      "expected": "list_database_connections → возвращает массив с engine/host/status",
+      "tools": [
+        "databaseconnectiontool"
+      ],
+      "match": false,
+      "matcher_path": "cross_engine",
+      "priority": "P2",
+      "elapsed_s": 5.63
+    },
+    {
+      "idx": 12,
+      "id": "CONN-13",
+      "engine": "?",
+      "scenario": "Подключи СУБД Oracle",
+      "expected": "reject — engine не поддержан (поддержаны pg/mysql/clickhouse/mongodb)",
+      "tools": [
+        "databaseconnectiontool"
+      ],
+      "match": true,
+      "matcher_path": "reject",
+      "priority": "P2",
+      "elapsed_s": 3.85
+    },
+    {
+      "idx": 13,
+      "id": "CONN-14",
+      "engine": "postgresql",
+      "scenario": "Подключи Postgres на host=localhost port=99999",
+      "expected": "reject — port out of range",
+      "tools": [
+        "databaseconnectiontool"
+      ],
+      "match": false,
+      "matcher_path": "reject",
+      "priority": "P2",
+      "elapsed_s": 5.65
+    },
+    {
+      "idx": 14,
+      "id": "CONN-15",
+      "engine": "postgresql",
+      "scenario": "Создай подключение без имени",
+      "expected": "reject — name required",
+      "tools": [],
+      "match": true,
+      "matcher_path": "reject",
+      "priority": "P2",
+      "elapsed_s": 3.46
+    },
+    {
+      "idx": 15,
+      "id": "CONN-16",
+      "engine": "*",
+      "scenario": "Через 60 сек после создания статус должен обновиться через Celery",
+      "expected": "celery beat task refresh-database-connections-every-minute обновляет status и la",
+      "tools": [
+        "sitestatustool"
+      ],
+      "match": false,
+      "matcher_path": "cross_engine",
+      "priority": "P0",
+      "elapsed_s": 19.72
+    },
+    {
+      "idx": 16,
+      "id": "CONN-17",
+      "engine": "postgresql",
+      "scenario": "БД легла после успешного создания",
+      "expected": "в следующем тике status=error, last_error заполнен",
+      "tools": [
+        "sitestatustool",
+        "databaseconnectiontool"
+      ],
+      "match": true,
+      "matcher_path": "normal",
+      "priority": "P1",
+      "elapsed_s": 21.5
+    },
+    {
+      "idx": 17,
+      "id": "CONN-18",
+      "engine": "postgresql",
+      "scenario": "БД восстановилась после сбоя",
+      "expected": "в следующем тике status=active, last_error очищен",
+      "tools": [
+        "sitestatustool",
+        "databaseconnectiontool",
+        "databaseinspectortool"
+      ],
+      "match": true,
+      "matcher_path": "normal",
+      "priority": "P1",
+      "elapsed_s": 22.0
+    },
+    {
+      "idx": 18,
+      "id": "CONN-19",
+      "engine": "mysql",
+      "scenario": "Создал MySQL → покажи каталог",
+      "expected": "сценарий: upsert → test → list_catalog с правильным engine dialect",
+      "tools": [
+        "sitestatustool",
+        "databaseconnectiontool",
+        "catalogtool",
+        "databaseinspectortool"
+      ],
+      "match": true,
+      "matcher_path": "normal",
+      "priority": "P0",
+      "elapsed_s": 24.42
+    },
+    {
+      "idx": 19,
+      "id": "CONN-20",
+      "engine": "postgresql",
+      "scenario": "Удали подключение test_pg",
+      "expected": "связанные tool_runs ondelete=cascade; список не содержит удалённого",
+      "tools": [
+        "databaseconnectiontool"
+      ],
+      "match": true,
+      "matcher_path": "normal",
+      "priority": "P1",
+      "elapsed_s": 4.73
+    },
+    {
+      "idx": 20,
+      "id": "CONN-21",
+      "engine": "*",
+      "scenario": "Сравни выручку из sales_pg (orders.amount) с MySQL retail_sales",
+      "expected": "агент делает 2 execute_sql с разными connection_id, объединяет в финальном ответ",
+      "tools": [],
+      "match": false,
+      "matcher_path": "cross_engine",
+      "priority": "P0",
+      "elapsed_s": 120.01
+    },
+    {
+      "idx": 21,
+      "id": "CONN-22",
+      "engine": "mongodb+postgresql",
+      "scenario": "Сравни средний score из Mongo interview_sessions с avg amount из sales_pg",
+      "expected": "2 разные операции: mongo aggregate + sql avg",
+      "tools": [
+        "sitestatustool",
+        "databaseconnectiontool",
+        "mcpdiscoverytool",
+        "catalogtool",
+        "mcpdiscoverytool",
+        "sqltool",
+        "bashsandboxtool",
+        "bashsandboxtool",
+        "bashsandboxtool",
+        "bashsandboxtool",
+        "databaseinspectortool",
+        "bashsandboxtool",
+        "bashsandboxtool",
+        "sqltool",
+        "externalmcptool",
+        "sqltool",
+        "bashsandboxtool",
+        "bashsandboxtool",
+        "sitecontroltool",
+        "bashsandboxtool",
+        "mcpdiscoverytool",
+        "externalmcptool",
+        "externalmcptool",
+        "externalmcptool"
+      ],
+      "match": true,
+      "matcher_path": "cross_engine",
+      "priority": "P1",
+      "elapsed_s": 86.33
+    },
+    {
+      "idx": 22,
+      "id": "CONN-23",
+      "engine": "*",
+      "scenario": "Пароль не должен фигурировать в логах tool_runs",
+      "expected": "tool_runs.input_json не содержит password в open text",
+      "tools": [
+        "sitestatustool"
+      ],
+      "match": true,
+      "matcher_path": "audit",
+      "priority": "P0",
+      "elapsed_s": 19.69
+    },
+    {
+      "idx": 23,
+      "id": "CONN-24",
+      "engine": "*",
+      "scenario": "Тест подключения скрывает credentials",
+      "expected": "output test_database_connection не содержит password/secret",
+      "tools": [
+        "sitestatustool",
+        "databaseconnectiontool"
+      ],
+      "match": true,
+      "matcher_path": "audit",
+      "priority": "P0",
+      "elapsed_s": 19.87
+    },
+    {
+      "idx": 24,
+      "id": "CONN-25",
+      "engine": "*",
+      "scenario": "Два пользователя одновременно меняют одно подключение",
+      "expected": "last-write-wins; бд остаётся в согласованном состоянии (updated_at последний)",
+      "tools": [
+        "sitestatustool",
+        "databaseconnectiontool"
+      ],
+      "match": true,
+      "matcher_path": "cross_engine",
+      "priority": "P2",
+      "elapsed_s": 22.76
+    },
+    {
+      "idx": 25,
+      "id": "CONN-26",
+      "engine": "postgresql",
+      "scenario": "Создай подключение с именем 'продажи'",
+      "expected": "корректная обработка utf-8 в name",
+      "tools": [
+        "databaseconnectiontool"
+      ],
+      "match": true,
+      "matcher_path": "normal",
+      "priority": "P2",
+      "elapsed_s": 5.42
+    },
+    {
+      "idx": 26,
+      "id": "CONN-27",
+      "engine": "*",
+      "scenario": "options_json содержит 50 KB параметров",
+      "expected": "сохраняется без обрезки до лимита (4 mb json column)",
+      "tools": [
+        "sitestatustool"
+      ],
+      "match": false,
+      "matcher_path": "cross_engine",
+      "priority": "P2",
+      "elapsed_s": 20.16
+    },
+    {
+      "idx": 27,
+      "id": "CONN-28",
+      "engine": "mongodb",
+      "scenario": "Mongo без user/pass",
+      "expected": "поддерживаются anonymous подключения; status может быть active если бд позволяет",
+      "tools": [
+        "databaseconnectiontool",
+        "databaseconnectiontool",
+        "databaseconnectiontool"
+      ],
+      "match": true,
+      "matcher_path": "normal",
+      "priority": "P2",
+      "elapsed_s": 9.64
+    },
+    {
+      "idx": 28,
+      "id": "CONN-29",
+      "engine": "*",
+      "scenario": "Connection health-check не блокирует основные таски",
+      "expected": "routing: connections.refresh_statuses в queue=connections (не в default)",
+      "tools": [
+        "sitestatustool",
+        "databaseconnectiontool"
+      ],
+      "match": true,
+      "matcher_path": "cross_engine",
+      "priority": "P1",
+      "elapsed_s": 23.19
+    },
+    {
+      "idx": 29,
+      "id": "CONN-30",
+      "engine": "*",
+      "scenario": "Запрос 'покажи orders из retail' с двумя подключёнными БД",
+      "expected": "агент выбирает mysql retail, не pg sales — disambiguation по контексту",
+      "tools": [
+        "sitestatustool",
+        "databaseconnectiontool",
+        "databaseinspectortool",
+        "sqltool",
+        "mcpdiscoverytool",
+        "externalmcptool"
+      ],
+      "match": true,
+      "matcher_path": "cross_engine",
+      "priority": "P0",
+      "elapsed_s": 32.51
+    }
+  ],
+  "_runtime_s": 175.4
+}

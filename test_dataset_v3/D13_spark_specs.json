@@ -1,0 +1,827 @@
+[
+  {
+    "id": "01_wordcount",
+    "source_file": "D13_real_spark_scripts/01_wordcount.py",
+    "source_repo": "apache/spark",
+    "source_sha": "b2c2a8d68dcbbaca715adc74c0dd543582c9ff02",
+    "source_license": "Apache-2.0",
+    "topic": "core",
+    "ml_modules": [],
+    "classes_used": [],
+    "spec": "Сгенерируй PySpark-скрипт по образцу wordcount. Скрипт должен импортировать pyspark и быть готовым к spark-submit.",
+    "invariants": [
+      "valid_python_ast",
+      "imports_pyspark"
+    ],
+    "must_artifact_type": "spark"
+  },
+  {
+    "id": "02_sort",
+    "source_file": "D13_real_spark_scripts/02_sort.py",
+    "source_repo": "apache/spark",
+    "source_sha": "b2c2a8d68dcbbaca715adc74c0dd543582c9ff02",
+    "source_license": "Apache-2.0",
+    "topic": "core",
+    "ml_modules": [],
+    "classes_used": [],
+    "spec": "Сгенерируй PySpark-скрипт по образцу sort. Скрипт должен импортировать pyspark и быть готовым к spark-submit.",
+    "invariants": [
+      "valid_python_ast",
+      "imports_pyspark"
+    ],
+    "must_artifact_type": "spark"
+  },
+  {
+    "id": "03_pi",
+    "source_file": "D13_real_spark_scripts/03_pi.py",
+    "source_repo": "apache/spark",
+    "source_sha": "b2c2a8d68dcbbaca715adc74c0dd543582c9ff02",
+    "source_license": "Apache-2.0",
+    "topic": "core",
+    "ml_modules": [],
+    "classes_used": [],
+    "spec": "Сгенерируй PySpark-скрипт по образцу pi. Скрипт должен импортировать pyspark и быть готовым к spark-submit.",
+    "invariants": [
+      "valid_python_ast",
+      "imports_pyspark"
+    ],
+    "must_artifact_type": "spark"
+  },
+  {
+    "id": "04_kmeans",
+    "source_file": "D13_real_spark_scripts/04_kmeans.py",
+    "source_repo": "apache/spark",
+    "source_sha": "b2c2a8d68dcbbaca715adc74c0dd543582c9ff02",
+    "source_license": "Apache-2.0",
+    "topic": "core",
+    "ml_modules": [],
+    "classes_used": [],
+    "spec": "Описание задачи: The K-means algorithm written from scratch against PySpark. In practice,\none may prefer to use the KMeans algorithm in ML, as shown in\nexamples/src/main/python/ml/kmeans_example.py. Скрипт должен импортировать pyspark и быть готовым к spark-submit.",
+    "invariants": [
+      "valid_python_ast",
+      "imports_pyspark"
+    ],
+    "must_artifact_type": "spark"
+  },
+  {
+    "id": "05_logistic_regression",
+    "source_file": "D13_real_spark_scripts/05_logistic_regression.py",
+    "source_repo": "apache/spark",
+    "source_sha": "b2c2a8d68dcbbaca715adc74c0dd543582c9ff02",
+    "source_license": "Apache-2.0",
+    "topic": "core",
+    "ml_modules": [],
+    "classes_used": [],
+    "spec": "Описание задачи: A logistic regression implementation that uses NumPy (http://www.numpy.org)\nto act on batches of input data using efficient matrix operations. Скрипт должен импортировать pyspark и быть готовым к spark-submit.",
+    "invariants": [
+      "valid_python_ast",
+      "imports_pyspark"
+    ],
+    "must_artifact_type": "spark"
+  },
+  {
+    "id": "06_pagerank",
+    "source_file": "D13_real_spark_scripts/06_pagerank.py",
+    "source_repo": "apache/spark",
+    "source_sha": "b2c2a8d68dcbbaca715adc74c0dd543582c9ff02",
+    "source_license": "Apache-2.0",
+    "topic": "core",
+    "ml_modules": [],
+    "classes_used": [
+      "URL"
+    ],
+    "spec": "Описание задачи: This is an example implementation of PageRank. For more conventional use,\nPlease refer to PageRank implementation provided by graphx Ключевые классы: URL. Скрипт должен импортировать pyspark и быть готовым к spark-submit.",
+    "invariants": [
+      "valid_python_ast",
+      "imports_pyspark",
+      {
+        "has_class_or_call": [
+          "URL"
+        ]
+      }
+    ],
+    "must_artifact_type": "spark"
+  },
+  {
+    "id": "07_transitive_closure",
+    "source_file": "D13_real_spark_scripts/07_transitive_closure.py",
+    "source_repo": "apache/spark",
+    "source_sha": "b2c2a8d68dcbbaca715adc74c0dd543582c9ff02",
+    "source_license": "Apache-2.0",
+    "topic": "core",
+    "ml_modules": [],
+    "classes_used": [
+      "Random"
+    ],
+    "spec": "Сгенерируй PySpark-скрипт по образцу transitive_closure. Ключевые классы: Random. Скрипт должен импортировать pyspark и быть готовым к spark-submit.",
+    "invariants": [
+      "valid_python_ast",
+      "imports_pyspark",
+      {
+        "has_class_or_call": [
+          "Random"
+        ]
+      }
+    ],
+    "must_artifact_type": "spark"
+  },
+  {
+    "id": "08_avro_inputformat",
+    "source_file": "D13_real_spark_scripts/08_avro_inputformat.py",
+    "source_repo": "apache/spark",
+    "source_sha": "b2c2a8d68dcbbaca715adc74c0dd543582c9ff02",
+    "source_license": "Apache-2.0",
+    "topic": "core",
+    "ml_modules": [],
+    "classes_used": [],
+    "spec": "Описание задачи: Read data file users.avro in local Spark distro: Скрипт должен импортировать pyspark и быть готовым к spark-submit.",
+    "invariants": [
+      "valid_python_ast",
+      "imports_pyspark"
+    ],
+    "must_artifact_type": "spark"
+  },
+  {
+    "id": "09_parquet_inputformat",
+    "source_file": "D13_real_spark_scripts/09_parquet_inputformat.py",
+    "source_repo": "apache/spark",
+    "source_sha": "b2c2a8d68dcbbaca715adc74c0dd543582c9ff02",
+    "source_license": "Apache-2.0",
+    "topic": "core",
+    "ml_modules": [],
+    "classes_used": [],
+    "spec": "Описание задачи: Read data file users.parquet in local Spark distro: Скрипт должен импортировать pyspark и быть готовым к spark-submit.",
+    "invariants": [
+      "valid_python_ast",
+      "imports_pyspark"
+    ],
+    "must_artifact_type": "spark"
+  },
+  {
+    "id": "10_status_api_demo",
+    "source_file": "D13_real_spark_scripts/10_status_api_demo.py",
+    "source_repo": "apache/spark",
+    "source_sha": "b2c2a8d68dcbbaca715adc74c0dd543582c9ff02",
+    "source_license": "Apache-2.0",
+    "topic": "core",
+    "ml_modules": [],
+    "classes_used": [
+      "SparkContext",
+      "Queue",
+      "Thread",
+      "SparkConf"
+    ],
+    "spec": "Сгенерируй PySpark-скрипт по образцу status_api_demo. Ключевые классы: SparkContext, Queue, Thread, SparkConf. Скрипт должен импортировать pyspark и быть готовым к spark-submit.",
+    "invariants": [
+      "valid_python_ast",
+      "imports_pyspark",
+      {
+        "has_class_or_call": [
+          "SparkContext",
+          "Queue",
+          "Thread",
+          "SparkConf"
+        ]
+      }
+    ],
+    "must_artifact_type": "spark"
+  },
+  {
+    "id": "11_basic",
+    "source_file": "D13_real_spark_scripts/11_basic.py",
+    "source_repo": "apache/spark",
+    "source_sha": "b2c2a8d68dcbbaca715adc74c0dd543582c9ff02",
+    "source_license": "Apache-2.0",
+    "topic": "sql",
+    "ml_modules": [],
+    "classes_used": [
+      "StructField",
+      "StringType",
+      "StructType",
+      "Row"
+    ],
+    "spec": "Описание задачи: A simple example demonstrating basic Spark SQL features.\nRun with:\n  ./bin/spark-submit examples/src/main/python/sql/basic.py Используй SparkSession и DataFrame API. Ключевые классы: StructField, StringType, StructType, Row. Скрипт должен импортировать pyspark и быть готовым к spark-submit.",
+    "invariants": [
+      "valid_python_ast",
+      "imports_pyspark",
+      "uses_spark_session",
+      {
+        "has_class_or_call": [
+          "StructField",
+          "StringType",
+          "StructType",
+          "Row"
+        ]
+      }
+    ],
+    "must_artifact_type": "spark"
+  },
+  {
+    "id": "12_arrow",
+    "source_file": "D13_real_spark_scripts/12_arrow.py",
+    "source_repo": "apache/spark",
+    "source_sha": "b2c2a8d68dcbbaca715adc74c0dd543582c9ff02",
+    "source_license": "Apache-2.0",
+    "topic": "sql",
+    "ml_modules": [],
+    "classes_used": [
+      "Series",
+      "DataFrame",
+      "LongType"
+    ],
+    "spec": "Описание задачи: A simple example demonstrating Arrow in Spark.\nRun with:\n  ./bin/spark-submit examples/src/main/python/sql/arrow.py Используй SparkSession и DataFrame API. Ключевые классы: Series, DataFrame, LongType. Скрипт должен импортировать pyspark и быть готовым к spark-submit.",
+    "invariants": [
+      "valid_python_ast",
+      "imports_pyspark",
+      "uses_spark_session",
+      {
+        "has_class_or_call": [
+          "Series",
+          "DataFrame",
+          "LongType"
+        ]
+      }
+    ],
+    "must_artifact_type": "spark"
+  },
+  {
+    "id": "13_datasource",
+    "source_file": "D13_real_spark_scripts/13_datasource.py",
+    "source_repo": "apache/spark",
+    "source_sha": "b2c2a8d68dcbbaca715adc74c0dd543582c9ff02",
+    "source_license": "Apache-2.0",
+    "topic": "sql",
+    "ml_modules": [],
+    "classes_used": [
+      "CHAR",
+      "VARCHAR",
+      "DECIMAL",
+      "Row"
+    ],
+    "spec": "Описание задачи: A simple example demonstrating Spark SQL data sources.\nRun with:\n  ./bin/spark-submit examples/src/main/python/sql/datasource.py Используй SparkSession и DataFrame API. Ключевые классы: CHAR, VARCHAR, DECIMAL, Row. Скрипт должен импортировать pyspark и быть готовым к spark-submit.",
+    "invariants": [
+      "valid_python_ast",
+      "imports_pyspark",
+      "uses_spark_session",
+      {
+        "has_class_or_call": [
+          "CHAR",
+          "VARCHAR",
+          "DECIMAL",
+          "Row"
+        ]
+      }
+    ],
+    "must_artifact_type": "spark"
+  },
+  {
+    "id": "14_hive",
+    "source_file": "D13_real_spark_scripts/14_hive.py",
+    "source_repo": "apache/spark",
+    "source_sha": "b2c2a8d68dcbbaca715adc74c0dd543582c9ff02",
+    "source_license": "Apache-2.0",
+    "topic": "sql",
+    "ml_modules": [],
+    "classes_used": [
+      "Row",
+      "Record",
+      "COUNT"
+    ],
+    "spec": "Описание задачи: A simple example demonstrating Spark SQL Hive integration.\nRun with:\n  ./bin/spark-submit examples/src/main/python/sql/hive.py Используй SparkSession и DataFrame API. Ключевые классы: Row, Record, COUNT. Скрипт должен импортировать pyspark и быть готовым к spark-submit.",
+    "invariants": [
+      "valid_python_ast",
+      "imports_pyspark",
+      "uses_spark_session",
+      {
+        "has_class_or_call": [
+          "Row",
+          "Record",
+          "COUNT"
+        ]
+      }
+    ],
+    "must_artifact_type": "spark"
+  },
+  {
+    "id": "15_jdbc",
+    "source_file": "D13_real_spark_scripts/15_jdbc.py",
+    "source_repo": "apache/spark",
+    "source_sha": "b2c2a8d68dcbbaca715adc74c0dd543582c9ff02",
+    "source_license": "Apache-2.0",
+    "topic": "sql",
+    "ml_modules": [],
+    "classes_used": [],
+    "spec": "Описание задачи: A simple example demonstrating Spark SQL JDBC integration.\nRun with:\n  ./bin/spark-submit examples/src/main/python/sql/jdbc.py [jdbc_url] Используй SparkSession и DataFrame API. Скрипт должен импортировать pyspark и быть готовым к spark-submit.",
+    "invariants": [
+      "valid_python_ast",
+      "imports_pyspark",
+      "uses_spark_session"
+    ],
+    "must_artifact_type": "spark"
+  },
+  {
+    "id": "16_structured_kafka_wordcount",
+    "source_file": "D13_real_spark_scripts/16_structured_kafka_wordcount.py",
+    "source_repo": "apache/spark",
+    "source_sha": "b2c2a8d68dcbbaca715adc74c0dd543582c9ff02",
+    "source_license": "Apache-2.0",
+    "topic": "core",
+    "ml_modules": [],
+    "classes_used": [
+      "CAST"
+    ],
+    "spec": "Описание задачи: Consumes messages from one or more topics in Kafka and does wordcount.\n Usage: structured_kafka_wordcount.py <bootstrap-servers> <subscribe-type> <topics>\n   <bootstrap-servers> The Kafka \"bootstrap.servers\" configuration. A\n   comma-separated list of host:port.\n   <subscribe-type> There are three kinds of type, i.e. 'assign', 'subscribe',\n   'subscribePattern'.\n   |- <assign> Specific TopicPartitions to consume. Json string\n   |  {\"topicA\":[0,1],\"topicB\":[2,4]}.\n   |- <subscribe> The topic list Ключевые классы: CAST. Скрипт должен импортировать pyspark и быть готовым к spark-submit.",
+    "invariants": [
+      "valid_python_ast",
+      "imports_pyspark",
+      {
+        "has_class_or_call": [
+          "CAST"
+        ]
+      }
+    ],
+    "must_artifact_type": "spark"
+  },
+  {
+    "id": "17_structured_network_wordcount",
+    "source_file": "D13_real_spark_scripts/17_structured_network_wordcount.py",
+    "source_repo": "apache/spark",
+    "source_sha": "b2c2a8d68dcbbaca715adc74c0dd543582c9ff02",
+    "source_license": "Apache-2.0",
+    "topic": "streaming",
+    "ml_modules": [],
+    "classes_used": [],
+    "spec": "Описание задачи: Counts words in UTF8 encoded, '\\n' delimited text received from the network.\n Usage: structured_network_wordcount.py <hostname> <port>\n   <hostname> and <port> describe the TCP server that Structured Streaming\n   would connect to receive data. Используй Structured Streaming API (readStream/writeStream). Скрипт должен импортировать pyspark и быть готовым к spark-submit.",
+    "invariants": [
+      "valid_python_ast",
+      "imports_pyspark",
+      "uses_streaming"
+    ],
+    "must_artifact_type": "spark"
+  },
+  {
+    "id": "18_structured_network_wordcount_session_window",
+    "source_file": "D13_real_spark_scripts/18_structured_network_wordcount_session_window.py",
+    "source_repo": "apache/spark",
+    "source_sha": "b2c2a8d68dcbbaca715adc74c0dd543582c9ff02",
+    "source_license": "Apache-2.0",
+    "topic": "streaming",
+    "ml_modules": [],
+    "classes_used": [
+      "DataFrame",
+      "StructType",
+      "StructField",
+      "TimestampType",
+      "LongType",
+      "StringType"
+    ],
+    "spec": "Описание задачи: Split lines into words, group by words and use the state per key to track session of each key.\n Each session window sets a 10 seconds processing time timeout.\n After 10 seconds of idle period, the session summary will be finalized and output to sink.\n Usage: structured_network_wordcount_windowed.py <hostname> <port>\n <hostname> and <port> describe the TCP server that Structured Streaming\n would connect to receive data. Используй Structured Streaming API (readStream/writeStream). Ключевые классы: DataFrame, StructType, StructField, TimestampType, LongType, StringType. Скрипт должен импортировать pyspark и быть готовым к spark-submit.",
+    "invariants": [
+      "valid_python_ast",
+      "imports_pyspark",
+      "uses_streaming",
+      {
+        "has_class_or_call": [
+          "DataFrame",
+          "StructType",
+          "StructField",
+          "TimestampType"
+        ]
+      }
+    ],
+    "must_artifact_type": "spark"
+  },
+  {
+    "id": "19_structured_network_wordcount_windowed",
+    "source_file": "D13_real_spark_scripts/19_structured_network_wordcount_windowed.py",
+    "source_repo": "apache/spark",
+    "source_sha": "b2c2a8d68dcbbaca715adc74c0dd543582c9ff02",
+    "source_license": "Apache-2.0",
+    "topic": "core",
+    "ml_modules": [],
+    "classes_used": [],
+    "spec": "Описание задачи: Counts words in UTF8 encoded, '\\n' delimited text received from the network over a\n sliding window of configurable duration. Each line from the network is tagged\n with a timestamp that is used to determine the windows into which it falls. Скрипт должен импортировать pyspark и быть готовым к spark-submit.",
+    "invariants": [
+      "valid_python_ast",
+      "imports_pyspark"
+    ],
+    "must_artifact_type": "spark"
+  },
+  {
+    "id": "20_structured_sessionization",
+    "source_file": "D13_real_spark_scripts/20_structured_sessionization.py",
+    "source_repo": "apache/spark",
+    "source_sha": "b2c2a8d68dcbbaca715adc74c0dd543582c9ff02",
+    "source_license": "Apache-2.0",
+    "topic": "core",
+    "ml_modules": [],
+    "classes_used": [
+      "CAST"
+    ],
+    "spec": "Описание задачи: Counts words in UTF8 encoded, '\\n' delimited text received from the network over a\n sliding window of configurable duration. Ключевые классы: CAST. Скрипт должен импортировать pyspark и быть готовым к spark-submit.",
+    "invariants": [
+      "valid_python_ast",
+      "imports_pyspark",
+      {
+        "has_class_or_call": [
+          "CAST"
+        ]
+      }
+    ],
+    "must_artifact_type": "spark"
+  },
+  {
+    "id": "21_als_example",
+    "source_file": "D13_real_spark_scripts/21_als_example.py",
+    "source_repo": "apache/spark",
+    "source_sha": "b2c2a8d68dcbbaca715adc74c0dd543582c9ff02",
+    "source_license": "Apache-2.0",
+    "topic": "ml",
+    "ml_modules": [
+      "evaluation",
+      "recommendation"
+    ],
+    "classes_used": [
+      "ALS",
+      "RegressionEvaluator",
+      "Row"
+    ],
+    "spec": "Сгенерируй PySpark-скрипт по образцу als_example. Используй модули PySpark ML: pyspark.ml.evaluation, pyspark.ml.recommendation. Используй pyspark.ml для построения модели. Ключевые классы: ALS, RegressionEvaluator, Row. Скрипт должен импортировать pyspark и быть готовым к spark-submit.",
+    "invariants": [
+      "valid_python_ast",
+      "imports_pyspark",
+      "uses_pyspark_ml",
+      {
+        "has_class_or_call": [
+          "ALS",
+          "RegressionEvaluator",
+          "Row"
+        ]
+      }
+    ],
+    "must_artifact_type": "spark"
+  },
+  {
+    "id": "22_kmeans_example",
+    "source_file": "D13_real_spark_scripts/22_kmeans_example.py",
+    "source_repo": "apache/spark",
+    "source_sha": "b2c2a8d68dcbbaca715adc74c0dd543582c9ff02",
+    "source_license": "Apache-2.0",
+    "topic": "ml",
+    "ml_modules": [
+      "clustering",
+      "evaluation"
+    ],
+    "classes_used": [
+      "KMeans",
+      "ClusteringEvaluator"
+    ],
+    "spec": "Описание задачи: An example demonstrating k-means clustering.\nRun with:\n  bin/spark-submit examples/src/main/python/ml/kmeans_example.py Используй модули PySpark ML: pyspark.ml.clustering, pyspark.ml.evaluation. Используй pyspark.ml для построения модели. Ключевые классы: KMeans, ClusteringEvaluator. Скрипт должен импортировать pyspark и быть готовым к spark-submit.",
+    "invariants": [
+      "valid_python_ast",
+      "imports_pyspark",
+      "uses_pyspark_ml",
+      {
+        "has_class_or_call": [
+          "KMeans",
+          "ClusteringEvaluator"
+        ]
+      }
+    ],
+    "must_artifact_type": "spark"
+  },
+  {
+    "id": "23_linear_regression_with_elastic_net",
+    "source_file": "D13_real_spark_scripts/23_linear_regression_with_elastic_net.py",
+    "source_repo": "apache/spark",
+    "source_sha": "b2c2a8d68dcbbaca715adc74c0dd543582c9ff02",
+    "source_license": "Apache-2.0",
+    "topic": "core",
+    "ml_modules": [
+      "regression"
+    ],
+    "classes_used": [
+      "LinearRegression"
+    ],
+    "spec": "Сгенерируй PySpark-скрипт по образцу linear_regression_with_elastic_net. Используй модули PySpark ML: pyspark.ml.regression. Ключевые классы: LinearRegression. Скрипт должен импортировать pyspark и быть готовым к spark-submit.",
+    "invariants": [
+      "valid_python_ast",
+      "imports_pyspark",
+      "uses_pyspark_ml",
+      {
+        "has_class_or_call": [
+          "LinearRegression"
+        ]
+      }
+    ],
+    "must_artifact_type": "spark"
+  },
+  {
+    "id": "24_decision_tree_classification_example",
+    "source_file": "D13_real_spark_scripts/24_decision_tree_classification_example.py",
+    "source_repo": "apache/spark",
+    "source_sha": "b2c2a8d68dcbbaca715adc74c0dd543582c9ff02",
+    "source_license": "Apache-2.0",
+    "topic": "ml",
+    "ml_modules": [
+      "evaluation",
+      "classification",
+      "feature"
+    ],
+    "classes_used": [
+      "MulticlassClassificationEvaluator",
+      "StringIndexer",
+      "Pipeline",
+      "VectorIndexer",
+      "DecisionTreeClassifier"
+    ],
+    "spec": "Описание задачи: Decision Tree Classification Example. Используй модули PySpark ML: pyspark.ml.evaluation, pyspark.ml.classification, pyspark.ml.feature. Используй pyspark.ml для построения модели. Ключевые классы: MulticlassClassificationEvaluator, StringIndexer, Pipeline, VectorIndexer, DecisionTreeClassifier. Скрипт должен импортировать pyspark и быть готовым к spark-submit.",
+    "invariants": [
+      "valid_python_ast",
+      "imports_pyspark",
+      "uses_pyspark_ml",
+      {
+        "has_class_or_call": [
+          "MulticlassClassificationEvaluator",
+          "StringIndexer",
+          "Pipeline",
+          "VectorIndexer"
+        ]
+      }
+    ],
+    "must_artifact_type": "spark"
+  },
+  {
+    "id": "25_random_forest_classifier_example",
+    "source_file": "D13_real_spark_scripts/25_random_forest_classifier_example.py",
+    "source_repo": "apache/spark",
+    "source_sha": "b2c2a8d68dcbbaca715adc74c0dd543582c9ff02",
+    "source_license": "Apache-2.0",
+    "topic": "ml",
+    "ml_modules": [
+      "evaluation",
+      "classification",
+      "feature"
+    ],
+    "classes_used": [
+      "MulticlassClassificationEvaluator",
+      "RandomForestClassifier",
+      "StringIndexer",
+      "Pipeline",
+      "VectorIndexer",
+      "IndexToString"
+    ],
+    "spec": "Описание задачи: Random Forest Classifier Example. Используй модули PySpark ML: pyspark.ml.evaluation, pyspark.ml.classification, pyspark.ml.feature. Используй pyspark.ml для построения модели. Ключевые классы: MulticlassClassificationEvaluator, RandomForestClassifier, StringIndexer, Pipeline, VectorIndexer, IndexToString. Скрипт должен импортировать pyspark и быть готовым к spark-submit.",
+    "invariants": [
+      "valid_python_ast",
+      "imports_pyspark",
+      "uses_pyspark_ml",
+      {
+        "has_class_or_call": [
+          "MulticlassClassificationEvaluator",
+          "RandomForestClassifier",
+          "StringIndexer",
+          "Pipeline"
+        ]
+      }
+    ],
+    "must_artifact_type": "spark"
+  },
+  {
+    "id": "26_gradient_boosted_tree_classifier_example",
+    "source_file": "D13_real_spark_scripts/26_gradient_boosted_tree_classifier_example.py",
+    "source_repo": "apache/spark",
+    "source_sha": "b2c2a8d68dcbbaca715adc74c0dd543582c9ff02",
+    "source_license": "Apache-2.0",
+    "topic": "ml",
+    "ml_modules": [
+      "evaluation",
+      "classification",
+      "feature"
+    ],
+    "classes_used": [
+      "GBTClassifier",
+      "MulticlassClassificationEvaluator",
+      "StringIndexer",
+      "Pipeline",
+      "VectorIndexer"
+    ],
+    "spec": "Описание задачи: Gradient Boosted Tree Classifier Example. Используй модули PySpark ML: pyspark.ml.evaluation, pyspark.ml.classification, pyspark.ml.feature. Используй pyspark.ml для построения модели. Ключевые классы: GBTClassifier, MulticlassClassificationEvaluator, StringIndexer, Pipeline, VectorIndexer. Скрипт должен импортировать pyspark и быть готовым к spark-submit.",
+    "invariants": [
+      "valid_python_ast",
+      "imports_pyspark",
+      "uses_pyspark_ml",
+      {
+        "has_class_or_call": [
+          "GBTClassifier",
+          "MulticlassClassificationEvaluator",
+          "StringIndexer",
+          "Pipeline"
+        ]
+      }
+    ],
+    "must_artifact_type": "spark"
+  },
+  {
+    "id": "27_naive_bayes_example",
+    "source_file": "D13_real_spark_scripts/27_naive_bayes_example.py",
+    "source_repo": "apache/spark",
+    "source_sha": "b2c2a8d68dcbbaca715adc74c0dd543582c9ff02",
+    "source_license": "Apache-2.0",
+    "topic": "ml",
+    "ml_modules": [
+      "evaluation",
+      "classification"
+    ],
+    "classes_used": [
+      "MulticlassClassificationEvaluator",
+      "NaiveBayes"
+    ],
+    "spec": "Сгенерируй PySpark-скрипт по образцу naive_bayes_example. Используй модули PySpark ML: pyspark.ml.evaluation, pyspark.ml.classification. Используй pyspark.ml для построения модели. Ключевые классы: MulticlassClassificationEvaluator, NaiveBayes. Скрипт должен импортировать pyspark и быть готовым к spark-submit.",
+    "invariants": [
+      "valid_python_ast",
+      "imports_pyspark",
+      "uses_pyspark_ml",
+      {
+        "has_class_or_call": [
+          "MulticlassClassificationEvaluator",
+          "NaiveBayes"
+        ]
+      }
+    ],
+    "must_artifact_type": "spark"
+  },
+  {
+    "id": "28_pipeline_example",
+    "source_file": "D13_real_spark_scripts/28_pipeline_example.py",
+    "source_repo": "apache/spark",
+    "source_sha": "b2c2a8d68dcbbaca715adc74c0dd543582c9ff02",
+    "source_license": "Apache-2.0",
+    "topic": "ml",
+    "ml_modules": [
+      "classification",
+      "feature"
+    ],
+    "classes_used": [
+      "Pipeline",
+      "HashingTF",
+      "LogisticRegression",
+      "Tokenizer"
+    ],
+    "spec": "Описание задачи: Pipeline Example. Используй модули PySpark ML: pyspark.ml.classification, pyspark.ml.feature. Используй pyspark.ml для построения модели. Ключевые классы: Pipeline, HashingTF, LogisticRegression, Tokenizer. Скрипт должен импортировать pyspark и быть готовым к spark-submit.",
+    "invariants": [
+      "valid_python_ast",
+      "imports_pyspark",
+      "uses_pyspark_ml",
+      {
+        "has_class_or_call": [
+          "Pipeline",
+          "HashingTF",
+          "LogisticRegression",
+          "Tokenizer"
+        ]
+      }
+    ],
+    "must_artifact_type": "spark"
+  },
+  {
+    "id": "29_cross_validator",
+    "source_file": "D13_real_spark_scripts/29_cross_validator.py",
+    "source_repo": "apache/spark",
+    "source_sha": "b2c2a8d68dcbbaca715adc74c0dd543582c9ff02",
+    "source_license": "Apache-2.0",
+    "topic": "core",
+    "ml_modules": [
+      "evaluation",
+      "classification",
+      "feature",
+      "tuning"
+    ],
+    "classes_used": [
+      "Tokenizer",
+      "HashingTF",
+      "ParamGridBuilder",
+      "LogisticRegression",
+      "CrossValidator",
+      "Pipeline",
+      "BinaryClassificationEvaluator"
+    ],
+    "spec": "Описание задачи: A simple example demonstrating model selection using CrossValidator.\nThis example also demonstrates how Pipelines are Estimators.\nRun with: Используй модули PySpark ML: pyspark.ml.evaluation, pyspark.ml.classification, pyspark.ml.feature. Ключевые классы: Tokenizer, HashingTF, ParamGridBuilder, LogisticRegression, CrossValidator, Pipeline. Скрипт должен импортировать pyspark и быть готовым к spark-submit.",
+    "invariants": [
+      "valid_python_ast",
+      "imports_pyspark",
+      "uses_pyspark_ml",
+      {
+        "has_class_or_call": [
+          "Tokenizer",
+          "HashingTF",
+          "ParamGridBuilder",
+          "LogisticRegression"
+        ]
+      }
+    ],
+    "must_artifact_type": "spark"
+  },
+  {
+    "id": "30_tf_idf_example",
+    "source_file": "D13_real_spark_scripts/30_tf_idf_example.py",
+    "source_repo": "apache/spark",
+    "source_sha": "b2c2a8d68dcbbaca715adc74c0dd543582c9ff02",
+    "source_license": "Apache-2.0",
+    "topic": "ml",
+    "ml_modules": [
+      "feature"
+    ],
+    "classes_used": [
+      "IDF",
+      "HashingTF",
+      "Tokenizer"
+    ],
+    "spec": "Сгенерируй PySpark-скрипт по образцу tf_idf_example. Используй модули PySpark ML: pyspark.ml.feature. Используй pyspark.ml для построения модели. Ключевые классы: IDF, HashingTF, Tokenizer. Скрипт должен импортировать pyspark и быть готовым к spark-submit.",
+    "invariants": [
+      "valid_python_ast",
+      "imports_pyspark",
+      "uses_pyspark_ml",
+      {
+        "has_class_or_call": [
+          "IDF",
+          "HashingTF",
+          "Tokenizer"
+        ]
+      }
+    ],
+    "must_artifact_type": "spark"
+  },
+  {
+    "id": "31_word2vec_example",
+    "source_file": "D13_real_spark_scripts/31_word2vec_example.py",
+    "source_repo": "apache/spark",
+    "source_sha": "b2c2a8d68dcbbaca715adc74c0dd543582c9ff02",
+    "source_license": "Apache-2.0",
+    "topic": "ml",
+    "ml_modules": [
+      "feature"
+    ],
+    "classes_used": [],
+    "spec": "Сгенерируй PySpark-скрипт по образцу word2vec_example. Используй модули PySpark ML: pyspark.ml.feature. Используй pyspark.ml для построения модели. Скрипт должен импортировать pyspark и быть готовым к spark-submit.",
+    "invariants": [
+      "valid_python_ast",
+      "imports_pyspark",
+      "uses_pyspark_ml"
+    ],
+    "must_artifact_type": "spark"
+  },
+  {
+    "id": "32_standard_scaler_example",
+    "source_file": "D13_real_spark_scripts/32_standard_scaler_example.py",
+    "source_repo": "apache/spark",
+    "source_sha": "b2c2a8d68dcbbaca715adc74c0dd543582c9ff02",
+    "source_license": "Apache-2.0",
+    "topic": "ml",
+    "ml_modules": [
+      "feature"
+    ],
+    "classes_used": [
+      "StandardScaler"
+    ],
+    "spec": "Сгенерируй PySpark-скрипт по образцу standard_scaler_example. Используй модули PySpark ML: pyspark.ml.feature. Используй pyspark.ml для построения модели. Ключевые классы: StandardScaler. Скрипт должен импортировать pyspark и быть готовым к spark-submit.",
+    "invariants": [
+      "valid_python_ast",
+      "imports_pyspark",
+      "uses_pyspark_ml",
+      {
+        "has_class_or_call": [
+          "StandardScaler"
+        ]
+      }
+    ],
+    "must_artifact_type": "spark"
+  },
+  {
+    "id": "33_pca_example",
+    "source_file": "D13_real_spark_scripts/33_pca_example.py",
+    "source_repo": "apache/spark",
+    "source_sha": "b2c2a8d68dcbbaca715adc74c0dd543582c9ff02",
+    "source_license": "Apache-2.0",
+    "topic": "ml",
+    "ml_modules": [
+      "feature",
+      "linalg"
+    ],
+    "classes_used": [
+      "PCA"
+    ],
+    "spec": "Сгенерируй PySpark-скрипт по образцу pca_example. Используй модули PySpark ML: pyspark.ml.feature, pyspark.ml.linalg. Используй pyspark.ml для построения модели. Ключевые классы: PCA. Скрипт должен импортировать pyspark и быть готовым к spark-submit.",
+    "invariants": [
+      "valid_python_ast",
+      "imports_pyspark",
+      "uses_pyspark_ml",
+      {
+        "has_class_or_call": [
+          "PCA"
+        ]
+      }
+    ],
+    "must_artifact_type": "spark"
+  }
+]

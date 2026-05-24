@@ -1,0 +1,44 @@
+query,expected_intent
+Покажи топ-10 заказов за последний месяц по сумме,sql
+Сколько строк в orders за вчера?,sql
+Найди аномалии в выручке за последний квартал,sql
+Дай выборку products где stock = 0,sql
+Запусти DAG daily_orders_etl,airflow
+Когда последний раз отрабатывал customer_sync?,airflow
+Триггерни orders_sync прямо сейчас,airflow
+Покажи последний запуск reviews_daily,airflow
+Поставь на паузу все DAG,airflow_control
+Останови pipeline reviews_daily,airflow_control
+Возобнови все остановленные даги,airflow_control
+Отправь Spark job для расчёта LTV клиентов,spark
+Какой статус у моего последнего spark job?,spark
+Перезапусти джоб clickstream_aggregator,spark
+Создай DAG для ежедневной загрузки CSV из /data в orders_raw,artifact_airflow
+Напиши Airflow DAG который раз в час забирает данные из S3,artifact_airflow
+Сгенерируй пайплайн синхронизации с PostgreSQL каждые 30 минут,artifact_airflow
+Напиши PySpark который считает median по amount в orders,artifact_spark
+Создай spark задачу для дедупликации clickstream по user_id,artifact_spark
+Сгенерируй pyspark код для join orders и customers,artifact_spark
+Покажи каталог таблиц,catalog
+Какие колонки в products?,catalog
+Покажи схему БД,catalog
+Что лежит в нашей базе?,database
+Покажи все таблицы и количество строк,database
+Что внутри warehouse?,database
+Покажи все статусы пайплайнов и джобов,site
+Какое состояние системы сейчас?,site
+Что сейчас выполняется?,site
+Покажи историю версий DAG orders_sync,versioning
+Какая была предыдущая версия скрипта clickstream_etl?,versioning
+Откати артефакт ltv_calculator на версию 3,versioning
+Отладь traceback: KeyError 'customer_id',debug
+Помоги разобраться с OutOfMemoryError в Spark,debug
+В чём ошибка в моём DAG?,debug
+Какие MCP инструменты доступны?,mcp
+Вызови MCP filesystem чтобы прочитать конфиг,mcp
+Используй model context protocol для документа,mcp
+Открой Spark Workspace,navigate:spark
+Перейди на Airflow,navigate:airflow
+Покажи Settings,navigate:settings
+Открой профиль,navigate:profile
+Покажи мне dashboard,navigate:dashboard

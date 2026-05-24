@@ -1,0 +1,8 @@
+question_id,domain,engine,difficulty,question,gold_sql,evidence
+pgdemo-001,demo-sales,postgresql,simple,How many orders are paid?,SELECT COUNT(*) FROM sales.orders WHERE status = 'paid';,
+pgdemo-002,demo-sales,postgresql,moderate,Top 3 customers by order amount,"SELECT c.email, SUM(o.amount) AS total FROM sales.customers c JOIN sales.orders o ON o.customer_id = c.customer_id GROUP BY c.customer_id, c.email ORDER BY total DESC LIMIT 3;",
+pgdemo-003,demo-sales,postgresql,simple,Orders per segment,"SELECT c.segment, COUNT(*) FROM sales.customers c JOIN sales.orders o ON o.customer_id = c.customer_id GROUP BY c.segment;",
+pgdemo-004,demo-sales,postgresql,moderate,Cancellation rate,SELECT COUNT(*) FILTER (WHERE status = 'cancelled')::numeric / COUNT(*) AS cancel_rate FROM sales.orders;,
+pgdemo-005,demo-sales,postgresql,simple,Average order amount per VIP customer,SELECT AVG(o.amount) FROM sales.orders o JOIN sales.customers c ON c.customer_id = o.customer_id WHERE c.segment = 'vip';,
+pgdemo-006,demo-sales,postgresql,simple,Daily revenue trend,"SELECT DATE_TRUNC('day', order_ts) AS d, SUM(amount) AS revenue FROM sales.orders WHERE status = 'paid' GROUP BY d ORDER BY d;",
+pgdemo-007,demo-sales,postgresql,simple,Customers with > 1 order,"SELECT customer_id, COUNT(*) AS n FROM sales.orders GROUP BY customer_id HAVING COUNT(*) > 1;",

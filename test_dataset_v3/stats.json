@@ -1,0 +1,141 @@
+{
+  "categories_total_cases": 370,
+  "categories_count": 17,
+  "bird_financial": {
+    "total": 106,
+    "by_difficulty": {
+      "moderate": 37,
+      "simple": 63,
+      "challenging": 6
+    }
+  },
+  "d1_intents": {
+    "total": 43,
+    "by_intent": {
+      "sql": 4,
+      "airflow": 4,
+      "airflow_control": 3,
+      "spark": 3,
+      "artifact_airflow": 3,
+      "artifact_spark": 3,
+      "catalog": 3,
+      "database": 3,
+      "site": 3,
+      "versioning": 3,
+      "debug": 3,
+      "mcp": 3,
+      "navigate:spark": 1,
+      "navigate:airflow": 1,
+      "navigate:settings": 1,
+      "navigate:profile": 1,
+      "navigate:dashboard": 1
+    }
+  },
+  "d6_sandbox": {
+    "total": 20,
+    "by_label": {
+      "valid": 10,
+      "broken": 10
+    },
+    "by_mutation_broken": {
+      "syntax_error": 1,
+      "cyclic_dependency": 1,
+      "undefined_name": 1,
+      "missing_required_arg": 1,
+      "dangerous_command": 1,
+      "network_egress_in_spark": 1,
+      "sensitive_path": 1,
+      "fork_bomb": 1,
+      "infinite_loop": 1,
+      "sql_injection_in_code": 1
+    }
+  },
+  "d7_prompt_injection": {
+    "total": 15,
+    "by_class": {
+      "direct_override": 3,
+      "indirect_injection": 2,
+      "sql_injection": 2,
+      "sql_injection_cte_bypass": 1,
+      "role_escalation": 2,
+      "data_exfiltration": 1,
+      "data_exfiltration_via_spark": 1,
+      "data_exfiltration_via_git": 1,
+      "xml_tag_injection": 1,
+      "bash_sandbox_escape": 1
+    }
+  },
+  "d10_connection_mgmt": {
+    "total": 30,
+    "by_engine": {
+      "postgresql": 13,
+      "mysql": 3,
+      "clickhouse": 1,
+      "mongodb": 2,
+      "*": 9,
+      "?": 1,
+      "mongodb+postgresql": 1
+    }
+  },
+  "d11_bash_git": {
+    "total": 40
+  },
+  "metrics_targets": {
+    "M-01": {
+      "name": "Intent accuracy",
+      "target": 0.9
+    },
+    "M-02": {
+      "name": "Tool precision macro",
+      "target": 0.92
+    },
+    "M-03": {
+      "name": "Tool recall macro",
+      "target": 0.88
+    },
+    "M-04": {
+      "name": "Text-to-SQL EX BIRD",
+      "target": 0.5
+    },
+    "M-05": {
+      "name": "Text-to-SQL Chinook/Sakila",
+      "target": 0.7
+    },
+    "M-06": {
+      "name": "Cross-engine SQL validity",
+      "target": 0.9
+    },
+    "M-07": {
+      "name": "DAG quality (LLM-judge)",
+      "target": 0.75
+    },
+    "M-08": {
+      "name": "PySpark quality (LLM-judge)",
+      "target": 0.7
+    },
+    "M-09": {
+      "name": "Sandbox catch rate",
+      "target": 0.95
+    },
+    "M-10": {
+      "name": "Sandbox FPR (≤)",
+      "target": 0.05
+    },
+    "M-16": {
+      "name": "Prompt injection block",
+      "target": 0.8
+    },
+    "M-17": {
+      "name": "Halluc tool calls (≤)",
+      "target": 0.05
+    },
+    "M-18": {
+      "name": "DB connection success",
+      "target": 0.95
+    },
+    "M-20": {
+      "name": "Git auth rate",
+      "target": 1.0
+    }
+  }
+}
