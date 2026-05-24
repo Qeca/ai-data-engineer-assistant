@@ -1,3 +1,4 @@
+import asyncio
 import time
 from typing import Any
 from datetime import UTC, datetime
@@ -103,14 +104,30 @@ class AirflowTool:
                 )
                 response.raise_for_status()
                 dags = response.json().get("dags", [])
-                pipelines = [
-                    await self._pipeline_from_remote_dag(client, base_url, dag)
-                    for dag in dags
-                    if dag.get("dag_id")
-                ]
+                semaphore = asyncio.Semaphore(12)
+                pipelines = await asyncio.gather(
+                    *[
+                        self._safe_pipeline_from_remote_dag(client, base_url, dag, semaphore)
+                        for dag in dags
+                        if dag.get("dag_id")
+                    ]
+                )
                 return sorted(pipelines, key=lambda pipeline: pipeline.dag_id)
         except Exception:
             return None
+
+    async def _safe_pipeline_from_remote_dag(
+        self,
+        client: httpx.AsyncClient,
+        base_url: str,
+        dag: dict[str, Any],
+        semaphore: asyncio.Semaphore,
+    ) -> PipelineRead:
+        async with semaphore:
+            try:
+                return await self._pipeline_from_remote_dag(client, base_url, dag)
+            except Exception:
+                return self._pipeline_from_remote_dag_summary(dag)
 
     async def _pipeline_from_remote_dag(
         self,
@@ -131,6 +148,19 @@ class AirflowTool:
             last_run=latest_run,
             next_run=self._value_text(dag.get("next_dagrun")),
             tasks=tasks,
+        )
+
+    def _pipeline_from_remote_dag_summary(self, dag: dict[str, Any]) -> PipelineRead:
+        dag_id = str(dag["dag_id"])
+        return PipelineRead(
+            dag_id=dag_id,
+            name=str(dag.get("dag_display_name") or dag_id.replace("_", " ").title()),
+            schedule=self._schedule_text(dag),
+            status=self._dag_status(dag),
+            owner=self._owners_text(dag.get("owners")),
+            description=self._value_text(dag.get("description")),
+            next_run=self._value_text(dag.get("next_dagrun")),
+            tasks=[],
         )
 
     async def _dag_tasks(self, client: httpx.AsyncClient, base_url: str, dag_id: str) -> list[dict[str, Any]]:
