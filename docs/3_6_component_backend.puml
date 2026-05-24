@@ -1,0 +1,169 @@
+@startuml component_backend
+title 3.6 Component diagram — внутреннее устройство FastAPI Backend
+
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam component {
+    BackgroundColor #B5E0E2
+    BorderColor #2A6F9A
+    ArrowColor #2A6F9A
+}
+skinparam database {
+    BackgroundColor #C5E0B4
+    BorderColor #4F7A2E
+}
+skinparam interface {
+    BackgroundColor #FFE7AB
+    BorderColor #B07A12
+}
+
+actor "Frontend (Next.js)" as FE
+actor "External MCP\nservers" as MCP_EXT
+actor "LLM Provider" as LLM
+actor "Airflow REST" as AF_REST
+actor "Spark master" as SPARK
+actor "Docker Sandbox\n(agent-debugger)" as SBX
+
+package "FastAPI Backend" {
+
+    package "API Layer (app/api/routes)" {
+        [auth.py\nPOST /auth/login\nPOST /auth/refresh\nGET /me] as R_AUTH
+        [agent.py\nPOST /agent/query\nSSE stream] as R_AGENT
+        [sessions.py\nGET /sessions\nGET /sessions/{id}/messages] as R_SESS
+        [sql.py\nPOST /sql/execute] as R_SQL
+        [catalog.py\nGET /catalog/tables] as R_CAT
+        [airflow.py\nGET/POST /airflow/dags/...] as R_AF
+        [spark.py\nPOST /spark/jobs\nGET /spark/jobs/{id}] as R_SP
+        [pipelines.py\nGET /pipelines] as R_PIPE
+        [connections.py\n/connections CRUD\n/connections/test] as R_CONN
+        [users.py\nGET/POST /users] as R_USERS
+        [health.py /health] as R_HC
+    }
+
+    package "Agent core (app/agent)" {
+        [AgentOrchestrator\n(LangGraph StateGraph)] as ORCH
+        [AgentToolRegistry] as REG
+        [MCPInstructionBook\n(prompt playbook)] as MIB
+    }
+
+    package "Tools (app/tools)" {
+        [SQL tool\n(read-only validator)] as T_SQL
+        [Catalog tool] as T_CAT
+        [Airflow tool] as T_AF
+        [Spark tool] as T_SP
+    }
+
+    package "Services (app/services)" {
+        [magnitgpt.py] as S_MG
+        [openai_responses.py] as S_OAI
+        [openrouter.py] as S_OR
+        [external_mcp.py\n(stdio + HTTP MCP client)] as S_MCP
+        [artifacts.py\n(write + syntax validate)] as S_ART
+        [git_versioning.py] as S_GIT
+        [debug_sandbox.py\n(HTTP -> agent-debugger)] as S_SBX
+        [connections.py] as S_CONN
+        [tracing.py\n(Langfuse adapter)] as S_TR
+    }
+
+    package "Core (app/core)" {
+        [config.py (settings,\nLLM_PROVIDER, env)] as CFG
+        [security.py\n(JWT, password hash)] as SEC
+    }
+
+    package "Persistence (app/db, app/models.py)" {
+        database "PostgreSQL" as PG {
+            [app_users]
+            [agent_sessions]
+            [messages]
+            [tool_runs]
+            [pipeline_runs / states]
+            [spark_jobs]
+            [artifact_versions]
+            [database_connections]
+        }
+        [SQLAlchemy async\nsession] as SA
+    }
+}
+
+' External calls
+FE --> R_AUTH : HTTPS
+FE --> R_AGENT
+FE --> R_SESS
+FE --> R_SQL
+FE --> R_CAT
+FE --> R_AF
+FE --> R_SP
+FE --> R_PIPE
+FE --> R_CONN
+FE --> R_USERS
+
+' Routes -> core
+R_AUTH ..> SEC : verify / sign JWT
+R_AUTH ..> SA
+R_AGENT ..> SEC
+R_AGENT --> ORCH : run(query, user)
+R_SESS ..> SA
+R_SQL --> T_SQL
+R_CAT --> T_CAT
+R_AF --> T_AF
+R_SP --> T_SP
+R_PIPE ..> SA
+R_CONN --> S_CONN
+R_USERS ..> SA
+
+' Agent core
+ORCH --> REG : invoke(name, args)
+ORCH --> S_MG : tool calling
+ORCH --> S_OAI
+ORCH --> S_OR
+ORCH ..> MIB : prompt MCP playbook
+ORCH ..> S_TR : tracing
+
+REG --> T_SQL
+REG --> T_CAT
+REG --> T_AF
+REG --> T_SP
+REG --> S_MCP : list/call MCP tools
+REG --> S_ART : write artifact
+REG --> S_GIT : commit version
+REG --> S_SBX : sandbox run
+REG ..> SA : INSERT tool_runs
+
+' Services -> external
+S_MG --> LLM
+S_OAI --> LLM
+S_OR --> LLM
+S_MCP --> MCP_EXT
+T_AF --> AF_REST
+T_SP --> SPARK
+S_SBX --> SBX
+
+' Persistence
+SA --> PG
+
+' Config injected everywhere
+CFG ..> ORCH
+CFG ..> S_MG
+CFG ..> S_OAI
+CFG ..> S_OR
+CFG ..> S_MCP
+
+note right of REG
+  Function tools, видимые модели:
+  list_site_status, navigate_site,
+  execute_sql, list_catalog,
+  inspect_database, list_mcp_*,
+  call_mcp_tool, list_pipelines,
+  manage_airflow_dags,
+  trigger_airflow_dag,
+  get_airflow_run,
+  submit_spark_job, get_spark_job,
+  write_airflow_dag,
+  write_spark_script,
+  check_airflow_dag_sandbox,
+  run_spark_script_sandbox,
+  run_python_script_sandbox,
+  list_artifact_versions.
+end note
+
+@enduml

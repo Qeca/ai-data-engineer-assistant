@@ -1,0 +1,67 @@
+@startuml state_agent
+title 3.4 State machine — узлы графа LangGraph
+
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam state {
+    BackgroundColor #B5E0E2
+    BorderColor #2A6F9A
+    ArrowColor #2A6F9A
+    FontColor #1a1a1a
+}
+
+[*] --> select_runtime : POST /agent/query
+
+state select_runtime {
+    [*] --> CheckProvider
+    CheckProvider : settings.llm_provider
+    CheckProvider --> MagnitGPT : magnitgpt && enabled
+    CheckProvider --> OpenAI : openai && enabled
+    CheckProvider --> OpenRouter : openrouter && enabled
+    CheckProvider --> Unconfigured : нет ключа
+}
+
+select_runtime --> call_model : route="llm"\n(provider выбран)
+select_runtime --> configuration_error : route="error"\n(provider=unconfigured)
+
+state call_model {
+    [*] --> SendRequest
+    SendRequest : POST /chat/completions\nили /responses.create
+    SendRequest --> ParseResponse
+    ParseResponse --> HasToolCalls : tool_calls != []
+    ParseResponse --> NoToolCalls : финальный ответ
+}
+
+call_model --> execute_tools : route="tools"\n(HasToolCalls)
+call_model --> finalize : route="final"\n(NoToolCalls)
+
+state execute_tools {
+    [*] --> NextCall
+    NextCall --> InvokeTool : есть pending tool_call
+    InvokeTool : registry.invoke(name, args)\n(SQL / Airflow / Spark /\nArtifact / Sandbox / MCP)
+    InvokeTool --> PersistRun : ToolExecution
+    PersistRun : INSERT tool_runs
+    PersistRun --> NextCall : следующий tool_call
+    NextCall --> AllDone : все tool_calls выполнены
+}
+
+execute_tools --> call_model : route="llm"\n(observations → messages)
+execute_tools --> finalize : route="final"\n(достигнут лимит итераций)
+
+state finalize {
+    [*] --> CollectActions
+    CollectActions : ui_actions += navigate_site
+    CollectActions --> BuildResult
+    BuildResult : AgentResult(intent, answer,\ntool_calls, ui_actions,\nelapsed_ms)
+}
+
+finalize --> [*] : ответ -> API
+configuration_error --> [*] : 503 Configuration error
+
+note right of execute_tools
+  ReAct loop: model → tool → observation
+  → model → ... до финального ответа
+  или лимита итераций.
+end note
+
+@enduml

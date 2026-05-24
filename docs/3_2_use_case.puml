@@ -1,0 +1,73 @@
+@startuml use_case
+title 3.2 Диаграмма вариантов использования (Use Case)
+
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam usecase {
+    BackgroundColor #E8F4F8
+    BorderColor #2A6F9A
+    ArrowColor #2A6F9A
+}
+skinparam actor {
+    BackgroundColor #FFE7AB
+    BorderColor #B07A12
+}
+left to right direction
+
+actor "Data Engineer" as DE
+actor "Администратор" as Admin
+actor "LLM Provider\n(MagnitGPT / OpenAI /\nOpenRouter)" as LLM <<external>>
+actor "Docker Sandbox" as Sandbox <<external>>
+actor "Airflow" as Airflow <<external>>
+actor "Spark cluster" as Spark <<external>>
+
+rectangle "AI Data Engineer Assistant" {
+    usecase "Аутентификация (JWT)" as UC_AUTH
+    usecase "Диалог с AI агентом\n(natural language)" as UC_CHAT
+    usecase "Выполнить read-only SQL" as UC_SQL
+    usecase "Просмотр каталога\nтаблиц и колонок" as UC_CATALOG
+    usecase "Управление подключениями\nк БД" as UC_CONN
+    usecase "Просмотр и запуск\nAirflow DAG" as UC_AF
+    usecase "Pause/Resume DAG" as UC_AFPAUSE
+    usecase "Отправить Spark job" as UC_SPARK
+    usecase "Сгенерировать DAG / Spark\nскрипт (artifact)" as UC_GENART
+    usecase "Проверить артефакт\nв Docker sandbox" as UC_SBX
+    usecase "История артефактов\n+ Git versioning" as UC_HIST
+    usecase "Управление пользователями\nи ролями" as UC_USERS
+    usecase "Просмотр истории сессий\nи tool runs" as UC_HISTORY
+}
+
+DE --> UC_AUTH
+DE --> UC_CHAT
+DE --> UC_SQL
+DE --> UC_CATALOG
+DE --> UC_CONN
+DE --> UC_AF
+DE --> UC_SPARK
+DE --> UC_GENART
+DE --> UC_HIST
+DE --> UC_HISTORY
+
+Admin --> UC_AUTH
+Admin --> UC_USERS
+Admin --> UC_AFPAUSE
+Admin --> UC_HIST
+
+' Includes / extends
+UC_CHAT ..> UC_SQL : <<include>>\n(когда tool=execute_sql)
+UC_CHAT ..> UC_AF : <<include>>\n(когда tool=manage_airflow_dags)
+UC_CHAT ..> UC_SPARK : <<include>>\n(когда tool=submit_spark_job)
+UC_CHAT ..> UC_CATALOG : <<include>>
+UC_GENART ..> UC_SBX : <<include>>\nsandbox validation
+UC_GENART ..> UC_HIST : <<include>>\nGit commit
+
+' External actors
+UC_CHAT --> LLM : tool calling
+UC_SBX --> Sandbox : run container
+UC_AF --> Airflow : REST API
+UC_AFPAUSE --> Airflow
+UC_SPARK --> Spark : submit
+UC_SQL --> Airflow #white
+UC_SQL ..> Sandbox #white
+
+@enduml

@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html class="frame" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<title>AI Data Engineer Assistant - Physical Architecture</title>
+
+	<!-- JQUERY -->
+	<script type="text/javascript" src="../../lib/jquery/jquery.min.js"></script>
+	<!-- BOOTSTRAP -->
+	<link type="text/css" rel="stylesheet" href="../../lib/bootstrap/css/bootstrap.min.yeti.css">
+	<script type="text/javascript" src="../../lib/bootstrap/js/bootstrap-3.4.1.min.js"></script>
+	<!-- REPORT SPECIFIC -->
+	<link type="text/css" rel="stylesheet" href="../../css/model.css">
+	<link type="text/css" rel="stylesheet" href="../../css/i18n.css">
+	<script type="text/javascript" src="../../js/frame.js"></script>
+	<script type="text/javascript" src="../../js/imageMapResizer.min.js"></script>
+</head>
+
+<body>
+	<div class="panel panel-default root-panel">
+
+		<div class="panel-heading root-panel-heading">
+            <!-- Name -->
+               <b>AI Data Engineer Assistant - Physical Architecture</b>
+
+            <!-- If a View with Viewpoint -->
+		</div>
+
+		<div class="panel-body root-panel-body">
+		    <!-- If this is a digram model (has children and no bounds) show the image -->
+
+			<div role="tabpanel">
+				<!-- Nav tabs -->
+				<ul class="nav nav-tabs" role="tablist">
+                    <!-- Purpose / Documentation / Content -->
+                       <li role="presentation" class="active"><a href="#documentation" aria-controls="documentation" role="tab" data-toggle="tab" class="i18n-purpose"></a></li>
+
+                    <!-- Properties -->
+                    <li role="presentation"><a href="#properties" aria-controls="properties" role="tab" data-toggle="tab" class="i18n-properties"></a></li>
+
+                    <!-- Analysis -->
+
+						<li role="presentation"><a href="#query" aria-controls="query" role="tab" data-toggle="tab" class="i18n-query"></a></li>
+				</ul>
+
+				<!-- Tab panes -->
+				<div class="tab-content">
+					<div role="tabpanel" class="tab-pane active" id="documentation">
+						<div class="convertlinks documentation" style="white-space:pre-wrap"></div>
+					</div>
+					<div role="tabpanel" class="tab-pane" id="properties">
+						<table class="table table-striped table-hover table-condensed">
+							<thead>
+								<tr>
+									<th class="i18n-key"></th>
+									<th class="i18n-value"></th>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+					</div>
+					<div role="tabpanel" class="tab-pane" id="analysis">
+						<table class="table table-striped table-hover table-condensed" id="used-in-views">
+							<thead>
+								<tr><th colspan="2" class="i18n-used-in-views" /></tr>
+								<tr>
+									<th class="i18n-name"></th>
+									<th class="i18n-viewpoint"></th>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+						<table class="table table-striped table-hover table-condensed" id="model-relations">
+							<thead>
+								<tr><th colspan="4" class="i18n-model-relations" /></tr>
+								<tr>
+									<th class="i18n-name"></th>
+									<th class="i18n-type"></th>
+									<th class="i18n-source"></th>
+									<th class="i18n-target"></th>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+					</div>
+						<div role="tabpanel" class="tab-pane" id="query">
+						<br>
+						<style>
+						#myprompt {
+						    width: 80%;
+						    font-family: Consolas,Monaco, monospace;
+						}
+						</style>
+
+						<div id='myconsole'></div>
+
+						<p>
+							<tt><span id="useid">alasql</span> &gt;</tt> <input id='myprompt' autofocus/> 
+						</p>
+
+						<script src='../../lib/alasql/alasql.min.js'></script>
+
+						<script>
+							function decodeURL(s) {
+								return decodeURIComponent(s.replace(/\+/g, "%20"));
+							}
+
+							var first = decodeURI(location.search.substr(1));
+						 	alasql.options.logtarget = 'myconsole';
+							alasql.prompt('myprompt','useid');
+							alasql.prompt('myprompt','useid', first);
+
+							var dataElements = [ ];	  
+						  	var dataProperties = [ ];
+						 	var dataRelationships = [ ];
+						 	var dataViews = [ ];
+						 	var dataViewsContent = [ ];
+						 	var dataFolders = [ ];
+						 	var dataFoldersContent = [ ];
+
+							dataFolders.push({id:"id-model-aida-physical", type:"ArchimateModel", name:decodeURL("AI+Data+Engineer+Assistant+-+Physical+Architecture"), documentation:decodeURL("")});
+								dataFoldersContent.push({folderid:"id-model-aida-physical", contentid:"id-folder-strategy", contenttype:"Folder"});
+								dataFolders.push({id:"id-folder-strategy", type:"Folder", name:decodeURL("Strategy"), documentation:decodeURL("")});
+
+								dataFoldersContent.push({folderid:"id-model-aida-physical", contentid:"id-folder-business", contenttype:"Folder"});
+								dataFolders.push({id:"id-folder-business", type:"Folder", name:decodeURL("Business"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-business", contentid:"id-actor-de", contenttype:"BusinessActor"});
+										dataElements.push({id:"id-actor-de", type:"BusinessActor", specialization:decodeURL(""), name:decodeURL("Data+Engineer"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-business", contentid:"id-actor-admin", contenttype:"BusinessActor"});
+										dataElements.push({id:"id-actor-admin", type:"BusinessActor", specialization:decodeURL(""), name:decodeURL("%D0%90%D0%B4%D0%BC%D0%B8%D0%BD%D0%B8%D1%81%D1%82%D1%80%D0%B0%D1%82%D0%BE%D1%80"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-business", contentid:"id-role-user", contenttype:"BusinessRole"});
+										dataElements.push({id:"id-role-user", type:"BusinessRole", specialization:decodeURL(""), name:decodeURL("%D0%9F%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8C+LLM-%D0%B0%D0%B3%D0%B5%D0%BD%D1%82%D0%B0"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-business", contentid:"id-bs-main", contenttype:"BusinessService"});
+										dataElements.push({id:"id-bs-main", type:"BusinessService", specialization:decodeURL(""), name:decodeURL("AI+Data+Engineer+Assistant"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-business", contentid:"id-bp-send", contenttype:"BusinessProcess"});
+										dataElements.push({id:"id-bp-send", type:"BusinessProcess", specialization:decodeURL(""), name:decodeURL("%D0%9E%D1%82%D0%BF%D1%80%D0%B0%D0%B2%D0%BA%D0%B0+%D0%B7%D0%B0%D0%BF%D1%80%D0%BE%D1%81%D0%B0"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-business", contentid:"id-bp-display", contenttype:"BusinessProcess"});
+										dataElements.push({id:"id-bp-display", type:"BusinessProcess", specialization:decodeURL(""), name:decodeURL("%D0%9F%D0%BE%D0%BB%D1%83%D1%87%D0%B5%D0%BD%D0%B8%D0%B5+%D0%BE%D1%82%D0%B2%D0%B5%D1%82%D0%B0+%D0%B8%0A%D0%BE%D1%82%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5+%D0%B2+UI"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-business", contentid:"id-bp-internal-recv", contenttype:"BusinessProcess"});
+										dataElements.push({id:"id-bp-internal-recv", type:"BusinessProcess", specialization:decodeURL(""), name:decodeURL("%D0%9F%D0%BE%D0%BB%D1%83%D1%87%D0%B5%D0%BD%D0%B8%D0%B5+%D0%B7%D0%B0%D0%BF%D1%80%D0%BE%D1%81%D0%B0"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-business", contentid:"id-bp-intent", contenttype:"BusinessProcess"});
+										dataElements.push({id:"id-bp-intent", type:"BusinessProcess", specialization:decodeURL(""), name:decodeURL("%D0%90%D0%BD%D0%B0%D0%BB%D0%B8%D0%B7+%D0%BD%D0%B0%D0%BC%D0%B5%D1%80%D0%B5%D0%BD%D0%B8%D1%8F+%D0%B8%0A%D0%B2%D1%8B%D0%B1%D0%BE%D1%80+%D0%B8%D0%BD%D1%81%D1%82%D1%80%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-business", contentid:"id-bp-llm-proc", contenttype:"BusinessProcess"});
+										dataElements.push({id:"id-bp-llm-proc", type:"BusinessProcess", specialization:decodeURL(""), name:decodeURL("%D0%9E%D0%B1%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0+%D0%B7%D0%B0%D0%BF%D1%80%D0%BE%D1%81%D0%B0+%D0%B2+LLM%0A%28tool+calling%29"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-business", contentid:"id-bp-exec", contenttype:"BusinessProcess"});
+										dataElements.push({id:"id-bp-exec", type:"BusinessProcess", specialization:decodeURL(""), name:decodeURL("%D0%92%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5+%D0%B8%D0%BD%D1%81%D1%82%D1%80%D1%83%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%0A%28SQL+%2F+Airflow+%2F+Spark+%2F+Sandbox+%2F+MCP%29"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-business", contentid:"id-bp-form", contenttype:"BusinessProcess"});
+										dataElements.push({id:"id-bp-form", type:"BusinessProcess", specialization:decodeURL(""), name:decodeURL("%D0%A4%D0%BE%D1%80%D0%BC%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5+%D0%BE%D1%82%D0%B2%D0%B5%D1%82%D0%B0"), documentation:decodeURL("")});
+
+								dataFoldersContent.push({folderid:"id-model-aida-physical", contentid:"id-folder-application", contenttype:"Folder"});
+								dataFolders.push({id:"id-folder-application", type:"Folder", name:decodeURL("Application"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-application", contentid:"id-ac-frontend", contenttype:"ApplicationComponent"});
+										dataElements.push({id:"id-ac-frontend", type:"ApplicationComponent", specialization:decodeURL(""), name:decodeURL("Next.js+Frontend"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-application", contentid:"id-ac-backend", contenttype:"ApplicationComponent"});
+										dataElements.push({id:"id-ac-backend", type:"ApplicationComponent", specialization:decodeURL(""), name:decodeURL("FastAPI+Backend"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-application", contentid:"id-af-chat", contenttype:"ApplicationFunction"});
+										dataElements.push({id:"id-af-chat", type:"ApplicationFunction", specialization:decodeURL(""), name:decodeURL("AI+Chat+UI"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-application", contentid:"id-af-sql-ui", contenttype:"ApplicationFunction"});
+										dataElements.push({id:"id-af-sql-ui", type:"ApplicationFunction", specialization:decodeURL(""), name:decodeURL("SQL+Workspace+UI"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-application", contentid:"id-af-pipe-ui", contenttype:"ApplicationFunction"});
+										dataElements.push({id:"id-af-pipe-ui", type:"ApplicationFunction", specialization:decodeURL(""), name:decodeURL("Pipelines+UI"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-application", contentid:"id-af-catalog-ui", contenttype:"ApplicationFunction"});
+										dataElements.push({id:"id-af-catalog-ui", type:"ApplicationFunction", specialization:decodeURL(""), name:decodeURL("Catalog+%2F+Connections+UI"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-application", contentid:"id-af-settings-ui", contenttype:"ApplicationFunction"});
+										dataElements.push({id:"id-af-settings-ui", type:"ApplicationFunction", specialization:decodeURL(""), name:decodeURL("Settings+%2F+Profile+UI"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-application", contentid:"id-af-recv", contenttype:"ApplicationFunction"});
+										dataElements.push({id:"id-af-recv", type:"ApplicationFunction", specialization:decodeURL(""), name:decodeURL("%D0%9F%D0%BE%D0%BB%D1%83%D1%87%D0%B5%D0%BD%D0%B8%D0%B5+%D0%B7%D0%B0%D0%BF%D1%80%D0%BE%D1%81%D0%B0%0A%28REST+API%29"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-application", contentid:"id-af-auth", contenttype:"ApplicationFunction"});
+										dataElements.push({id:"id-af-auth", type:"ApplicationFunction", specialization:decodeURL(""), name:decodeURL("%D0%90%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F+%28JWT%29"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-application", contentid:"id-af-agent", contenttype:"ApplicationFunction"});
+										dataElements.push({id:"id-af-agent", type:"ApplicationFunction", specialization:decodeURL(""), name:decodeURL("Agent+Orchestrator%0A%28LangGraph%29"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-application", contentid:"id-af-llm", contenttype:"ApplicationFunction"});
+										dataElements.push({id:"id-af-llm", type:"ApplicationFunction", specialization:decodeURL(""), name:decodeURL("%D0%9E%D0%B1%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0+%D0%B7%D0%B0%D0%BF%D1%80%D0%BE%D1%81%D0%B0+%D0%B2+LLM%0A%28tool+calling%29"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-application", contentid:"id-af-tools", contenttype:"ApplicationFunction"});
+										dataElements.push({id:"id-af-tools", type:"ApplicationFunction", specialization:decodeURL(""), name:decodeURL("Tool+Registry"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-application", contentid:"id-af-sql-exec", contenttype:"ApplicationFunction"});
+										dataElements.push({id:"id-af-sql-exec", type:"ApplicationFunction", specialization:decodeURL(""), name:decodeURL("SQL+Executor%0A%28read-only%29"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-application", contentid:"id-af-airflow", contenttype:"ApplicationFunction"});
+										dataElements.push({id:"id-af-airflow", type:"ApplicationFunction", specialization:decodeURL(""), name:decodeURL("Airflow+Client"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-application", contentid:"id-af-spark", contenttype:"ApplicationFunction"});
+										dataElements.push({id:"id-af-spark", type:"ApplicationFunction", specialization:decodeURL(""), name:decodeURL("Spark+Client"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-application", contentid:"id-af-mcp", contenttype:"ApplicationFunction"});
+										dataElements.push({id:"id-af-mcp", type:"ApplicationFunction", specialization:decodeURL(""), name:decodeURL("MCP+Client"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-application", contentid:"id-af-artifact", contenttype:"ApplicationFunction"});
+										dataElements.push({id:"id-af-artifact", type:"ApplicationFunction", specialization:decodeURL(""), name:decodeURL("Artifact+Writer+%2B+Git"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-application", contentid:"id-af-sandbox", contenttype:"ApplicationFunction"});
+										dataElements.push({id:"id-af-sandbox", type:"ApplicationFunction", specialization:decodeURL(""), name:decodeURL("Sandbox+Client"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-application", contentid:"id-af-resp", contenttype:"ApplicationFunction"});
+										dataElements.push({id:"id-af-resp", type:"ApplicationFunction", specialization:decodeURL(""), name:decodeURL("%D0%A4%D0%BE%D1%80%D0%BC%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5+%D0%BE%D1%82%D0%B2%D0%B5%D1%82%D0%B0%0A%28intent+%2B+ui_actions%29"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-application", contentid:"id-af-persist", contenttype:"ApplicationFunction"});
+										dataElements.push({id:"id-af-persist", type:"ApplicationFunction", specialization:decodeURL(""), name:decodeURL("%D0%A1%D0%BE%D1%85%D1%80%D0%B0%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5+%D1%81%D0%B5%D1%81%D1%81%D0%B8%D0%B8%2C%0A%D1%81%D0%BE%D0%BE%D0%B1%D1%89%D0%B5%D0%BD%D0%B8%D0%B9+%D0%B8+tool_runs"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-application", contentid:"id-do-users", contenttype:"DataObject"});
+										dataElements.push({id:"id-do-users", type:"DataObject", specialization:decodeURL(""), name:decodeURL("%D0%9F%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D0%B8%2C+%D1%81%D0%B5%D1%81%D1%81%D0%B8%D0%B8%2C+%D1%81%D0%BE%D0%BE%D0%B1%D1%89%D0%B5%D0%BD%D0%B8%D1%8F"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-application", contentid:"id-do-runs", contenttype:"DataObject"});
+										dataElements.push({id:"id-do-runs", type:"DataObject", specialization:decodeURL(""), name:decodeURL("Tool+runs%2C+%D0%B2%D0%B5%D1%80%D1%81%D0%B8%D0%B8+%D0%B0%D1%80%D1%82%D0%B5%D1%84%D0%B0%D0%BA%D1%82%D0%BE%D0%B2"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-application", contentid:"id-do-airflow-meta", contenttype:"DataObject"});
+										dataElements.push({id:"id-do-airflow-meta", type:"DataObject", specialization:decodeURL(""), name:decodeURL("%D0%9C%D0%B5%D1%82%D0%B0%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D0%B5+Airflow"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-application", contentid:"id-as-api", contenttype:"ApplicationService"});
+										dataElements.push({id:"id-as-api", type:"ApplicationService", specialization:decodeURL(""), name:decodeURL("AI+Data+Engineer+Service"), documentation:decodeURL("")});
+
+								dataFoldersContent.push({folderid:"id-model-aida-physical", contentid:"id-folder-technology", contenttype:"Folder"});
+								dataFolders.push({id:"id-folder-technology", type:"Folder", name:decodeURL("Technology+%26+Physical"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-technology", contentid:"id-node-host", contenttype:"Node"});
+										dataElements.push({id:"id-node-host", type:"Node", specialization:decodeURL(""), name:decodeURL("Host+Machine+%28Docker+Engine%29"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-technology", contentid:"id-node-platform", contenttype:"Node"});
+										dataElements.push({id:"id-node-platform", type:"Node", specialization:decodeURL(""), name:decodeURL("Docker"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-technology", contentid:"id-cn-docker", contenttype:"CommunicationNetwork"});
+										dataElements.push({id:"id-cn-docker", type:"CommunicationNetwork", specialization:decodeURL(""), name:decodeURL("Docker+bridge+network"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-technology", contentid:"id-node-browser", contenttype:"Node"});
+										dataElements.push({id:"id-node-browser", type:"Node", specialization:decodeURL(""), name:decodeURL("Browser+%28Client%29"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-technology", contentid:"id-node-frontend", contenttype:"Node"});
+										dataElements.push({id:"id-node-frontend", type:"Node", specialization:decodeURL(""), name:decodeURL("frontend+container"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-technology", contentid:"id-node-backend", contenttype:"Node"});
+										dataElements.push({id:"id-node-backend", type:"Node", specialization:decodeURL(""), name:decodeURL("backend+container"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-technology", contentid:"id-node-pg", contenttype:"Node"});
+										dataElements.push({id:"id-node-pg", type:"Node", specialization:decodeURL(""), name:decodeURL("postgres"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-technology", contentid:"id-node-af-web", contenttype:"Node"});
+										dataElements.push({id:"id-node-af-web", type:"Node", specialization:decodeURL(""), name:decodeURL("airflow-webserver"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-technology", contentid:"id-node-af-sch", contenttype:"Node"});
+										dataElements.push({id:"id-node-af-sch", type:"Node", specialization:decodeURL(""), name:decodeURL("airflow-scheduler"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-technology", contentid:"id-node-af-pg", contenttype:"Node"});
+										dataElements.push({id:"id-node-af-pg", type:"Node", specialization:decodeURL(""), name:decodeURL("airflow-postgres"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-technology", contentid:"id-node-sp-m", contenttype:"Node"});
+										dataElements.push({id:"id-node-sp-m", type:"Node", specialization:decodeURL(""), name:decodeURL("spark-master"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-technology", contentid:"id-node-sp-w", contenttype:"Node"});
+										dataElements.push({id:"id-node-sp-w", type:"Node", specialization:decodeURL(""), name:decodeURL("spark-worker"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-technology", contentid:"id-node-dbg", contenttype:"Node"});
+										dataElements.push({id:"id-node-dbg", type:"Node", specialization:decodeURL(""), name:decodeURL("agent-debugger"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-technology", contentid:"id-node-redis", contenttype:"Node"});
+										dataElements.push({id:"id-node-redis", type:"Node", specialization:decodeURL(""), name:decodeURL("redis+%28Celery+broker%29"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-technology", contentid:"id-node-bworker", contenttype:"Node"});
+										dataElements.push({id:"id-node-bworker", type:"Node", specialization:decodeURL(""), name:decodeURL("backend-worker"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-technology", contentid:"id-node-bbeat", contenttype:"Node"});
+										dataElements.push({id:"id-node-bbeat", type:"Node", specialization:decodeURL(""), name:decodeURL("backend-beat"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-technology", contentid:"id-node-sbx-py", contenttype:"Node"});
+										dataElements.push({id:"id-node-sbx-py", type:"Node", specialization:decodeURL(""), name:decodeURL("Sandbox%3A+python%3A3.12-slim"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-technology", contentid:"id-node-sbx-af", contenttype:"Node"});
+										dataElements.push({id:"id-node-sbx-af", type:"Node", specialization:decodeURL(""), name:decodeURL("Sandbox%3A+apache%2Fairflow%3A2.10.4"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-technology", contentid:"id-node-sbx-sp", contenttype:"Node"});
+										dataElements.push({id:"id-node-sbx-sp", type:"Node", specialization:decodeURL(""), name:decodeURL("Sandbox%3A+apache%2Fspark%3A3.5.4"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-technology", contentid:"id-node-llm", contenttype:"Node"});
+										dataElements.push({id:"id-node-llm", type:"Node", specialization:decodeURL(""), name:decodeURL("LLM+Provider+%28MagnitGPT+%2F+OpenAI+%2F+OpenRouter%29"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-technology", contentid:"id-node-user-dbs", contenttype:"Node"});
+										dataElements.push({id:"id-node-user-dbs", type:"Node", specialization:decodeURL(""), name:decodeURL("%D0%92%D0%BD%D0%B5%D1%88%D0%BD%D0%B8%D0%B5+%D0%91%D0%94+%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D0%B5%D0%B9++%281..N%29%0APostgreSQL+%2F+MySQL+%2F+ClickHouse+%2F+MongoDB+%2F+Redis+%2F+..."), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-technology", contentid:"id-ss-node", contenttype:"SystemSoftware"});
+										dataElements.push({id:"id-ss-node", type:"SystemSoftware", specialization:decodeURL(""), name:decodeURL("Node.js+20"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-technology", contentid:"id-ss-python", contenttype:"SystemSoftware"});
+										dataElements.push({id:"id-ss-python", type:"SystemSoftware", specialization:decodeURL(""), name:decodeURL("Python+3.12+%2B+Uvicorn"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-technology", contentid:"id-ss-pg", contenttype:"SystemSoftware"});
+										dataElements.push({id:"id-ss-pg", type:"SystemSoftware", specialization:decodeURL(""), name:decodeURL("PostgreSQL+16"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-technology", contentid:"id-ss-af", contenttype:"SystemSoftware"});
+										dataElements.push({id:"id-ss-af", type:"SystemSoftware", specialization:decodeURL(""), name:decodeURL("Apache+Airflow+2.10"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-technology", contentid:"id-ss-sp", contenttype:"SystemSoftware"});
+										dataElements.push({id:"id-ss-sp", type:"SystemSoftware", specialization:decodeURL(""), name:decodeURL("Apache+Spark+3.5.4"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-technology", contentid:"id-ss-docker", contenttype:"SystemSoftware"});
+										dataElements.push({id:"id-ss-docker", type:"SystemSoftware", specialization:decodeURL(""), name:decodeURL("Docker+Engine"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-technology", contentid:"id-ss-redis", contenttype:"SystemSoftware"});
+										dataElements.push({id:"id-ss-redis", type:"SystemSoftware", specialization:decodeURL(""), name:decodeURL("Redis+7"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-technology", contentid:"id-ss-celery", contenttype:"SystemSoftware"});
+										dataElements.push({id:"id-ss-celery", type:"SystemSoftware", specialization:decodeURL(""), name:decodeURL("Python+3.12+%2B+Celery"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-technology", contentid:"id-art-frontend", contenttype:"Artifact"});
+										dataElements.push({id:"id-art-frontend", type:"Artifact", specialization:decodeURL(""), name:decodeURL("Next.js+bundle"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-technology", contentid:"id-art-backend", contenttype:"Artifact"});
+										dataElements.push({id:"id-art-backend", type:"Artifact", specialization:decodeURL(""), name:decodeURL("FastAPI+app+%2B+LangGraph"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-technology", contentid:"id-art-dags", contenttype:"Artifact"});
+										dataElements.push({id:"id-art-dags", type:"Artifact", specialization:decodeURL(""), name:decodeURL("DAG+files+%28infra%2Fairflow%2Fdags%29"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-technology", contentid:"id-art-jobs", contenttype:"Artifact"});
+										dataElements.push({id:"id-art-jobs", type:"Artifact", specialization:decodeURL(""), name:decodeURL("Spark+jobs+%28infra%2Fspark%2Fjobs%29"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-technology", contentid:"id-art-sock", contenttype:"Artifact"});
+										dataElements.push({id:"id-art-sock", type:"Artifact", specialization:decodeURL(""), name:decodeURL("%2Fvar%2Frun%2Fdocker.sock"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-technology", contentid:"id-art-pgvol", contenttype:"Artifact"});
+										dataElements.push({id:"id-art-pgvol", type:"Artifact", specialization:decodeURL(""), name:decodeURL("Volume%3A+postgres-data"), documentation:decodeURL("")});
+
+								dataFoldersContent.push({folderid:"id-model-aida-physical", contentid:"id-folder-motivation", contenttype:"Folder"});
+								dataFolders.push({id:"id-folder-motivation", type:"Folder", name:decodeURL("Motivation"), documentation:decodeURL("")});
+
+								dataFoldersContent.push({folderid:"id-model-aida-physical", contentid:"id-folder-implementation_migration", contenttype:"Folder"});
+								dataFolders.push({id:"id-folder-implementation_migration", type:"Folder", name:decodeURL("Implementation+%26+Migration"), documentation:decodeURL("")});
+
+								dataFoldersContent.push({folderid:"id-model-aida-physical", contentid:"id-folder-other", contenttype:"Folder"});
+								dataFolders.push({id:"id-folder-other", type:"Folder", name:decodeURL("Other"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-other", contentid:"id-grp-user-side", contenttype:"Grouping"});
+										dataElements.push({id:"id-grp-user-side", type:"Grouping", specialization:decodeURL(""), name:decodeURL("%D0%92%D0%B7%D0%B0%D0%B8%D0%BC%D0%BE%D0%B4%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%B8%D0%B5+%D1%81+%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D0%B5%D0%BC"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-other", contentid:"id-grp-internal", contenttype:"Grouping"});
+										dataElements.push({id:"id-grp-internal", type:"Grouping", specialization:decodeURL(""), name:decodeURL("AI+Data+Engineer+Assistant++%28%D0%B2%D0%BD%D1%83%D1%82%D1%80%D0%B5%D0%BD%D0%BD%D0%B8%D0%B9+%D1%81%D0%B5%D1%80%D0%B2%D0%B8%D1%81%29"), documentation:decodeURL("")});
+
+								dataFoldersContent.push({folderid:"id-model-aida-physical", contentid:"id-folder-relations", contenttype:"Folder"});
+								dataFolders.push({id:"id-folder-relations", type:"Folder", name:decodeURL("Relations"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0001", contenttype:"AssignmentRelationship"});
+										dataRelationships.push({id:"id-rel-0001", type:"AssignmentRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-actor-de", targetid:"id-role-user"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0002", contenttype:"AssignmentRelationship"});
+										dataRelationships.push({id:"id-rel-0002", type:"AssignmentRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-actor-admin", targetid:"id-role-user"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0003", contenttype:"AssignmentRelationship"});
+										dataRelationships.push({id:"id-rel-0003", type:"AssignmentRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-role-user", targetid:"id-bp-send"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0004", contenttype:"AssignmentRelationship"});
+										dataRelationships.push({id:"id-rel-0004", type:"AssignmentRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-role-user", targetid:"id-bp-display"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0005", contenttype:"TriggeringRelationship"});
+										dataRelationships.push({id:"id-rel-0005", type:"TriggeringRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-bp-send", targetid:"id-bp-internal-recv"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0006", contenttype:"TriggeringRelationship"});
+										dataRelationships.push({id:"id-rel-0006", type:"TriggeringRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-bp-internal-recv", targetid:"id-bp-intent"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0007", contenttype:"TriggeringRelationship"});
+										dataRelationships.push({id:"id-rel-0007", type:"TriggeringRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-bp-intent", targetid:"id-bp-llm-proc"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0008", contenttype:"TriggeringRelationship"});
+										dataRelationships.push({id:"id-rel-0008", type:"TriggeringRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-bp-llm-proc", targetid:"id-bp-exec"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0009", contenttype:"TriggeringRelationship"});
+										dataRelationships.push({id:"id-rel-0009", type:"TriggeringRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-bp-exec", targetid:"id-bp-llm-proc"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0010", contenttype:"TriggeringRelationship"});
+										dataRelationships.push({id:"id-rel-0010", type:"TriggeringRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-bp-llm-proc", targetid:"id-bp-form"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0011", contenttype:"TriggeringRelationship"});
+										dataRelationships.push({id:"id-rel-0011", type:"TriggeringRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-bp-form", targetid:"id-bp-display"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0012", contenttype:"RealizationRelationship"});
+										dataRelationships.push({id:"id-rel-0012", type:"RealizationRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-bp-internal-recv", targetid:"id-bs-main"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0013", contenttype:"RealizationRelationship"});
+										dataRelationships.push({id:"id-rel-0013", type:"RealizationRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-bp-intent", targetid:"id-bs-main"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0014", contenttype:"RealizationRelationship"});
+										dataRelationships.push({id:"id-rel-0014", type:"RealizationRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-bp-llm-proc", targetid:"id-bs-main"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0015", contenttype:"RealizationRelationship"});
+										dataRelationships.push({id:"id-rel-0015", type:"RealizationRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-bp-exec", targetid:"id-bs-main"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0016", contenttype:"RealizationRelationship"});
+										dataRelationships.push({id:"id-rel-0016", type:"RealizationRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-bp-form", targetid:"id-bs-main"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0017", contenttype:"RealizationRelationship"});
+										dataRelationships.push({id:"id-rel-0017", type:"RealizationRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-as-api", targetid:"id-bs-main"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0018", contenttype:"ServingRelationship"});
+										dataRelationships.push({id:"id-rel-0018", type:"ServingRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-as-api", targetid:"id-bp-internal-recv"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0019", contenttype:"ServingRelationship"});
+										dataRelationships.push({id:"id-rel-0019", type:"ServingRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-as-api", targetid:"id-bp-intent"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0020", contenttype:"ServingRelationship"});
+										dataRelationships.push({id:"id-rel-0020", type:"ServingRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-as-api", targetid:"id-bp-llm-proc"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0021", contenttype:"ServingRelationship"});
+										dataRelationships.push({id:"id-rel-0021", type:"ServingRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-as-api", targetid:"id-bp-exec"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0022", contenttype:"ServingRelationship"});
+										dataRelationships.push({id:"id-rel-0022", type:"ServingRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-as-api", targetid:"id-bp-form"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0023", contenttype:"CompositionRelationship"});
+										dataRelationships.push({id:"id-rel-0023", type:"CompositionRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-grp-user-side", targetid:"id-bp-send"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0024", contenttype:"CompositionRelationship"});
+										dataRelationships.push({id:"id-rel-0024", type:"CompositionRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-grp-user-side", targetid:"id-bp-display"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0025", contenttype:"CompositionRelationship"});
+										dataRelationships.push({id:"id-rel-0025", type:"CompositionRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-grp-internal", targetid:"id-bp-internal-recv"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0026", contenttype:"CompositionRelationship"});
+										dataRelationships.push({id:"id-rel-0026", type:"CompositionRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-grp-internal", targetid:"id-bp-intent"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0027", contenttype:"CompositionRelationship"});
+										dataRelationships.push({id:"id-rel-0027", type:"CompositionRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-grp-internal", targetid:"id-bp-llm-proc"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0028", contenttype:"CompositionRelationship"});
+										dataRelationships.push({id:"id-rel-0028", type:"CompositionRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-grp-internal", targetid:"id-bp-exec"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0029", contenttype:"CompositionRelationship"});
+										dataRelationships.push({id:"id-rel-0029", type:"CompositionRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-grp-internal", targetid:"id-bp-form"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0030", contenttype:"AssignmentRelationship"});
+										dataRelationships.push({id:"id-rel-0030", type:"AssignmentRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-ac-frontend", targetid:"id-af-chat"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0031", contenttype:"AssignmentRelationship"});
+										dataRelationships.push({id:"id-rel-0031", type:"AssignmentRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-ac-frontend", targetid:"id-af-sql-ui"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0032", contenttype:"AssignmentRelationship"});
+										dataRelationships.push({id:"id-rel-0032", type:"AssignmentRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-ac-frontend", targetid:"id-af-pipe-ui"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0033", contenttype:"AssignmentRelationship"});
+										dataRelationships.push({id:"id-rel-0033", type:"AssignmentRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-ac-frontend", targetid:"id-af-catalog-ui"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0034", contenttype:"AssignmentRelationship"});
+										dataRelationships.push({id:"id-rel-0034", type:"AssignmentRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-ac-frontend", targetid:"id-af-settings-ui"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0035", contenttype:"AssignmentRelationship"});
+										dataRelationships.push({id:"id-rel-0035", type:"AssignmentRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-ac-backend", targetid:"id-af-recv"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0036", contenttype:"AssignmentRelationship"});
+										dataRelationships.push({id:"id-rel-0036", type:"AssignmentRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-ac-backend", targetid:"id-af-auth"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0037", contenttype:"AssignmentRelationship"});
+										dataRelationships.push({id:"id-rel-0037", type:"AssignmentRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-ac-backend", targetid:"id-af-agent"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0038", contenttype:"AssignmentRelationship"});
+										dataRelationships.push({id:"id-rel-0038", type:"AssignmentRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-ac-backend", targetid:"id-af-llm"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0039", contenttype:"AssignmentRelationship"});
+										dataRelationships.push({id:"id-rel-0039", type:"AssignmentRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-ac-backend", targetid:"id-af-tools"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0040", contenttype:"AssignmentRelationship"});
+										dataRelationships.push({id:"id-rel-0040", type:"AssignmentRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-ac-backend", targetid:"id-af-sql-exec"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0041", contenttype:"AssignmentRelationship"});
+										dataRelationships.push({id:"id-rel-0041", type:"AssignmentRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-ac-backend", targetid:"id-af-airflow"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0042", contenttype:"AssignmentRelationship"});
+										dataRelationships.push({id:"id-rel-0042", type:"AssignmentRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-ac-backend", targetid:"id-af-spark"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0043", contenttype:"AssignmentRelationship"});
+										dataRelationships.push({id:"id-rel-0043", type:"AssignmentRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-ac-backend", targetid:"id-af-mcp"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0044", contenttype:"AssignmentRelationship"});
+										dataRelationships.push({id:"id-rel-0044", type:"AssignmentRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-ac-backend", targetid:"id-af-artifact"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0045", contenttype:"AssignmentRelationship"});
+										dataRelationships.push({id:"id-rel-0045", type:"AssignmentRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-ac-backend", targetid:"id-af-sandbox"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0046", contenttype:"AssignmentRelationship"});
+										dataRelationships.push({id:"id-rel-0046", type:"AssignmentRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-ac-backend", targetid:"id-af-resp"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0047", contenttype:"AssignmentRelationship"});
+										dataRelationships.push({id:"id-rel-0047", type:"AssignmentRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-ac-backend", targetid:"id-af-persist"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-recv-auth", contenttype:"TriggeringRelationship"});
+										dataRelationships.push({id:"id-rel-recv-auth", type:"TriggeringRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-af-recv", targetid:"id-af-auth"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-auth-agent", contenttype:"TriggeringRelationship"});
+										dataRelationships.push({id:"id-rel-auth-agent", type:"TriggeringRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-af-auth", targetid:"id-af-agent"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-agent-llm", contenttype:"TriggeringRelationship"});
+										dataRelationships.push({id:"id-rel-agent-llm", type:"TriggeringRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-af-agent", targetid:"id-af-llm"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-llm-agent", contenttype:"TriggeringRelationship"});
+										dataRelationships.push({id:"id-rel-llm-agent", type:"TriggeringRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-af-llm", targetid:"id-af-agent"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-agent-tools", contenttype:"TriggeringRelationship"});
+										dataRelationships.push({id:"id-rel-agent-tools", type:"TriggeringRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-af-agent", targetid:"id-af-tools"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-agent-resp", contenttype:"TriggeringRelationship"});
+										dataRelationships.push({id:"id-rel-agent-resp", type:"TriggeringRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-af-agent", targetid:"id-af-resp"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-resp-persist", contenttype:"TriggeringRelationship"});
+										dataRelationships.push({id:"id-rel-resp-persist", type:"TriggeringRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-af-resp", targetid:"id-af-persist"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-be-api", contenttype:"RealizationRelationship"});
+										dataRelationships.push({id:"id-rel-be-api", type:"RealizationRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-ac-backend", targetid:"id-as-api"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-recv-chat", contenttype:"ServingRelationship"});
+										dataRelationships.push({id:"id-rel-recv-chat", type:"ServingRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-af-recv", targetid:"id-af-chat"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-recv-sqlui", contenttype:"ServingRelationship"});
+										dataRelationships.push({id:"id-rel-recv-sqlui", type:"ServingRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-af-recv", targetid:"id-af-sql-ui"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-recv-pipe", contenttype:"ServingRelationship"});
+										dataRelationships.push({id:"id-rel-recv-pipe", type:"ServingRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-af-recv", targetid:"id-af-pipe-ui"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-recv-catui", contenttype:"ServingRelationship"});
+										dataRelationships.push({id:"id-rel-recv-catui", type:"ServingRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-af-recv", targetid:"id-af-catalog-ui"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-recv-setui", contenttype:"ServingRelationship"});
+										dataRelationships.push({id:"id-rel-recv-setui", type:"ServingRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-af-recv", targetid:"id-af-settings-ui"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-resp-chat", contenttype:"TriggeringRelationship"});
+										dataRelationships.push({id:"id-rel-resp-chat", type:"TriggeringRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-af-resp", targetid:"id-af-chat"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0048", contenttype:"ServingRelationship"});
+										dataRelationships.push({id:"id-rel-0048", type:"ServingRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-af-tools", targetid:"id-af-agent"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0049", contenttype:"CompositionRelationship"});
+										dataRelationships.push({id:"id-rel-0049", type:"CompositionRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-af-tools", targetid:"id-af-sql-exec"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0050", contenttype:"CompositionRelationship"});
+										dataRelationships.push({id:"id-rel-0050", type:"CompositionRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-af-tools", targetid:"id-af-airflow"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0051", contenttype:"CompositionRelationship"});
+										dataRelationships.push({id:"id-rel-0051", type:"CompositionRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-af-tools", targetid:"id-af-spark"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0052", contenttype:"CompositionRelationship"});
+										dataRelationships.push({id:"id-rel-0052", type:"CompositionRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-af-tools", targetid:"id-af-mcp"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0053", contenttype:"CompositionRelationship"});
+										dataRelationships.push({id:"id-rel-0053", type:"CompositionRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-af-tools", targetid:"id-af-artifact"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0054", contenttype:"CompositionRelationship"});
+										dataRelationships.push({id:"id-rel-0054", type:"CompositionRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-af-tools", targetid:"id-af-sandbox"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-auth-users", contenttype:"AccessRelationship"});
+										dataRelationships.push({id:"id-rel-auth-users", type:"AccessRelationship", specialization:decodeURL(""), name:decodeURL("read"), documentation:decodeURL(""), sourceid:"id-af-auth", targetid:"id-do-users"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-persist-runs", contenttype:"AccessRelationship"});
+										dataRelationships.push({id:"id-rel-persist-runs", type:"AccessRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-af-persist", targetid:"id-do-runs"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-persist-users", contenttype:"AccessRelationship"});
+										dataRelationships.push({id:"id-rel-persist-users", type:"AccessRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-af-persist", targetid:"id-do-users"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-afcli-meta", contenttype:"AccessRelationship"});
+										dataRelationships.push({id:"id-rel-afcli-meta", type:"AccessRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-af-airflow", targetid:"id-do-airflow-meta"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-artfe-ac", contenttype:"RealizationRelationship"});
+										dataRelationships.push({id:"id-rel-artfe-ac", type:"RealizationRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-art-frontend", targetid:"id-ac-frontend"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-artbe-ac", contenttype:"RealizationRelationship"});
+										dataRelationships.push({id:"id-rel-artbe-ac", type:"RealizationRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-art-backend", targetid:"id-ac-backend"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-pgvol-users", contenttype:"RealizationRelationship"});
+										dataRelationships.push({id:"id-rel-pgvol-users", type:"RealizationRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-art-pgvol", targetid:"id-do-users"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-pgvol-runs", contenttype:"RealizationRelationship"});
+										dataRelationships.push({id:"id-rel-pgvol-runs", type:"RealizationRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-art-pgvol", targetid:"id-do-runs"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-dags-meta", contenttype:"RealizationRelationship"});
+										dataRelationships.push({id:"id-rel-dags-meta", type:"RealizationRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-art-dags", targetid:"id-do-airflow-meta"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0055", contenttype:"CompositionRelationship"});
+										dataRelationships.push({id:"id-rel-0055", type:"CompositionRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-node-frontend", targetid:"id-ss-node"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0056", contenttype:"CompositionRelationship"});
+										dataRelationships.push({id:"id-rel-0056", type:"CompositionRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-node-backend", targetid:"id-ss-python"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0057", contenttype:"CompositionRelationship"});
+										dataRelationships.push({id:"id-rel-0057", type:"CompositionRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-node-pg", targetid:"id-ss-pg"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0058", contenttype:"CompositionRelationship"});
+										dataRelationships.push({id:"id-rel-0058", type:"CompositionRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-node-af-pg", targetid:"id-ss-pg"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0059", contenttype:"CompositionRelationship"});
+										dataRelationships.push({id:"id-rel-0059", type:"CompositionRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-node-af-web", targetid:"id-ss-af"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0060", contenttype:"CompositionRelationship"});
+										dataRelationships.push({id:"id-rel-0060", type:"CompositionRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-node-af-sch", targetid:"id-ss-af"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0061", contenttype:"CompositionRelationship"});
+										dataRelationships.push({id:"id-rel-0061", type:"CompositionRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-node-sp-m", targetid:"id-ss-sp"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0062", contenttype:"CompositionRelationship"});
+										dataRelationships.push({id:"id-rel-0062", type:"CompositionRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-node-sp-w", targetid:"id-ss-sp"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0063", contenttype:"CompositionRelationship"});
+										dataRelationships.push({id:"id-rel-0063", type:"CompositionRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-node-dbg", targetid:"id-ss-python"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0064", contenttype:"CompositionRelationship"});
+										dataRelationships.push({id:"id-rel-0064", type:"CompositionRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-node-host", targetid:"id-ss-docker"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0065", contenttype:"CompositionRelationship"});
+										dataRelationships.push({id:"id-rel-0065", type:"CompositionRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-node-redis", targetid:"id-ss-redis"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0066", contenttype:"CompositionRelationship"});
+										dataRelationships.push({id:"id-rel-0066", type:"CompositionRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-node-bworker", targetid:"id-ss-celery"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0067", contenttype:"CompositionRelationship"});
+										dataRelationships.push({id:"id-rel-0067", type:"CompositionRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-node-bbeat", targetid:"id-ss-celery"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0068", contenttype:"AssignmentRelationship"});
+										dataRelationships.push({id:"id-rel-0068", type:"AssignmentRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-node-frontend", targetid:"id-art-frontend"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0069", contenttype:"AssignmentRelationship"});
+										dataRelationships.push({id:"id-rel-0069", type:"AssignmentRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-node-backend", targetid:"id-art-backend"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0070", contenttype:"AssignmentRelationship"});
+										dataRelationships.push({id:"id-rel-0070", type:"AssignmentRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-node-bworker", targetid:"id-art-backend"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0071", contenttype:"AssignmentRelationship"});
+										dataRelationships.push({id:"id-rel-0071", type:"AssignmentRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-node-bbeat", targetid:"id-art-backend"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0072", contenttype:"AssignmentRelationship"});
+										dataRelationships.push({id:"id-rel-0072", type:"AssignmentRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-node-af-web", targetid:"id-art-dags"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0073", contenttype:"AssignmentRelationship"});
+										dataRelationships.push({id:"id-rel-0073", type:"AssignmentRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-node-af-sch", targetid:"id-art-dags"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0074", contenttype:"AssignmentRelationship"});
+										dataRelationships.push({id:"id-rel-0074", type:"AssignmentRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-node-sp-m", targetid:"id-art-jobs"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0075", contenttype:"AssignmentRelationship"});
+										dataRelationships.push({id:"id-rel-0075", type:"AssignmentRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-node-sp-w", targetid:"id-art-jobs"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0076", contenttype:"AssignmentRelationship"});
+										dataRelationships.push({id:"id-rel-0076", type:"AssignmentRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-node-dbg", targetid:"id-art-sock"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0077", contenttype:"AssignmentRelationship"});
+										dataRelationships.push({id:"id-rel-0077", type:"AssignmentRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-node-pg", targetid:"id-art-pgvol"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-platform-fe", contenttype:"RealizationRelationship"});
+										dataRelationships.push({id:"id-rel-platform-fe", type:"RealizationRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-node-platform", targetid:"id-ac-frontend"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-platform-be", contenttype:"RealizationRelationship"});
+										dataRelationships.push({id:"id-rel-platform-be", type:"RealizationRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-node-platform", targetid:"id-ac-backend"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-platform-do-users", contenttype:"AssociationRelationship"});
+										dataRelationships.push({id:"id-rel-platform-do-users", type:"AssociationRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-node-platform", targetid:"id-do-users"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-platform-do-runs", contenttype:"AssociationRelationship"});
+										dataRelationships.push({id:"id-rel-platform-do-runs", type:"AssociationRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-node-platform", targetid:"id-do-runs"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-platform-do-afmeta", contenttype:"AssociationRelationship"});
+										dataRelationships.push({id:"id-rel-platform-do-afmeta", type:"AssociationRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-node-platform", targetid:"id-do-airflow-meta"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-de-browser", contenttype:"AssociationRelationship"});
+										dataRelationships.push({id:"id-rel-de-browser", type:"AssociationRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-actor-de", targetid:"id-node-browser"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-admin-browser", contenttype:"AssociationRelationship"});
+										dataRelationships.push({id:"id-rel-admin-browser", type:"AssociationRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-actor-admin", targetid:"id-node-browser"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0078", contenttype:"AssociationRelationship"});
+										dataRelationships.push({id:"id-rel-0078", type:"AssociationRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-node-host", targetid:"id-cn-docker"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0079", contenttype:"AssignmentRelationship"});
+										dataRelationships.push({id:"id-rel-0079", type:"AssignmentRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-node-host", targetid:"id-art-jobs"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-browser-fe", contenttype:"FlowRelationship"});
+										dataRelationships.push({id:"id-rel-browser-fe", type:"FlowRelationship", specialization:decodeURL(""), name:decodeURL("HTTPS+%3A3000"), documentation:decodeURL(""), sourceid:"id-node-browser", targetid:"id-node-frontend"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-fe-be-flow", contenttype:"FlowRelationship"});
+										dataRelationships.push({id:"id-rel-fe-be-flow", type:"FlowRelationship", specialization:decodeURL(""), name:decodeURL("HTTP+%3A8000"), documentation:decodeURL(""), sourceid:"id-node-frontend", targetid:"id-node-backend"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-be-pg", contenttype:"FlowRelationship"});
+										dataRelationships.push({id:"id-rel-be-pg", type:"FlowRelationship", specialization:decodeURL(""), name:decodeURL("TCP+%3A5432"), documentation:decodeURL(""), sourceid:"id-node-backend", targetid:"id-node-pg"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-be-afw", contenttype:"FlowRelationship"});
+										dataRelationships.push({id:"id-rel-be-afw", type:"FlowRelationship", specialization:decodeURL(""), name:decodeURL("HTTP+%3A8080"), documentation:decodeURL(""), sourceid:"id-node-backend", targetid:"id-node-af-web"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-afw-afp", contenttype:"FlowRelationship"});
+										dataRelationships.push({id:"id-rel-afw-afp", type:"FlowRelationship", specialization:decodeURL(""), name:decodeURL("TCP+%3A5432"), documentation:decodeURL(""), sourceid:"id-node-af-web", targetid:"id-node-af-pg"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-afs-afp", contenttype:"FlowRelationship"});
+										dataRelationships.push({id:"id-rel-afs-afp", type:"FlowRelationship", specialization:decodeURL(""), name:decodeURL("TCP+%3A5432"), documentation:decodeURL(""), sourceid:"id-node-af-sch", targetid:"id-node-af-pg"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-be-spm", contenttype:"FlowRelationship"});
+										dataRelationships.push({id:"id-rel-be-spm", type:"FlowRelationship", specialization:decodeURL(""), name:decodeURL("Spark+%3A7077"), documentation:decodeURL(""), sourceid:"id-node-backend", targetid:"id-node-sp-m"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-spw-spm", contenttype:"FlowRelationship"});
+										dataRelationships.push({id:"id-rel-spw-spm", type:"FlowRelationship", specialization:decodeURL(""), name:decodeURL("Spark+%3A7077"), documentation:decodeURL(""), sourceid:"id-node-sp-w", targetid:"id-node-sp-m"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-be-dbg", contenttype:"FlowRelationship"});
+										dataRelationships.push({id:"id-rel-be-dbg", type:"FlowRelationship", specialization:decodeURL(""), name:decodeURL("HTTP+%3A8090"), documentation:decodeURL(""), sourceid:"id-node-backend", targetid:"id-node-dbg"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-dbg-sbxpy", contenttype:"FlowRelationship"});
+										dataRelationships.push({id:"id-rel-dbg-sbxpy", type:"FlowRelationship", specialization:decodeURL(""), name:decodeURL("Docker+API"), documentation:decodeURL(""), sourceid:"id-node-dbg", targetid:"id-node-sbx-py"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-dbg-sbxaf", contenttype:"FlowRelationship"});
+										dataRelationships.push({id:"id-rel-dbg-sbxaf", type:"FlowRelationship", specialization:decodeURL(""), name:decodeURL("Docker+API"), documentation:decodeURL(""), sourceid:"id-node-dbg", targetid:"id-node-sbx-af"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-dbg-sbxsp", contenttype:"FlowRelationship"});
+										dataRelationships.push({id:"id-rel-dbg-sbxsp", type:"FlowRelationship", specialization:decodeURL(""), name:decodeURL("Docker+API"), documentation:decodeURL(""), sourceid:"id-node-dbg", targetid:"id-node-sbx-sp"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-be-llm", contenttype:"FlowRelationship"});
+										dataRelationships.push({id:"id-rel-be-llm", type:"FlowRelationship", specialization:decodeURL(""), name:decodeURL("HTTPS+%28tool+calling%29"), documentation:decodeURL(""), sourceid:"id-node-backend", targetid:"id-node-llm"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-be-user-dbs", contenttype:"FlowRelationship"});
+										dataRelationships.push({id:"id-rel-be-user-dbs", type:"FlowRelationship", specialization:decodeURL(""), name:decodeURL("TCP+%28engine-specific%29"), documentation:decodeURL(""), sourceid:"id-node-backend", targetid:"id-node-user-dbs"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-be-redis", contenttype:"FlowRelationship"});
+										dataRelationships.push({id:"id-rel-be-redis", type:"FlowRelationship", specialization:decodeURL(""), name:decodeURL("enqueue+task+%3A6379"), documentation:decodeURL(""), sourceid:"id-node-backend", targetid:"id-node-redis"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-bw-redis", contenttype:"FlowRelationship"});
+										dataRelationships.push({id:"id-rel-bw-redis", type:"FlowRelationship", specialization:decodeURL(""), name:decodeURL("consume+%3A6379"), documentation:decodeURL(""), sourceid:"id-node-bworker", targetid:"id-node-redis"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-bb-redis", contenttype:"FlowRelationship"});
+										dataRelationships.push({id:"id-rel-bb-redis", type:"FlowRelationship", specialization:decodeURL(""), name:decodeURL("schedule+%3A6379"), documentation:decodeURL(""), sourceid:"id-node-bbeat", targetid:"id-node-redis"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-bw-pg", contenttype:"FlowRelationship"});
+										dataRelationships.push({id:"id-rel-bw-pg", type:"FlowRelationship", specialization:decodeURL(""), name:decodeURL("TCP+%3A5432"), documentation:decodeURL(""), sourceid:"id-node-bworker", targetid:"id-node-pg"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0080", contenttype:"CompositionRelationship"});
+										dataRelationships.push({id:"id-rel-0080", type:"CompositionRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-node-host", targetid:"id-node-frontend"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0081", contenttype:"CompositionRelationship"});
+										dataRelationships.push({id:"id-rel-0081", type:"CompositionRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-node-host", targetid:"id-node-backend"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0082", contenttype:"CompositionRelationship"});
+										dataRelationships.push({id:"id-rel-0082", type:"CompositionRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-node-host", targetid:"id-node-pg"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0083", contenttype:"CompositionRelationship"});
+										dataRelationships.push({id:"id-rel-0083", type:"CompositionRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-node-host", targetid:"id-node-af-web"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0084", contenttype:"CompositionRelationship"});
+										dataRelationships.push({id:"id-rel-0084", type:"CompositionRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-node-host", targetid:"id-node-af-sch"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0085", contenttype:"CompositionRelationship"});
+										dataRelationships.push({id:"id-rel-0085", type:"CompositionRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-node-host", targetid:"id-node-af-pg"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0086", contenttype:"CompositionRelationship"});
+										dataRelationships.push({id:"id-rel-0086", type:"CompositionRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-node-host", targetid:"id-node-sp-m"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0087", contenttype:"CompositionRelationship"});
+										dataRelationships.push({id:"id-rel-0087", type:"CompositionRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-node-host", targetid:"id-node-sp-w"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0088", contenttype:"CompositionRelationship"});
+										dataRelationships.push({id:"id-rel-0088", type:"CompositionRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-node-host", targetid:"id-node-dbg"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0089", contenttype:"CompositionRelationship"});
+										dataRelationships.push({id:"id-rel-0089", type:"CompositionRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-node-host", targetid:"id-node-sbx-py"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0090", contenttype:"CompositionRelationship"});
+										dataRelationships.push({id:"id-rel-0090", type:"CompositionRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-node-host", targetid:"id-node-sbx-af"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0091", contenttype:"CompositionRelationship"});
+										dataRelationships.push({id:"id-rel-0091", type:"CompositionRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-node-host", targetid:"id-node-sbx-sp"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0092", contenttype:"CompositionRelationship"});
+										dataRelationships.push({id:"id-rel-0092", type:"CompositionRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-node-host", targetid:"id-node-redis"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0093", contenttype:"CompositionRelationship"});
+										dataRelationships.push({id:"id-rel-0093", type:"CompositionRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-node-host", targetid:"id-node-bworker"});
+									dataFoldersContent.push({folderid:"id-folder-relations", contentid:"id-rel-0094", contenttype:"CompositionRelationship"});
+										dataRelationships.push({id:"id-rel-0094", type:"CompositionRelationship", specialization:decodeURL(""), name:decodeURL(""), documentation:decodeURL(""), sourceid:"id-node-host", targetid:"id-node-bbeat"});
+
+								dataFoldersContent.push({folderid:"id-model-aida-physical", contentid:"id-folder-diagrams", contenttype:"Folder"});
+								dataFolders.push({id:"id-folder-diagrams", type:"Folder", name:decodeURL("Views"), documentation:decodeURL("")});
+									dataFoldersContent.push({folderid:"id-folder-diagrams", contentid:"id-view-a-business", contenttype:"ArchimateDiagramModel"});
+										dataViews.push({id:"id-view-a-business", type:"ArchimateDiagramModel", name:decodeURL("3.1.a+%D0%91%D0%B8%D0%B7%D0%BD%D0%B5%D1%81-%D1%81%D0%BB%D0%BE%D0%B9+%D0%B8+%D1%81%D0%B5%D1%80%D0%B2%D0%B8%D1%81+AI+Data+Engineer"), documentation:decodeURL("")});
+												dataViewsContent.push({viewid:"id-view-a-business", contentid:"id-actor-de", contenttype:"BusinessActor"});
+												dataViewsContent.push({viewid:"id-view-a-business", contentid:"id-actor-admin", contenttype:"BusinessActor"});
+												dataViewsContent.push({viewid:"id-view-a-business", contentid:"id-role-user", contenttype:"BusinessRole"});
+												dataViewsContent.push({viewid:"id-view-a-business", contentid:"id-grp-user-side", contenttype:"Grouping"});
+														dataViewsContent.push({viewid:"id-view-a-business", contentid:"id-bp-send", contenttype:"BusinessProcess"});
+														dataViewsContent.push({viewid:"id-view-a-business", contentid:"id-bp-display", contenttype:"BusinessProcess"});
+												
+												dataViewsContent.push({viewid:"id-view-a-business", contentid:"id-grp-internal", contenttype:"Grouping"});
+														dataViewsContent.push({viewid:"id-view-a-business", contentid:"id-bp-internal-recv", contenttype:"BusinessProcess"});
+														dataViewsContent.push({viewid:"id-view-a-business", contentid:"id-bp-intent", contenttype:"BusinessProcess"});
+														dataViewsContent.push({viewid:"id-view-a-business", contentid:"id-bp-llm-proc", contenttype:"BusinessProcess"});
+														dataViewsContent.push({viewid:"id-view-a-business", contentid:"id-bp-exec", contenttype:"BusinessProcess"});
+														dataViewsContent.push({viewid:"id-view-a-business", contentid:"id-bp-form", contenttype:"BusinessProcess"});
+												
+												dataViewsContent.push({viewid:"id-view-a-business", contentid:"id-bs-main", contenttype:"BusinessService"});
+												dataViewsContent.push({viewid:"id-view-a-business", contentid:"id-as-api", contenttype:"ApplicationService"});
+
+																		dataViewsContent.push({viewid:"id-view-a-business", contentid:"id-rel-0001", contenttype:"AssignmentRelationship"});
+
+																		dataViewsContent.push({viewid:"id-view-a-business", contentid:"id-rel-0002", contenttype:"AssignmentRelationship"});
+
+																		dataViewsContent.push({viewid:"id-view-a-business", contentid:"id-rel-0003", contenttype:"AssignmentRelationship"});
+																		dataViewsContent.push({viewid:"id-view-a-business", contentid:"id-rel-0004", contenttype:"AssignmentRelationship"});
+
+																				dataViewsContent.push({viewid:"id-view-a-business", contentid:"id-rel-0005", contenttype:"TriggeringRelationship"});
+
+												
+																				dataViewsContent.push({viewid:"id-view-a-business", contentid:"id-rel-0006", contenttype:"TriggeringRelationship"});
+																				dataViewsContent.push({viewid:"id-view-a-business", contentid:"id-rel-0012", contenttype:"RealizationRelationship"});
+
+																				dataViewsContent.push({viewid:"id-view-a-business", contentid:"id-rel-0007", contenttype:"TriggeringRelationship"});
+																				dataViewsContent.push({viewid:"id-view-a-business", contentid:"id-rel-0013", contenttype:"RealizationRelationship"});
+
+																				dataViewsContent.push({viewid:"id-view-a-business", contentid:"id-rel-0008", contenttype:"TriggeringRelationship"});
+																				dataViewsContent.push({viewid:"id-view-a-business", contentid:"id-rel-0010", contenttype:"TriggeringRelationship"});
+																				dataViewsContent.push({viewid:"id-view-a-business", contentid:"id-rel-0014", contenttype:"RealizationRelationship"});
+
+																				dataViewsContent.push({viewid:"id-view-a-business", contentid:"id-rel-0009", contenttype:"TriggeringRelationship"});
+																				dataViewsContent.push({viewid:"id-view-a-business", contentid:"id-rel-0015", contenttype:"RealizationRelationship"});
+
+																				dataViewsContent.push({viewid:"id-view-a-business", contentid:"id-rel-0011", contenttype:"TriggeringRelationship"});
+																				dataViewsContent.push({viewid:"id-view-a-business", contentid:"id-rel-0016", contenttype:"RealizationRelationship"});
+
+												
+																		dataViewsContent.push({viewid:"id-view-a-business", contentid:"id-rel-0017", contenttype:"RealizationRelationship"});
+
+
+									dataFoldersContent.push({folderid:"id-folder-diagrams", contentid:"id-view-b-application", contenttype:"ArchimateDiagramModel"});
+										dataViews.push({id:"id-view-b-application", type:"ArchimateDiagramModel", name:decodeURL("3.1.b+%D0%A1%D0%BB%D0%BE%D0%B9+%D0%BF%D1%80%D0%B8%D0%BB%D0%BE%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F+%D0%B8+%D0%BF%D0%BB%D0%B0%D1%82%D1%84%D0%BE%D1%80%D0%BC%D0%B5%D0%BD%D0%BD%D1%8B%D0%B9+%D1%83%D0%B7%D0%B5%D0%BB"), documentation:decodeURL("")});
+												dataViewsContent.push({viewid:"id-view-b-application", contentid:"id-bs-main", contenttype:"BusinessService"});
+												dataViewsContent.push({viewid:"id-view-b-application", contentid:"id-as-api", contenttype:"ApplicationService"});
+												dataViewsContent.push({viewid:"id-view-b-application", contentid:"id-ac-frontend", contenttype:"ApplicationComponent"});
+														dataViewsContent.push({viewid:"id-view-b-application", contentid:"id-af-chat", contenttype:"ApplicationFunction"});
+														dataViewsContent.push({viewid:"id-view-b-application", contentid:"id-af-sql-ui", contenttype:"ApplicationFunction"});
+														dataViewsContent.push({viewid:"id-view-b-application", contentid:"id-af-pipe-ui", contenttype:"ApplicationFunction"});
+														dataViewsContent.push({viewid:"id-view-b-application", contentid:"id-af-catalog-ui", contenttype:"ApplicationFunction"});
+														dataViewsContent.push({viewid:"id-view-b-application", contentid:"id-af-settings-ui", contenttype:"ApplicationFunction"});
+												
+												dataViewsContent.push({viewid:"id-view-b-application", contentid:"id-ac-backend", contenttype:"ApplicationComponent"});
+														dataViewsContent.push({viewid:"id-view-b-application", contentid:"id-af-recv", contenttype:"ApplicationFunction"});
+														dataViewsContent.push({viewid:"id-view-b-application", contentid:"id-af-auth", contenttype:"ApplicationFunction"});
+														dataViewsContent.push({viewid:"id-view-b-application", contentid:"id-af-agent", contenttype:"ApplicationFunction"});
+														dataViewsContent.push({viewid:"id-view-b-application", contentid:"id-af-llm", contenttype:"ApplicationFunction"});
+														dataViewsContent.push({viewid:"id-view-b-application", contentid:"id-af-tools", contenttype:"ApplicationFunction"});
+														dataViewsContent.push({viewid:"id-view-b-application", contentid:"id-af-sql-exec", contenttype:"ApplicationFunction"});
+														dataViewsContent.push({viewid:"id-view-b-application", contentid:"id-af-airflow", contenttype:"ApplicationFunction"});
+														dataViewsContent.push({viewid:"id-view-b-application", contentid:"id-af-spark", contenttype:"ApplicationFunction"});
+														dataViewsContent.push({viewid:"id-view-b-application", contentid:"id-af-mcp", contenttype:"ApplicationFunction"});
+														dataViewsContent.push({viewid:"id-view-b-application", contentid:"id-af-artifact", contenttype:"ApplicationFunction"});
+														dataViewsContent.push({viewid:"id-view-b-application", contentid:"id-af-sandbox", contenttype:"ApplicationFunction"});
+														dataViewsContent.push({viewid:"id-view-b-application", contentid:"id-af-resp", contenttype:"ApplicationFunction"});
+														dataViewsContent.push({viewid:"id-view-b-application", contentid:"id-af-persist", contenttype:"ApplicationFunction"});
+												
+												dataViewsContent.push({viewid:"id-view-b-application", contentid:"id-do-users", contenttype:"DataObject"});
+												dataViewsContent.push({viewid:"id-view-b-application", contentid:"id-do-runs", contenttype:"DataObject"});
+												dataViewsContent.push({viewid:"id-view-b-application", contentid:"id-do-airflow-meta", contenttype:"DataObject"});
+												dataViewsContent.push({viewid:"id-view-b-application", contentid:"id-node-platform", contenttype:"Node"});
+
+																		dataViewsContent.push({viewid:"id-view-b-application", contentid:"id-rel-0017", contenttype:"RealizationRelationship"});
+
+												
+																		dataViewsContent.push({viewid:"id-view-b-application", contentid:"id-rel-be-api", contenttype:"RealizationRelationship"});
+
+																				dataViewsContent.push({viewid:"id-view-b-application", contentid:"id-rel-recv-auth", contenttype:"TriggeringRelationship"});
+																				dataViewsContent.push({viewid:"id-view-b-application", contentid:"id-rel-recv-chat", contenttype:"ServingRelationship"});
+																				dataViewsContent.push({viewid:"id-view-b-application", contentid:"id-rel-recv-sqlui", contenttype:"ServingRelationship"});
+																				dataViewsContent.push({viewid:"id-view-b-application", contentid:"id-rel-recv-pipe", contenttype:"ServingRelationship"});
+																				dataViewsContent.push({viewid:"id-view-b-application", contentid:"id-rel-recv-catui", contenttype:"ServingRelationship"});
+																				dataViewsContent.push({viewid:"id-view-b-application", contentid:"id-rel-recv-setui", contenttype:"ServingRelationship"});
+
+																				dataViewsContent.push({viewid:"id-view-b-application", contentid:"id-rel-auth-agent", contenttype:"TriggeringRelationship"});
+																				dataViewsContent.push({viewid:"id-view-b-application", contentid:"id-rel-auth-users", contenttype:"AccessRelationship"});
+
+																				dataViewsContent.push({viewid:"id-view-b-application", contentid:"id-rel-agent-llm", contenttype:"TriggeringRelationship"});
+																				dataViewsContent.push({viewid:"id-view-b-application", contentid:"id-rel-agent-tools", contenttype:"TriggeringRelationship"});
+																				dataViewsContent.push({viewid:"id-view-b-application", contentid:"id-rel-agent-resp", contenttype:"TriggeringRelationship"});
+
+																				dataViewsContent.push({viewid:"id-view-b-application", contentid:"id-rel-llm-agent", contenttype:"TriggeringRelationship"});
+
+																				dataViewsContent.push({viewid:"id-view-b-application", contentid:"id-rel-0049", contenttype:"CompositionRelationship"});
+																				dataViewsContent.push({viewid:"id-view-b-application", contentid:"id-rel-0050", contenttype:"CompositionRelationship"});
+																				dataViewsContent.push({viewid:"id-view-b-application", contentid:"id-rel-0051", contenttype:"CompositionRelationship"});
+																				dataViewsContent.push({viewid:"id-view-b-application", contentid:"id-rel-0052", contenttype:"CompositionRelationship"});
+																				dataViewsContent.push({viewid:"id-view-b-application", contentid:"id-rel-0053", contenttype:"CompositionRelationship"});
+																				dataViewsContent.push({viewid:"id-view-b-application", contentid:"id-rel-0054", contenttype:"CompositionRelationship"});
+
+																				dataViewsContent.push({viewid:"id-view-b-application", contentid:"id-rel-afcli-meta", contenttype:"AccessRelationship"});
+
+																				dataViewsContent.push({viewid:"id-view-b-application", contentid:"id-rel-resp-persist", contenttype:"TriggeringRelationship"});
+																				dataViewsContent.push({viewid:"id-view-b-application", contentid:"id-rel-resp-chat", contenttype:"TriggeringRelationship"});
+
+																				dataViewsContent.push({viewid:"id-view-b-application", contentid:"id-rel-persist-users", contenttype:"AccessRelationship"});
+																				dataViewsContent.push({viewid:"id-view-b-application", contentid:"id-rel-persist-runs", contenttype:"AccessRelationship"});
+
+												
+																		dataViewsContent.push({viewid:"id-view-b-application", contentid:"id-rel-platform-fe", contenttype:"RealizationRelationship"});
+																		dataViewsContent.push({viewid:"id-view-b-application", contentid:"id-rel-platform-be", contenttype:"RealizationRelationship"});
+																		dataViewsContent.push({viewid:"id-view-b-application", contentid:"id-rel-platform-do-users", contenttype:"AssociationRelationship"});
+																		dataViewsContent.push({viewid:"id-view-b-application", contentid:"id-rel-platform-do-runs", contenttype:"AssociationRelationship"});
+																		dataViewsContent.push({viewid:"id-view-b-application", contentid:"id-rel-platform-do-afmeta", contenttype:"AssociationRelationship"});
+
+
+									dataFoldersContent.push({folderid:"id-folder-diagrams", contentid:"id-view-c-technology", contenttype:"ArchimateDiagramModel"});
+										dataViews.push({id:"id-view-c-technology", type:"ArchimateDiagramModel", name:decodeURL("3.1.%D0%B2+%D0%98%D0%BD%D1%84%D1%80%D0%B0%D1%81%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D0%B0+%28%D1%82%D0%B5%D1%85%D0%BD%D0%BE%D0%BB%D0%BE%D0%B3%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9+%D1%81%D0%BB%D0%BE%D0%B9%29"), documentation:decodeURL("")});
+												dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-actor-de", contenttype:"BusinessActor"});
+												dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-actor-admin", contenttype:"BusinessActor"});
+												dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-node-browser", contenttype:"Node"});
+												dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-ac-frontend", contenttype:"ApplicationComponent"});
+												dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-ac-backend", contenttype:"ApplicationComponent"});
+												dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-node-llm", contenttype:"Node"});
+												dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-node-user-dbs", contenttype:"Node"});
+												dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-node-host", contenttype:"Node"});
+														dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-node-frontend", contenttype:"Node"});
+																dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-ss-node", contenttype:"SystemSoftware"});
+																dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-art-frontend", contenttype:"Artifact"});
+														
+														dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-node-backend", contenttype:"Node"});
+																dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-ss-python", contenttype:"SystemSoftware"});
+																dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-art-backend", contenttype:"Artifact"});
+														
+														dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-node-pg", contenttype:"Node"});
+																dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-ss-pg", contenttype:"SystemSoftware"});
+																dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-art-pgvol", contenttype:"Artifact"});
+														
+														dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-node-af-web", contenttype:"Node"});
+																dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-ss-af", contenttype:"SystemSoftware"});
+														
+														dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-node-af-sch", contenttype:"Node"});
+																dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-ss-af", contenttype:"SystemSoftware"});
+																dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-art-dags", contenttype:"Artifact"});
+														
+														dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-node-af-pg", contenttype:"Node"});
+																dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-ss-pg", contenttype:"SystemSoftware"});
+														
+														dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-node-sp-m", contenttype:"Node"});
+																dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-ss-sp", contenttype:"SystemSoftware"});
+														
+														dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-node-sp-w", contenttype:"Node"});
+																dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-ss-sp", contenttype:"SystemSoftware"});
+														
+														dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-art-jobs", contenttype:"Artifact"});
+														dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-node-dbg", contenttype:"Node"});
+																dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-ss-python", contenttype:"SystemSoftware"});
+																dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-art-sock", contenttype:"Artifact"});
+														
+														dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-node-sbx-py", contenttype:"Node"});
+														dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-node-sbx-af", contenttype:"Node"});
+														dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-node-sbx-sp", contenttype:"Node"});
+														dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-node-bworker", contenttype:"Node"});
+																dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-ss-celery", contenttype:"SystemSoftware"});
+														
+														dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-node-bbeat", contenttype:"Node"});
+																dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-ss-celery", contenttype:"SystemSoftware"});
+														
+														dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-node-redis", contenttype:"Node"});
+																dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-ss-redis", contenttype:"SystemSoftware"});
+														
+														dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-cn-docker", contenttype:"CommunicationNetwork"});
+														dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-ss-docker", contenttype:"SystemSoftware"});
+												
+
+																		dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-rel-de-browser", contenttype:"AssociationRelationship"});
+
+																		dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-rel-admin-browser", contenttype:"AssociationRelationship"});
+
+																		dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-rel-browser-fe", contenttype:"FlowRelationship"});
+
+																				dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-rel-fe-be-flow", contenttype:"FlowRelationship"});
+
+																						dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-rel-artfe-ac", contenttype:"RealizationRelationship"});
+
+														
+																				dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-rel-be-pg", contenttype:"FlowRelationship"});
+																				dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-rel-be-afw", contenttype:"FlowRelationship"});
+																				dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-rel-be-spm", contenttype:"FlowRelationship"});
+																				dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-rel-be-dbg", contenttype:"FlowRelationship"});
+																				dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-rel-be-llm", contenttype:"FlowRelationship"});
+																				dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-rel-be-user-dbs", contenttype:"FlowRelationship"});
+																				dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-rel-be-redis", contenttype:"FlowRelationship"});
+
+																						dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-rel-artbe-ac", contenttype:"RealizationRelationship"});
+
+														
+														
+																				dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-rel-afw-afp", contenttype:"FlowRelationship"});
+
+														
+																				dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-rel-afs-afp", contenttype:"FlowRelationship"});
+
+														
+														
+														
+																				dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-rel-spw-spm", contenttype:"FlowRelationship"});
+
+														
+																				dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-rel-dbg-sbxpy", contenttype:"FlowRelationship"});
+																				dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-rel-dbg-sbxaf", contenttype:"FlowRelationship"});
+																				dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-rel-dbg-sbxsp", contenttype:"FlowRelationship"});
+
+														
+																				dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-rel-bw-redis", contenttype:"FlowRelationship"});
+																				dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-rel-bw-pg", contenttype:"FlowRelationship"});
+
+														
+																				dataViewsContent.push({viewid:"id-view-c-technology", contentid:"id-rel-bb-redis", contenttype:"FlowRelationship"});
+
+														
+														
+												
+
+
+
+
+
+						    alasql('CREATE TABLE Elements');
+						    alasql('CREATE TABLE Properties');
+						    alasql('CREATE TABLE Relationships');
+						    alasql('CREATE TABLE Views');
+						    alasql('CREATE TABLE ViewsContent');
+						    alasql('CREATE TABLE Folders');
+						    alasql('CREATE TABLE FoldersContent');
+
+						    alasql.tables.Elements.data = dataElements;
+						    alasql.tables.Properties.data = dataProperties;
+						    alasql.tables.Relationships.data = dataRelationships;
+						    alasql.tables.Views.data = dataViews;
+						    alasql.tables.ViewsContent.data = dataViewsContent;
+						    alasql.tables.Folders.data = dataFolders;
+						    alasql.tables.FoldersContent.data = dataFoldersContent;
+						</script> 
+						</div>
+			  </div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">imageMapResize();</script>
+</body>
+</html>

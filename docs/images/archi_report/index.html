@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html class="model" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<title>AI Data Engineer Assistant - Physical Architecture</title>
+
+	<!-- JQUERY / UI / LAYOUT -->
+	<script type="text/javascript" src="lib/jquery/jquery.min.js"></script>
+	<script type="text/javascript" src="lib/jquery-ui/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="lib/jquery-ui-layout/jquery.layout-1.4.4.js"></script>
+	<link type="text/css" rel="stylesheet" href="lib/jquery-ui-layout/layout-default-1.4.4.css">
+	<!-- BOOTSTRAP -->
+	<link type="text/css" rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.yeti.css">
+	<script type="text/javascript" src="lib/bootstrap/js/bootstrap-3.4.1.min.js"></script>
+	<!-- REPORT SPECIFIC -->
+	<link type="text/css" rel="stylesheet" href="css/model.css">
+	<link type="text/css" rel="stylesheet" href="css/i18n.css">
+	<script type="text/javascript" src="js/model.js"></script>
+	<script type="text/javascript" src="js/url-polyfill.min.js"></script>
+</head>
+
+<body>
+	<!-- "ui-layout-north" class set (topbar) -->
+	<div class="ui-layout-north">
+		<nav class="navbar navbar-inverse">
+			<div class="navbar-header">
+				<span class="navbar-brand">AI Data Engineer Assistant - Physical Architecture</span>
+			</div>
+			<div class="collapse navbar-collapse">
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="#myModal" data-toggle="modal" class="go"><span class="i18n-about"></span></a></li>
+				</ul>
+			</div>
+		</nav>
+	</div>
+
+	<iframe name="view" class="ui-layout-center" src="id-model-aida-physical/elements/model.html" scrolling="no"></iframe>
+
+	<div class="ui-layout-west">
+		<iframe name="element" class="ui-layout-south" src="elements/empty-element.html"  scrolling="no"></iframe>
+		<div class="ui-layout-center">
+			<div class="panel panel-default root-panel">
+				<div class="panel-heading root-panel-heading">
+					<b><span class="i18n-modeltree"></span></b>
+				</div>
+				<div class="panel-body root-panel-body">
+					<b><a href="id-model-aida-physical/elements/model.html" target="view">AI Data Engineer Assistant - Physical Architecture</a></b>
+					<ul class="tree">
+					<!-- START OF STRINGTEMPLATE CODE -->
+						<li class="tree-folder sorted"><span class="i18n-model_content"><i class="glyphicon glyphicon-triangle-right"></i> </span>
+							<ul>
+                                <li class="tree-folder "><span class="i18n-strategy"><i class="glyphicon glyphicon-triangle-right"></i> </span>
+                                    <ul>
+                                    </ul>
+                                </li>
+								<li class="tree-folder "><span class="i18n-business_layer"><i class="glyphicon glyphicon-triangle-right"></i> </span>
+									<ul>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-actor-de.html" target="element"> Data Engineer </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-actor-admin.html" target="element"> &#1040;&#1076;&#1084;&#1080;&#1085;&#1080;&#1089;&#1090;&#1088;&#1072;&#1090;&#1086;&#1088; </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-role-user.html" target="element"> &#1055;&#1086;&#1083;&#1100;&#1079;&#1086;&#1074;&#1072;&#1090;&#1077;&#1083;&#1100; LLM-&#1072;&#1075;&#1077;&#1085;&#1090;&#1072; </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-bs-main.html" target="element"> AI Data Engineer Assistant </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-bp-send.html" target="element"> &#1054;&#1090;&#1087;&#1088;&#1072;&#1074;&#1082;&#1072; &#1079;&#1072;&#1087;&#1088;&#1086;&#1089;&#1072; </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-bp-display.html" target="element"> &#1055;&#1086;&#1083;&#1091;&#1095;&#1077;&#1085;&#1080;&#1077; &#1086;&#1090;&#1074;&#1077;&#1090;&#1072; &#1080;
+										&#1086;&#1090;&#1086;&#1073;&#1088;&#1072;&#1078;&#1077;&#1085;&#1080;&#1077; &#1074; UI </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-bp-internal-recv.html" target="element"> &#1055;&#1086;&#1083;&#1091;&#1095;&#1077;&#1085;&#1080;&#1077; &#1079;&#1072;&#1087;&#1088;&#1086;&#1089;&#1072; </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-bp-intent.html" target="element"> &#1040;&#1085;&#1072;&#1083;&#1080;&#1079; &#1085;&#1072;&#1084;&#1077;&#1088;&#1077;&#1085;&#1080;&#1103; &#1080;
+										&#1074;&#1099;&#1073;&#1086;&#1088; &#1080;&#1085;&#1089;&#1090;&#1088;&#1091;&#1084;&#1077;&#1085;&#1090;&#1072; </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-bp-llm-proc.html" target="element"> &#1054;&#1073;&#1088;&#1072;&#1073;&#1086;&#1090;&#1082;&#1072; &#1079;&#1072;&#1087;&#1088;&#1086;&#1089;&#1072; &#1074; LLM
+										(tool calling) </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-bp-exec.html" target="element"> &#1042;&#1099;&#1087;&#1086;&#1083;&#1085;&#1077;&#1085;&#1080;&#1077; &#1080;&#1085;&#1089;&#1090;&#1088;&#1091;&#1084;&#1077;&#1085;&#1090;&#1072;
+										(SQL / Airflow / Spark / Sandbox / MCP) </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-bp-form.html" target="element"> &#1060;&#1086;&#1088;&#1084;&#1080;&#1088;&#1086;&#1074;&#1072;&#1085;&#1080;&#1077; &#1086;&#1090;&#1074;&#1077;&#1090;&#1072; </a></li>
+
+									</ul>
+								</li>
+								<li class="tree-folder "><span class="i18n-application_layer"><i class="glyphicon glyphicon-triangle-right"></i> </span>
+									<ul>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-ac-frontend.html" target="element"> Next.js Frontend </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-ac-backend.html" target="element"> FastAPI Backend </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-af-chat.html" target="element"> AI Chat UI </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-af-sql-ui.html" target="element"> SQL Workspace UI </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-af-pipe-ui.html" target="element"> Pipelines UI </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-af-catalog-ui.html" target="element"> Catalog / Connections UI </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-af-settings-ui.html" target="element"> Settings / Profile UI </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-af-recv.html" target="element"> &#1055;&#1086;&#1083;&#1091;&#1095;&#1077;&#1085;&#1080;&#1077; &#1079;&#1072;&#1087;&#1088;&#1086;&#1089;&#1072;
+										(REST API) </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-af-auth.html" target="element"> &#1040;&#1074;&#1090;&#1086;&#1088;&#1080;&#1079;&#1072;&#1094;&#1080;&#1103; (JWT) </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-af-agent.html" target="element"> Agent Orchestrator
+										(LangGraph) </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-af-llm.html" target="element"> &#1054;&#1073;&#1088;&#1072;&#1073;&#1086;&#1090;&#1082;&#1072; &#1079;&#1072;&#1087;&#1088;&#1086;&#1089;&#1072; &#1074; LLM
+										(tool calling) </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-af-tools.html" target="element"> Tool Registry </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-af-sql-exec.html" target="element"> SQL Executor
+										(read-only) </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-af-airflow.html" target="element"> Airflow Client </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-af-spark.html" target="element"> Spark Client </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-af-mcp.html" target="element"> MCP Client </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-af-artifact.html" target="element"> Artifact Writer + Git </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-af-sandbox.html" target="element"> Sandbox Client </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-af-resp.html" target="element"> &#1060;&#1086;&#1088;&#1084;&#1080;&#1088;&#1086;&#1074;&#1072;&#1085;&#1080;&#1077; &#1086;&#1090;&#1074;&#1077;&#1090;&#1072;
+										(intent + ui_actions) </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-af-persist.html" target="element"> &#1057;&#1086;&#1093;&#1088;&#1072;&#1085;&#1077;&#1085;&#1080;&#1077; &#1089;&#1077;&#1089;&#1089;&#1080;&#1080;,
+										&#1089;&#1086;&#1086;&#1073;&#1097;&#1077;&#1085;&#1080;&#1081; &#1080; tool_runs </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-do-users.html" target="element"> &#1055;&#1086;&#1083;&#1100;&#1079;&#1086;&#1074;&#1072;&#1090;&#1077;&#1083;&#1080;, &#1089;&#1077;&#1089;&#1089;&#1080;&#1080;, &#1089;&#1086;&#1086;&#1073;&#1097;&#1077;&#1085;&#1080;&#1103; </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-do-runs.html" target="element"> Tool runs, &#1074;&#1077;&#1088;&#1089;&#1080;&#1080; &#1072;&#1088;&#1090;&#1077;&#1092;&#1072;&#1082;&#1090;&#1086;&#1074; </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-do-airflow-meta.html" target="element"> &#1052;&#1077;&#1090;&#1072;&#1076;&#1072;&#1085;&#1085;&#1099;&#1077; Airflow </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-as-api.html" target="element"> AI Data Engineer Service </a></li>
+
+									</ul>
+								</li>
+								<li class="tree-folder "><span class="i18n-technology_layer"><i class="glyphicon glyphicon-triangle-right"></i> </span>
+									<ul>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-node-host.html" target="element"> Host Machine (Docker Engine) </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-node-platform.html" target="element"> Docker </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-cn-docker.html" target="element"> Docker bridge network </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-node-browser.html" target="element"> Browser (Client) </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-node-frontend.html" target="element"> frontend container </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-node-backend.html" target="element"> backend container </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-node-pg.html" target="element"> postgres </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-node-af-web.html" target="element"> airflow-webserver </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-node-af-sch.html" target="element"> airflow-scheduler </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-node-af-pg.html" target="element"> airflow-postgres </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-node-sp-m.html" target="element"> spark-master </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-node-sp-w.html" target="element"> spark-worker </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-node-dbg.html" target="element"> agent-debugger </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-node-redis.html" target="element"> redis (Celery broker) </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-node-bworker.html" target="element"> backend-worker </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-node-bbeat.html" target="element"> backend-beat </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-node-sbx-py.html" target="element"> Sandbox: python:3.12-slim </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-node-sbx-af.html" target="element"> Sandbox: apache/airflow:2.10.4 </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-node-sbx-sp.html" target="element"> Sandbox: apache/spark:3.5.4 </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-node-llm.html" target="element"> LLM Provider (MagnitGPT / OpenAI / OpenRouter) </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-node-user-dbs.html" target="element"> &#1042;&#1085;&#1077;&#1096;&#1085;&#1080;&#1077; &#1041;&#1044; &#1087;&#1086;&#1083;&#1100;&#1079;&#1086;&#1074;&#1072;&#1090;&#1077;&#1083;&#1077;&#1081;  (1..N)
+										PostgreSQL / MySQL / ClickHouse / MongoDB / Redis / ... </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-ss-node.html" target="element"> Node.js 20 </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-ss-python.html" target="element"> Python 3.12 + Uvicorn </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-ss-pg.html" target="element"> PostgreSQL 16 </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-ss-af.html" target="element"> Apache Airflow 2.10 </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-ss-sp.html" target="element"> Apache Spark 3.5.4 </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-ss-docker.html" target="element"> Docker Engine </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-ss-redis.html" target="element"> Redis 7 </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-ss-celery.html" target="element"> Python 3.12 + Celery </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-art-frontend.html" target="element"> Next.js bundle </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-art-backend.html" target="element"> FastAPI app + LangGraph </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-art-dags.html" target="element"> DAG files (infra/airflow/dags) </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-art-jobs.html" target="element"> Spark jobs (infra/spark/jobs) </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-art-sock.html" target="element"> /var/run/docker.sock </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-art-pgvol.html" target="element"> Volume: postgres-data </a></li>
+
+									</ul>
+								</li>
+								<li class="tree-folder "><span class="i18n-motivation"><i class="glyphicon glyphicon-triangle-right"></i> </span>
+									<ul>
+									</ul>
+								</li>
+								<li class="tree-folder "><span class="i18n-implementation"><i class="glyphicon glyphicon-triangle-right"></i> </span>
+									<ul>
+									</ul>
+								</li>
+								<li class="tree-folder "><span class="i18n-connectors"><i class="glyphicon glyphicon-triangle-right"></i> </span>
+									<ul>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-grp-user-side.html" target="element"> &#1042;&#1079;&#1072;&#1080;&#1084;&#1086;&#1076;&#1077;&#1081;&#1089;&#1090;&#1074;&#1080;&#1077; &#1089; &#1087;&#1086;&#1083;&#1100;&#1079;&#1086;&#1074;&#1072;&#1090;&#1077;&#1083;&#1077;&#1084; </a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-grp-internal.html" target="element"> AI Data Engineer Assistant  (&#1074;&#1085;&#1091;&#1090;&#1088;&#1077;&#1085;&#1085;&#1080;&#1081; &#1089;&#1077;&#1088;&#1074;&#1080;&#1089;) </a></li>
+
+									</ul>
+								</li>
+								<li class="tree-folder "><span class="i18n-relations"><i class="glyphicon glyphicon-triangle-right"></i> </span>
+									<ul>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0001.html" target="element">
+															<span class="i18n-elementtype-AssignmentRelationship"></span>
+														(Data Engineer - &#1055;&#1086;&#1083;&#1100;&#1079;&#1086;&#1074;&#1072;&#1090;&#1077;&#1083;&#1100; LLM-&#1072;&#1075;&#1077;&#1085;&#1090;&#1072;) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0002.html" target="element">
+															<span class="i18n-elementtype-AssignmentRelationship"></span>
+														(&#1040;&#1076;&#1084;&#1080;&#1085;&#1080;&#1089;&#1090;&#1088;&#1072;&#1090;&#1086;&#1088; - &#1055;&#1086;&#1083;&#1100;&#1079;&#1086;&#1074;&#1072;&#1090;&#1077;&#1083;&#1100; LLM-&#1072;&#1075;&#1077;&#1085;&#1090;&#1072;) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0003.html" target="element">
+															<span class="i18n-elementtype-AssignmentRelationship"></span>
+														(&#1055;&#1086;&#1083;&#1100;&#1079;&#1086;&#1074;&#1072;&#1090;&#1077;&#1083;&#1100; LLM-&#1072;&#1075;&#1077;&#1085;&#1090;&#1072; - &#1054;&#1090;&#1087;&#1088;&#1072;&#1074;&#1082;&#1072; &#1079;&#1072;&#1087;&#1088;&#1086;&#1089;&#1072;) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0004.html" target="element">
+															<span class="i18n-elementtype-AssignmentRelationship"></span>
+														(&#1055;&#1086;&#1083;&#1100;&#1079;&#1086;&#1074;&#1072;&#1090;&#1077;&#1083;&#1100; LLM-&#1072;&#1075;&#1077;&#1085;&#1090;&#1072; - &#1055;&#1086;&#1083;&#1091;&#1095;&#1077;&#1085;&#1080;&#1077; &#1086;&#1090;&#1074;&#1077;&#1090;&#1072; &#1080;
+										&#1086;&#1090;&#1086;&#1073;&#1088;&#1072;&#1078;&#1077;&#1085;&#1080;&#1077; &#1074; UI) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0005.html" target="element">
+															<span class="i18n-elementtype-TriggeringRelationship"></span>
+														(&#1054;&#1090;&#1087;&#1088;&#1072;&#1074;&#1082;&#1072; &#1079;&#1072;&#1087;&#1088;&#1086;&#1089;&#1072; - &#1055;&#1086;&#1083;&#1091;&#1095;&#1077;&#1085;&#1080;&#1077; &#1079;&#1072;&#1087;&#1088;&#1086;&#1089;&#1072;) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0006.html" target="element">
+															<span class="i18n-elementtype-TriggeringRelationship"></span>
+														(&#1055;&#1086;&#1083;&#1091;&#1095;&#1077;&#1085;&#1080;&#1077; &#1079;&#1072;&#1087;&#1088;&#1086;&#1089;&#1072; - &#1040;&#1085;&#1072;&#1083;&#1080;&#1079; &#1085;&#1072;&#1084;&#1077;&#1088;&#1077;&#1085;&#1080;&#1103; &#1080;
+										&#1074;&#1099;&#1073;&#1086;&#1088; &#1080;&#1085;&#1089;&#1090;&#1088;&#1091;&#1084;&#1077;&#1085;&#1090;&#1072;) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0007.html" target="element">
+															<span class="i18n-elementtype-TriggeringRelationship"></span>
+														(&#1040;&#1085;&#1072;&#1083;&#1080;&#1079; &#1085;&#1072;&#1084;&#1077;&#1088;&#1077;&#1085;&#1080;&#1103; &#1080;
+										&#1074;&#1099;&#1073;&#1086;&#1088; &#1080;&#1085;&#1089;&#1090;&#1088;&#1091;&#1084;&#1077;&#1085;&#1090;&#1072; - &#1054;&#1073;&#1088;&#1072;&#1073;&#1086;&#1090;&#1082;&#1072; &#1079;&#1072;&#1087;&#1088;&#1086;&#1089;&#1072; &#1074; LLM
+										(tool calling)) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0008.html" target="element">
+															<span class="i18n-elementtype-TriggeringRelationship"></span>
+														(&#1054;&#1073;&#1088;&#1072;&#1073;&#1086;&#1090;&#1082;&#1072; &#1079;&#1072;&#1087;&#1088;&#1086;&#1089;&#1072; &#1074; LLM
+										(tool calling) - &#1042;&#1099;&#1087;&#1086;&#1083;&#1085;&#1077;&#1085;&#1080;&#1077; &#1080;&#1085;&#1089;&#1090;&#1088;&#1091;&#1084;&#1077;&#1085;&#1090;&#1072;
+										(SQL / Airflow / Spark / Sandbox / MCP)) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0009.html" target="element">
+															<span class="i18n-elementtype-TriggeringRelationship"></span>
+														(&#1042;&#1099;&#1087;&#1086;&#1083;&#1085;&#1077;&#1085;&#1080;&#1077; &#1080;&#1085;&#1089;&#1090;&#1088;&#1091;&#1084;&#1077;&#1085;&#1090;&#1072;
+										(SQL / Airflow / Spark / Sandbox / MCP) - &#1054;&#1073;&#1088;&#1072;&#1073;&#1086;&#1090;&#1082;&#1072; &#1079;&#1072;&#1087;&#1088;&#1086;&#1089;&#1072; &#1074; LLM
+										(tool calling)) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0010.html" target="element">
+															<span class="i18n-elementtype-TriggeringRelationship"></span>
+														(&#1054;&#1073;&#1088;&#1072;&#1073;&#1086;&#1090;&#1082;&#1072; &#1079;&#1072;&#1087;&#1088;&#1086;&#1089;&#1072; &#1074; LLM
+										(tool calling) - &#1060;&#1086;&#1088;&#1084;&#1080;&#1088;&#1086;&#1074;&#1072;&#1085;&#1080;&#1077; &#1086;&#1090;&#1074;&#1077;&#1090;&#1072;) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0011.html" target="element">
+															<span class="i18n-elementtype-TriggeringRelationship"></span>
+														(&#1060;&#1086;&#1088;&#1084;&#1080;&#1088;&#1086;&#1074;&#1072;&#1085;&#1080;&#1077; &#1086;&#1090;&#1074;&#1077;&#1090;&#1072; - &#1055;&#1086;&#1083;&#1091;&#1095;&#1077;&#1085;&#1080;&#1077; &#1086;&#1090;&#1074;&#1077;&#1090;&#1072; &#1080;
+										&#1086;&#1090;&#1086;&#1073;&#1088;&#1072;&#1078;&#1077;&#1085;&#1080;&#1077; &#1074; UI) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0012.html" target="element">
+															<span class="i18n-elementtype-RealizationRelationship"></span>
+														(&#1055;&#1086;&#1083;&#1091;&#1095;&#1077;&#1085;&#1080;&#1077; &#1079;&#1072;&#1087;&#1088;&#1086;&#1089;&#1072; - AI Data Engineer Assistant) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0013.html" target="element">
+															<span class="i18n-elementtype-RealizationRelationship"></span>
+														(&#1040;&#1085;&#1072;&#1083;&#1080;&#1079; &#1085;&#1072;&#1084;&#1077;&#1088;&#1077;&#1085;&#1080;&#1103; &#1080;
+										&#1074;&#1099;&#1073;&#1086;&#1088; &#1080;&#1085;&#1089;&#1090;&#1088;&#1091;&#1084;&#1077;&#1085;&#1090;&#1072; - AI Data Engineer Assistant) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0014.html" target="element">
+															<span class="i18n-elementtype-RealizationRelationship"></span>
+														(&#1054;&#1073;&#1088;&#1072;&#1073;&#1086;&#1090;&#1082;&#1072; &#1079;&#1072;&#1087;&#1088;&#1086;&#1089;&#1072; &#1074; LLM
+										(tool calling) - AI Data Engineer Assistant) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0015.html" target="element">
+															<span class="i18n-elementtype-RealizationRelationship"></span>
+														(&#1042;&#1099;&#1087;&#1086;&#1083;&#1085;&#1077;&#1085;&#1080;&#1077; &#1080;&#1085;&#1089;&#1090;&#1088;&#1091;&#1084;&#1077;&#1085;&#1090;&#1072;
+										(SQL / Airflow / Spark / Sandbox / MCP) - AI Data Engineer Assistant) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0016.html" target="element">
+															<span class="i18n-elementtype-RealizationRelationship"></span>
+														(&#1060;&#1086;&#1088;&#1084;&#1080;&#1088;&#1086;&#1074;&#1072;&#1085;&#1080;&#1077; &#1086;&#1090;&#1074;&#1077;&#1090;&#1072; - AI Data Engineer Assistant) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0017.html" target="element">
+															<span class="i18n-elementtype-RealizationRelationship"></span>
+														(AI Data Engineer Service - AI Data Engineer Assistant) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0018.html" target="element">
+															<span class="i18n-elementtype-ServingRelationship"></span>
+														(AI Data Engineer Service - &#1055;&#1086;&#1083;&#1091;&#1095;&#1077;&#1085;&#1080;&#1077; &#1079;&#1072;&#1087;&#1088;&#1086;&#1089;&#1072;) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0019.html" target="element">
+															<span class="i18n-elementtype-ServingRelationship"></span>
+														(AI Data Engineer Service - &#1040;&#1085;&#1072;&#1083;&#1080;&#1079; &#1085;&#1072;&#1084;&#1077;&#1088;&#1077;&#1085;&#1080;&#1103; &#1080;
+										&#1074;&#1099;&#1073;&#1086;&#1088; &#1080;&#1085;&#1089;&#1090;&#1088;&#1091;&#1084;&#1077;&#1085;&#1090;&#1072;) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0020.html" target="element">
+															<span class="i18n-elementtype-ServingRelationship"></span>
+														(AI Data Engineer Service - &#1054;&#1073;&#1088;&#1072;&#1073;&#1086;&#1090;&#1082;&#1072; &#1079;&#1072;&#1087;&#1088;&#1086;&#1089;&#1072; &#1074; LLM
+										(tool calling)) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0021.html" target="element">
+															<span class="i18n-elementtype-ServingRelationship"></span>
+														(AI Data Engineer Service - &#1042;&#1099;&#1087;&#1086;&#1083;&#1085;&#1077;&#1085;&#1080;&#1077; &#1080;&#1085;&#1089;&#1090;&#1088;&#1091;&#1084;&#1077;&#1085;&#1090;&#1072;
+										(SQL / Airflow / Spark / Sandbox / MCP)) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0022.html" target="element">
+															<span class="i18n-elementtype-ServingRelationship"></span>
+														(AI Data Engineer Service - &#1060;&#1086;&#1088;&#1084;&#1080;&#1088;&#1086;&#1074;&#1072;&#1085;&#1080;&#1077; &#1086;&#1090;&#1074;&#1077;&#1090;&#1072;) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0023.html" target="element">
+															<span class="i18n-elementtype-CompositionRelationship"></span>
+														(&#1042;&#1079;&#1072;&#1080;&#1084;&#1086;&#1076;&#1077;&#1081;&#1089;&#1090;&#1074;&#1080;&#1077; &#1089; &#1087;&#1086;&#1083;&#1100;&#1079;&#1086;&#1074;&#1072;&#1090;&#1077;&#1083;&#1077;&#1084; - &#1054;&#1090;&#1087;&#1088;&#1072;&#1074;&#1082;&#1072; &#1079;&#1072;&#1087;&#1088;&#1086;&#1089;&#1072;) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0024.html" target="element">
+															<span class="i18n-elementtype-CompositionRelationship"></span>
+														(&#1042;&#1079;&#1072;&#1080;&#1084;&#1086;&#1076;&#1077;&#1081;&#1089;&#1090;&#1074;&#1080;&#1077; &#1089; &#1087;&#1086;&#1083;&#1100;&#1079;&#1086;&#1074;&#1072;&#1090;&#1077;&#1083;&#1077;&#1084; - &#1055;&#1086;&#1083;&#1091;&#1095;&#1077;&#1085;&#1080;&#1077; &#1086;&#1090;&#1074;&#1077;&#1090;&#1072; &#1080;
+										&#1086;&#1090;&#1086;&#1073;&#1088;&#1072;&#1078;&#1077;&#1085;&#1080;&#1077; &#1074; UI) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0025.html" target="element">
+															<span class="i18n-elementtype-CompositionRelationship"></span>
+														(AI Data Engineer Assistant  (&#1074;&#1085;&#1091;&#1090;&#1088;&#1077;&#1085;&#1085;&#1080;&#1081; &#1089;&#1077;&#1088;&#1074;&#1080;&#1089;) - &#1055;&#1086;&#1083;&#1091;&#1095;&#1077;&#1085;&#1080;&#1077; &#1079;&#1072;&#1087;&#1088;&#1086;&#1089;&#1072;) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0026.html" target="element">
+															<span class="i18n-elementtype-CompositionRelationship"></span>
+														(AI Data Engineer Assistant  (&#1074;&#1085;&#1091;&#1090;&#1088;&#1077;&#1085;&#1085;&#1080;&#1081; &#1089;&#1077;&#1088;&#1074;&#1080;&#1089;) - &#1040;&#1085;&#1072;&#1083;&#1080;&#1079; &#1085;&#1072;&#1084;&#1077;&#1088;&#1077;&#1085;&#1080;&#1103; &#1080;
+										&#1074;&#1099;&#1073;&#1086;&#1088; &#1080;&#1085;&#1089;&#1090;&#1088;&#1091;&#1084;&#1077;&#1085;&#1090;&#1072;) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0027.html" target="element">
+															<span class="i18n-elementtype-CompositionRelationship"></span>
+														(AI Data Engineer Assistant  (&#1074;&#1085;&#1091;&#1090;&#1088;&#1077;&#1085;&#1085;&#1080;&#1081; &#1089;&#1077;&#1088;&#1074;&#1080;&#1089;) - &#1054;&#1073;&#1088;&#1072;&#1073;&#1086;&#1090;&#1082;&#1072; &#1079;&#1072;&#1087;&#1088;&#1086;&#1089;&#1072; &#1074; LLM
+										(tool calling)) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0028.html" target="element">
+															<span class="i18n-elementtype-CompositionRelationship"></span>
+														(AI Data Engineer Assistant  (&#1074;&#1085;&#1091;&#1090;&#1088;&#1077;&#1085;&#1085;&#1080;&#1081; &#1089;&#1077;&#1088;&#1074;&#1080;&#1089;) - &#1042;&#1099;&#1087;&#1086;&#1083;&#1085;&#1077;&#1085;&#1080;&#1077; &#1080;&#1085;&#1089;&#1090;&#1088;&#1091;&#1084;&#1077;&#1085;&#1090;&#1072;
+										(SQL / Airflow / Spark / Sandbox / MCP)) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0029.html" target="element">
+															<span class="i18n-elementtype-CompositionRelationship"></span>
+														(AI Data Engineer Assistant  (&#1074;&#1085;&#1091;&#1090;&#1088;&#1077;&#1085;&#1085;&#1080;&#1081; &#1089;&#1077;&#1088;&#1074;&#1080;&#1089;) - &#1060;&#1086;&#1088;&#1084;&#1080;&#1088;&#1086;&#1074;&#1072;&#1085;&#1080;&#1077; &#1086;&#1090;&#1074;&#1077;&#1090;&#1072;) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0030.html" target="element">
+															<span class="i18n-elementtype-AssignmentRelationship"></span>
+														(Next.js Frontend - AI Chat UI) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0031.html" target="element">
+															<span class="i18n-elementtype-AssignmentRelationship"></span>
+														(Next.js Frontend - SQL Workspace UI) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0032.html" target="element">
+															<span class="i18n-elementtype-AssignmentRelationship"></span>
+														(Next.js Frontend - Pipelines UI) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0033.html" target="element">
+															<span class="i18n-elementtype-AssignmentRelationship"></span>
+														(Next.js Frontend - Catalog / Connections UI) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0034.html" target="element">
+															<span class="i18n-elementtype-AssignmentRelationship"></span>
+														(Next.js Frontend - Settings / Profile UI) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0035.html" target="element">
+															<span class="i18n-elementtype-AssignmentRelationship"></span>
+														(FastAPI Backend - &#1055;&#1086;&#1083;&#1091;&#1095;&#1077;&#1085;&#1080;&#1077; &#1079;&#1072;&#1087;&#1088;&#1086;&#1089;&#1072;
+										(REST API)) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0036.html" target="element">
+															<span class="i18n-elementtype-AssignmentRelationship"></span>
+														(FastAPI Backend - &#1040;&#1074;&#1090;&#1086;&#1088;&#1080;&#1079;&#1072;&#1094;&#1080;&#1103; (JWT)) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0037.html" target="element">
+															<span class="i18n-elementtype-AssignmentRelationship"></span>
+														(FastAPI Backend - Agent Orchestrator
+										(LangGraph)) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0038.html" target="element">
+															<span class="i18n-elementtype-AssignmentRelationship"></span>
+														(FastAPI Backend - &#1054;&#1073;&#1088;&#1072;&#1073;&#1086;&#1090;&#1082;&#1072; &#1079;&#1072;&#1087;&#1088;&#1086;&#1089;&#1072; &#1074; LLM
+										(tool calling)) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0039.html" target="element">
+															<span class="i18n-elementtype-AssignmentRelationship"></span>
+														(FastAPI Backend - Tool Registry) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0040.html" target="element">
+															<span class="i18n-elementtype-AssignmentRelationship"></span>
+														(FastAPI Backend - SQL Executor
+										(read-only)) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0041.html" target="element">
+															<span class="i18n-elementtype-AssignmentRelationship"></span>
+														(FastAPI Backend - Airflow Client) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0042.html" target="element">
+															<span class="i18n-elementtype-AssignmentRelationship"></span>
+														(FastAPI Backend - Spark Client) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0043.html" target="element">
+															<span class="i18n-elementtype-AssignmentRelationship"></span>
+														(FastAPI Backend - MCP Client) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0044.html" target="element">
+															<span class="i18n-elementtype-AssignmentRelationship"></span>
+														(FastAPI Backend - Artifact Writer + Git) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0045.html" target="element">
+															<span class="i18n-elementtype-AssignmentRelationship"></span>
+														(FastAPI Backend - Sandbox Client) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0046.html" target="element">
+															<span class="i18n-elementtype-AssignmentRelationship"></span>
+														(FastAPI Backend - &#1060;&#1086;&#1088;&#1084;&#1080;&#1088;&#1086;&#1074;&#1072;&#1085;&#1080;&#1077; &#1086;&#1090;&#1074;&#1077;&#1090;&#1072;
+										(intent + ui_actions)) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0047.html" target="element">
+															<span class="i18n-elementtype-AssignmentRelationship"></span>
+														(FastAPI Backend - &#1057;&#1086;&#1093;&#1088;&#1072;&#1085;&#1077;&#1085;&#1080;&#1077; &#1089;&#1077;&#1089;&#1089;&#1080;&#1080;,
+										&#1089;&#1086;&#1086;&#1073;&#1097;&#1077;&#1085;&#1080;&#1081; &#1080; tool_runs) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-recv-auth.html" target="element">
+															<span class="i18n-elementtype-TriggeringRelationship"></span>
+														(&#1055;&#1086;&#1083;&#1091;&#1095;&#1077;&#1085;&#1080;&#1077; &#1079;&#1072;&#1087;&#1088;&#1086;&#1089;&#1072;
+										(REST API) - &#1040;&#1074;&#1090;&#1086;&#1088;&#1080;&#1079;&#1072;&#1094;&#1080;&#1103; (JWT)) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-auth-agent.html" target="element">
+															<span class="i18n-elementtype-TriggeringRelationship"></span>
+														(&#1040;&#1074;&#1090;&#1086;&#1088;&#1080;&#1079;&#1072;&#1094;&#1080;&#1103; (JWT) - Agent Orchestrator
+										(LangGraph)) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-agent-llm.html" target="element">
+															<span class="i18n-elementtype-TriggeringRelationship"></span>
+														(Agent Orchestrator
+										(LangGraph) - &#1054;&#1073;&#1088;&#1072;&#1073;&#1086;&#1090;&#1082;&#1072; &#1079;&#1072;&#1087;&#1088;&#1086;&#1089;&#1072; &#1074; LLM
+										(tool calling)) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-llm-agent.html" target="element">
+															<span class="i18n-elementtype-TriggeringRelationship"></span>
+														(&#1054;&#1073;&#1088;&#1072;&#1073;&#1086;&#1090;&#1082;&#1072; &#1079;&#1072;&#1087;&#1088;&#1086;&#1089;&#1072; &#1074; LLM
+										(tool calling) - Agent Orchestrator
+										(LangGraph)) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-agent-tools.html" target="element">
+															<span class="i18n-elementtype-TriggeringRelationship"></span>
+														(Agent Orchestrator
+										(LangGraph) - Tool Registry) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-agent-resp.html" target="element">
+															<span class="i18n-elementtype-TriggeringRelationship"></span>
+														(Agent Orchestrator
+										(LangGraph) - &#1060;&#1086;&#1088;&#1084;&#1080;&#1088;&#1086;&#1074;&#1072;&#1085;&#1080;&#1077; &#1086;&#1090;&#1074;&#1077;&#1090;&#1072;
+										(intent + ui_actions)) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-resp-persist.html" target="element">
+															<span class="i18n-elementtype-TriggeringRelationship"></span>
+														(&#1060;&#1086;&#1088;&#1084;&#1080;&#1088;&#1086;&#1074;&#1072;&#1085;&#1080;&#1077; &#1086;&#1090;&#1074;&#1077;&#1090;&#1072;
+										(intent + ui_actions) - &#1057;&#1086;&#1093;&#1088;&#1072;&#1085;&#1077;&#1085;&#1080;&#1077; &#1089;&#1077;&#1089;&#1089;&#1080;&#1080;,
+										&#1089;&#1086;&#1086;&#1073;&#1097;&#1077;&#1085;&#1080;&#1081; &#1080; tool_runs) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-be-api.html" target="element">
+															<span class="i18n-elementtype-RealizationRelationship"></span>
+														(FastAPI Backend - AI Data Engineer Service) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-recv-chat.html" target="element">
+															<span class="i18n-elementtype-ServingRelationship"></span>
+														(&#1055;&#1086;&#1083;&#1091;&#1095;&#1077;&#1085;&#1080;&#1077; &#1079;&#1072;&#1087;&#1088;&#1086;&#1089;&#1072;
+										(REST API) - AI Chat UI) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-recv-sqlui.html" target="element">
+															<span class="i18n-elementtype-ServingRelationship"></span>
+														(&#1055;&#1086;&#1083;&#1091;&#1095;&#1077;&#1085;&#1080;&#1077; &#1079;&#1072;&#1087;&#1088;&#1086;&#1089;&#1072;
+										(REST API) - SQL Workspace UI) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-recv-pipe.html" target="element">
+															<span class="i18n-elementtype-ServingRelationship"></span>
+														(&#1055;&#1086;&#1083;&#1091;&#1095;&#1077;&#1085;&#1080;&#1077; &#1079;&#1072;&#1087;&#1088;&#1086;&#1089;&#1072;
+										(REST API) - Pipelines UI) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-recv-catui.html" target="element">
+															<span class="i18n-elementtype-ServingRelationship"></span>
+														(&#1055;&#1086;&#1083;&#1091;&#1095;&#1077;&#1085;&#1080;&#1077; &#1079;&#1072;&#1087;&#1088;&#1086;&#1089;&#1072;
+										(REST API) - Catalog / Connections UI) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-recv-setui.html" target="element">
+															<span class="i18n-elementtype-ServingRelationship"></span>
+														(&#1055;&#1086;&#1083;&#1091;&#1095;&#1077;&#1085;&#1080;&#1077; &#1079;&#1072;&#1087;&#1088;&#1086;&#1089;&#1072;
+										(REST API) - Settings / Profile UI) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-resp-chat.html" target="element">
+															<span class="i18n-elementtype-TriggeringRelationship"></span>
+														(&#1060;&#1086;&#1088;&#1084;&#1080;&#1088;&#1086;&#1074;&#1072;&#1085;&#1080;&#1077; &#1086;&#1090;&#1074;&#1077;&#1090;&#1072;
+										(intent + ui_actions) - AI Chat UI) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0048.html" target="element">
+															<span class="i18n-elementtype-ServingRelationship"></span>
+														(Tool Registry - Agent Orchestrator
+										(LangGraph)) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0049.html" target="element">
+															<span class="i18n-elementtype-CompositionRelationship"></span>
+														(Tool Registry - SQL Executor
+										(read-only)) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0050.html" target="element">
+															<span class="i18n-elementtype-CompositionRelationship"></span>
+														(Tool Registry - Airflow Client) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0051.html" target="element">
+															<span class="i18n-elementtype-CompositionRelationship"></span>
+														(Tool Registry - Spark Client) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0052.html" target="element">
+															<span class="i18n-elementtype-CompositionRelationship"></span>
+														(Tool Registry - MCP Client) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0053.html" target="element">
+															<span class="i18n-elementtype-CompositionRelationship"></span>
+														(Tool Registry - Artifact Writer + Git) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0054.html" target="element">
+															<span class="i18n-elementtype-CompositionRelationship"></span>
+														(Tool Registry - Sandbox Client) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-auth-users.html" target="element">
+															read
+														(&#1040;&#1074;&#1090;&#1086;&#1088;&#1080;&#1079;&#1072;&#1094;&#1080;&#1103; (JWT) - &#1055;&#1086;&#1083;&#1100;&#1079;&#1086;&#1074;&#1072;&#1090;&#1077;&#1083;&#1080;, &#1089;&#1077;&#1089;&#1089;&#1080;&#1080;, &#1089;&#1086;&#1086;&#1073;&#1097;&#1077;&#1085;&#1080;&#1103;) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-persist-runs.html" target="element">
+															<span class="i18n-elementtype-AccessRelationship"></span>
+														(&#1057;&#1086;&#1093;&#1088;&#1072;&#1085;&#1077;&#1085;&#1080;&#1077; &#1089;&#1077;&#1089;&#1089;&#1080;&#1080;,
+										&#1089;&#1086;&#1086;&#1073;&#1097;&#1077;&#1085;&#1080;&#1081; &#1080; tool_runs - Tool runs, &#1074;&#1077;&#1088;&#1089;&#1080;&#1080; &#1072;&#1088;&#1090;&#1077;&#1092;&#1072;&#1082;&#1090;&#1086;&#1074;) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-persist-users.html" target="element">
+															<span class="i18n-elementtype-AccessRelationship"></span>
+														(&#1057;&#1086;&#1093;&#1088;&#1072;&#1085;&#1077;&#1085;&#1080;&#1077; &#1089;&#1077;&#1089;&#1089;&#1080;&#1080;,
+										&#1089;&#1086;&#1086;&#1073;&#1097;&#1077;&#1085;&#1080;&#1081; &#1080; tool_runs - &#1055;&#1086;&#1083;&#1100;&#1079;&#1086;&#1074;&#1072;&#1090;&#1077;&#1083;&#1080;, &#1089;&#1077;&#1089;&#1089;&#1080;&#1080;, &#1089;&#1086;&#1086;&#1073;&#1097;&#1077;&#1085;&#1080;&#1103;) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-afcli-meta.html" target="element">
+															<span class="i18n-elementtype-AccessRelationship"></span>
+														(Airflow Client - &#1052;&#1077;&#1090;&#1072;&#1076;&#1072;&#1085;&#1085;&#1099;&#1077; Airflow) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-artfe-ac.html" target="element">
+															<span class="i18n-elementtype-RealizationRelationship"></span>
+														(Next.js bundle - Next.js Frontend) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-artbe-ac.html" target="element">
+															<span class="i18n-elementtype-RealizationRelationship"></span>
+														(FastAPI app + LangGraph - FastAPI Backend) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-pgvol-users.html" target="element">
+															<span class="i18n-elementtype-RealizationRelationship"></span>
+														(Volume: postgres-data - &#1055;&#1086;&#1083;&#1100;&#1079;&#1086;&#1074;&#1072;&#1090;&#1077;&#1083;&#1080;, &#1089;&#1077;&#1089;&#1089;&#1080;&#1080;, &#1089;&#1086;&#1086;&#1073;&#1097;&#1077;&#1085;&#1080;&#1103;) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-pgvol-runs.html" target="element">
+															<span class="i18n-elementtype-RealizationRelationship"></span>
+														(Volume: postgres-data - Tool runs, &#1074;&#1077;&#1088;&#1089;&#1080;&#1080; &#1072;&#1088;&#1090;&#1077;&#1092;&#1072;&#1082;&#1090;&#1086;&#1074;) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-dags-meta.html" target="element">
+															<span class="i18n-elementtype-RealizationRelationship"></span>
+														(DAG files (infra/airflow/dags) - &#1052;&#1077;&#1090;&#1072;&#1076;&#1072;&#1085;&#1085;&#1099;&#1077; Airflow) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0055.html" target="element">
+															<span class="i18n-elementtype-CompositionRelationship"></span>
+														(frontend container - Node.js 20) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0056.html" target="element">
+															<span class="i18n-elementtype-CompositionRelationship"></span>
+														(backend container - Python 3.12 + Uvicorn) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0057.html" target="element">
+															<span class="i18n-elementtype-CompositionRelationship"></span>
+														(postgres - PostgreSQL 16) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0058.html" target="element">
+															<span class="i18n-elementtype-CompositionRelationship"></span>
+														(airflow-postgres - PostgreSQL 16) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0059.html" target="element">
+															<span class="i18n-elementtype-CompositionRelationship"></span>
+														(airflow-webserver - Apache Airflow 2.10) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0060.html" target="element">
+															<span class="i18n-elementtype-CompositionRelationship"></span>
+														(airflow-scheduler - Apache Airflow 2.10) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0061.html" target="element">
+															<span class="i18n-elementtype-CompositionRelationship"></span>
+														(spark-master - Apache Spark 3.5.4) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0062.html" target="element">
+															<span class="i18n-elementtype-CompositionRelationship"></span>
+														(spark-worker - Apache Spark 3.5.4) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0063.html" target="element">
+															<span class="i18n-elementtype-CompositionRelationship"></span>
+														(agent-debugger - Python 3.12 + Uvicorn) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0064.html" target="element">
+															<span class="i18n-elementtype-CompositionRelationship"></span>
+														(Host Machine (Docker Engine) - Docker Engine) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0065.html" target="element">
+															<span class="i18n-elementtype-CompositionRelationship"></span>
+														(redis (Celery broker) - Redis 7) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0066.html" target="element">
+															<span class="i18n-elementtype-CompositionRelationship"></span>
+														(backend-worker - Python 3.12 + Celery) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0067.html" target="element">
+															<span class="i18n-elementtype-CompositionRelationship"></span>
+														(backend-beat - Python 3.12 + Celery) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0068.html" target="element">
+															<span class="i18n-elementtype-AssignmentRelationship"></span>
+														(frontend container - Next.js bundle) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0069.html" target="element">
+															<span class="i18n-elementtype-AssignmentRelationship"></span>
+														(backend container - FastAPI app + LangGraph) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0070.html" target="element">
+															<span class="i18n-elementtype-AssignmentRelationship"></span>
+														(backend-worker - FastAPI app + LangGraph) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0071.html" target="element">
+															<span class="i18n-elementtype-AssignmentRelationship"></span>
+														(backend-beat - FastAPI app + LangGraph) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0072.html" target="element">
+															<span class="i18n-elementtype-AssignmentRelationship"></span>
+														(airflow-webserver - DAG files (infra/airflow/dags)) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0073.html" target="element">
+															<span class="i18n-elementtype-AssignmentRelationship"></span>
+														(airflow-scheduler - DAG files (infra/airflow/dags)) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0074.html" target="element">
+															<span class="i18n-elementtype-AssignmentRelationship"></span>
+														(spark-master - Spark jobs (infra/spark/jobs)) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0075.html" target="element">
+															<span class="i18n-elementtype-AssignmentRelationship"></span>
+														(spark-worker - Spark jobs (infra/spark/jobs)) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0076.html" target="element">
+															<span class="i18n-elementtype-AssignmentRelationship"></span>
+														(agent-debugger - /var/run/docker.sock) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0077.html" target="element">
+															<span class="i18n-elementtype-AssignmentRelationship"></span>
+														(postgres - Volume: postgres-data) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-platform-fe.html" target="element">
+															<span class="i18n-elementtype-RealizationRelationship"></span>
+														(Docker - Next.js Frontend) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-platform-be.html" target="element">
+															<span class="i18n-elementtype-RealizationRelationship"></span>
+														(Docker - FastAPI Backend) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-platform-do-users.html" target="element">
+															<span class="i18n-elementtype-AssociationRelationship"></span>
+														(Docker - &#1055;&#1086;&#1083;&#1100;&#1079;&#1086;&#1074;&#1072;&#1090;&#1077;&#1083;&#1080;, &#1089;&#1077;&#1089;&#1089;&#1080;&#1080;, &#1089;&#1086;&#1086;&#1073;&#1097;&#1077;&#1085;&#1080;&#1103;) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-platform-do-runs.html" target="element">
+															<span class="i18n-elementtype-AssociationRelationship"></span>
+														(Docker - Tool runs, &#1074;&#1077;&#1088;&#1089;&#1080;&#1080; &#1072;&#1088;&#1090;&#1077;&#1092;&#1072;&#1082;&#1090;&#1086;&#1074;) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-platform-do-afmeta.html" target="element">
+															<span class="i18n-elementtype-AssociationRelationship"></span>
+														(Docker - &#1052;&#1077;&#1090;&#1072;&#1076;&#1072;&#1085;&#1085;&#1099;&#1077; Airflow) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-de-browser.html" target="element">
+															<span class="i18n-elementtype-AssociationRelationship"></span>
+														(Data Engineer - Browser (Client)) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-admin-browser.html" target="element">
+															<span class="i18n-elementtype-AssociationRelationship"></span>
+														(&#1040;&#1076;&#1084;&#1080;&#1085;&#1080;&#1089;&#1090;&#1088;&#1072;&#1090;&#1086;&#1088; - Browser (Client)) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0078.html" target="element">
+															<span class="i18n-elementtype-AssociationRelationship"></span>
+														(Host Machine (Docker Engine) - Docker bridge network) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0079.html" target="element">
+															<span class="i18n-elementtype-AssignmentRelationship"></span>
+														(Host Machine (Docker Engine) - Spark jobs (infra/spark/jobs)) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-browser-fe.html" target="element">
+															HTTPS :3000
+														(Browser (Client) - frontend container) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-fe-be-flow.html" target="element">
+															HTTP :8000
+														(frontend container - backend container) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-be-pg.html" target="element">
+															TCP :5432
+														(backend container - postgres) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-be-afw.html" target="element">
+															HTTP :8080
+														(backend container - airflow-webserver) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-afw-afp.html" target="element">
+															TCP :5432
+														(airflow-webserver - airflow-postgres) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-afs-afp.html" target="element">
+															TCP :5432
+														(airflow-scheduler - airflow-postgres) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-be-spm.html" target="element">
+															Spark :7077
+														(backend container - spark-master) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-spw-spm.html" target="element">
+															Spark :7077
+														(spark-worker - spark-master) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-be-dbg.html" target="element">
+															HTTP :8090
+														(backend container - agent-debugger) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-dbg-sbxpy.html" target="element">
+															Docker API
+														(agent-debugger - Sandbox: python:3.12-slim) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-dbg-sbxaf.html" target="element">
+															Docker API
+														(agent-debugger - Sandbox: apache/airflow:2.10.4) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-dbg-sbxsp.html" target="element">
+															Docker API
+														(agent-debugger - Sandbox: apache/spark:3.5.4) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-be-llm.html" target="element">
+															HTTPS (tool calling)
+														(backend container - LLM Provider (MagnitGPT / OpenAI / OpenRouter)) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-be-user-dbs.html" target="element">
+															TCP (engine-specific)
+														(backend container - &#1042;&#1085;&#1077;&#1096;&#1085;&#1080;&#1077; &#1041;&#1044; &#1087;&#1086;&#1083;&#1100;&#1079;&#1086;&#1074;&#1072;&#1090;&#1077;&#1083;&#1077;&#1081;  (1..N)
+										PostgreSQL / MySQL / ClickHouse / MongoDB / Redis / ...) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-be-redis.html" target="element">
+															enqueue task :6379
+														(backend container - redis (Celery broker)) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-bw-redis.html" target="element">
+															consume :6379
+														(backend-worker - redis (Celery broker)) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-bb-redis.html" target="element">
+															schedule :6379
+														(backend-beat - redis (Celery broker)) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-bw-pg.html" target="element">
+															TCP :5432
+														(backend-worker - postgres) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0080.html" target="element">
+															<span class="i18n-elementtype-CompositionRelationship"></span>
+														(Host Machine (Docker Engine) - frontend container) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0081.html" target="element">
+															<span class="i18n-elementtype-CompositionRelationship"></span>
+														(Host Machine (Docker Engine) - backend container) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0082.html" target="element">
+															<span class="i18n-elementtype-CompositionRelationship"></span>
+														(Host Machine (Docker Engine) - postgres) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0083.html" target="element">
+															<span class="i18n-elementtype-CompositionRelationship"></span>
+														(Host Machine (Docker Engine) - airflow-webserver) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0084.html" target="element">
+															<span class="i18n-elementtype-CompositionRelationship"></span>
+														(Host Machine (Docker Engine) - airflow-scheduler) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0085.html" target="element">
+															<span class="i18n-elementtype-CompositionRelationship"></span>
+														(Host Machine (Docker Engine) - airflow-postgres) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0086.html" target="element">
+															<span class="i18n-elementtype-CompositionRelationship"></span>
+														(Host Machine (Docker Engine) - spark-master) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0087.html" target="element">
+															<span class="i18n-elementtype-CompositionRelationship"></span>
+														(Host Machine (Docker Engine) - spark-worker) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0088.html" target="element">
+															<span class="i18n-elementtype-CompositionRelationship"></span>
+														(Host Machine (Docker Engine) - agent-debugger) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0089.html" target="element">
+															<span class="i18n-elementtype-CompositionRelationship"></span>
+														(Host Machine (Docker Engine) - Sandbox: python:3.12-slim) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0090.html" target="element">
+															<span class="i18n-elementtype-CompositionRelationship"></span>
+														(Host Machine (Docker Engine) - Sandbox: apache/airflow:2.10.4) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0091.html" target="element">
+															<span class="i18n-elementtype-CompositionRelationship"></span>
+														(Host Machine (Docker Engine) - Sandbox: apache/spark:3.5.4) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0092.html" target="element">
+															<span class="i18n-elementtype-CompositionRelationship"></span>
+														(Host Machine (Docker Engine) - redis (Celery broker)) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0093.html" target="element">
+															<span class="i18n-elementtype-CompositionRelationship"></span>
+														(Host Machine (Docker Engine) - backend-worker) 
+													</a></li>
+													<li class="tree-element "><a href="id-model-aida-physical/elements/id-rel-0094.html" target="element">
+															<span class="i18n-elementtype-CompositionRelationship"></span>
+														(Host Machine (Docker Engine) - backend-beat) 
+													</a></li>
+
+									</ul>
+								</li>
+							</ul>
+						</li>
+						<li class="tree-folder "><span class="i18n-views"><i class="glyphicon glyphicon-triangle-right"></i> </span>
+							<ul>
+											<li class="tree-element "><a href="id-model-aida-physical/views/id-view-a-business.html" target="view"> 3.1.a &#1041;&#1080;&#1079;&#1085;&#1077;&#1089;-&#1089;&#1083;&#1086;&#1081; &#1080; &#1089;&#1077;&#1088;&#1074;&#1080;&#1089; AI Data Engineer </a></li>
+											<li class="tree-element "><a href="id-model-aida-physical/views/id-view-b-application.html" target="view"> 3.1.b &#1057;&#1083;&#1086;&#1081; &#1087;&#1088;&#1080;&#1083;&#1086;&#1078;&#1077;&#1085;&#1080;&#1103; &#1080; &#1087;&#1083;&#1072;&#1090;&#1092;&#1086;&#1088;&#1084;&#1077;&#1085;&#1085;&#1099;&#1081; &#1091;&#1079;&#1077;&#1083; </a></li>
+											<li class="tree-element "><a href="id-model-aida-physical/views/id-view-c-technology.html" target="view"> 3.1.&#1074; &#1048;&#1085;&#1092;&#1088;&#1072;&#1089;&#1090;&#1088;&#1091;&#1082;&#1090;&#1091;&#1088;&#1072; (&#1090;&#1077;&#1093;&#1085;&#1086;&#1083;&#1086;&#1075;&#1080;&#1095;&#1077;&#1089;&#1082;&#1080;&#1081; &#1089;&#1083;&#1086;&#1081;) </a></li>
+
+							</ul>
+						</li>
+					<!-- END OF STRINGTEMPLATE CODE -->
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- START ABOUT MODAL DIALOG -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">×</button>
+					<h4 class="modal-title i18n-about"></h4>
+				</div>
+				<div class="modal-body">
+					<p><strong> <span class="i18n-about-pluginname"></span></strong></p>
+					<p><span class="i18n-about-pluginversion"></span></p>
+					<p><span class="i18n-about-plugintext1"></span></p>
+					<p><span class="i18n-about-plugintext2"></span></p>
+					<p><a href="https://www.archimatetool.com" target="_blank">Archi®</a> <span class="i18n-about-plugintext3"></span></p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default i18n-close" data-dismiss="modal"></button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- END ABOUT MODAL DIALOG -->
+
+	<!-- START HINT MODAL DIALOG -->
+	<div class="modal fade first-load" id="myModalHint" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">×</button>
+						<h4 class="modal-title i18n-hint"></h4>
+				</div>
+				<div class="modal-body">
+						<iframe id="frame-hint" name="hint" onload="if($('#myModalHint').hasClass('first-load')) $('#myModalHint').removeClass('first-load'); else $('#myModalHint').modal({show:true});"></iframe>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default i18n-close" data-dismiss="modal"></button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- END HINT MODAL DIALOG -->
+</body>
+</html>

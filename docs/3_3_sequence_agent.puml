@@ -1,0 +1,82 @@
+@startuml sequence_agent
+title 3.3 Sequence diagram — цикл ReAct-агента (LangGraph)
+
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam sequenceMessageAlign center
+skinparam sequence {
+    LifeLineBorderColor #2A6F9A
+    LifeLineBackgroundColor #E8F4F8
+    ParticipantBorderColor #2A6F9A
+    ParticipantBackgroundColor #B5E0E2
+    ActorBackgroundColor #FFE7AB
+}
+
+actor "Data Engineer" as User
+participant "Next.js\nFrontend" as FE
+participant "FastAPI\n/agent/query" as API
+participant "AgentOrchestrator\n(LangGraph)" as Orch
+participant "select_runtime" as N1 <<node>>
+participant "call_model" as N2 <<node>>
+participant "execute_tools" as N3 <<node>>
+participant "finalize" as N4 <<node>>
+participant "AgentToolRegistry" as Reg
+participant "LLM Provider\n(MagnitGPT/OpenAI/OpenRouter)" as LLM
+database "PostgreSQL\n(messages, tool_runs)" as DB
+
+User -> FE : Запрос на естественном языке
+FE -> API : POST /agent/query\n{ query, session_id }
+API -> API : authenticate JWT
+API -> DB : INSERT message (role=user)
+API -> Orch : run(query, user, app_state)
+
+Orch -> N1 : enter select_runtime
+N1 -> N1 : выбрать провайдера\n(settings.llm_provider)
+N1 --> Orch : provider, messages[]
+
+loop ReAct loop (model → tool → observation)
+    Orch -> N2 : enter call_model
+    N2 -> LLM : chat.completions / responses.create\n(tools = tool_schemas)
+    LLM --> N2 : assistant message\n(+ tool_calls?)
+    alt есть tool_calls
+        N2 --> Orch : route = "tools"
+        Orch -> N3 : enter execute_tools
+        loop по каждому tool_call
+            N3 -> Reg : invoke(name, arguments)
+            alt name=execute_sql
+                Reg -> DB : run read-only query
+            else name=manage_airflow_dags / trigger_airflow_dag
+                Reg -> Reg : Airflow REST API
+            else name=submit_spark_job
+                Reg -> Reg : Spark master :7077
+            else name=write_airflow_dag / write_spark_script
+                Reg -> Reg : Artifact Writer + Git
+            else name=check_airflow_dag_sandbox / run_*_sandbox
+                Reg -> Reg : Docker Sandbox\n(agent-debugger)
+            else name=call_mcp_tool
+                Reg -> Reg : MCP client (stdio / HTTP)
+            end
+            Reg --> N3 : ToolExecution\n(input, output, latency_ms)
+            N3 -> DB : INSERT tool_runs
+        end
+        N3 --> Orch : route = "llm"\n(observations добавлены в messages)
+    else финальный ответ
+        N2 --> Orch : route = "final"
+    end
+end
+
+Orch -> N4 : enter finalize
+N4 --> Orch : AgentResult\n(intent, answer, tool_calls, ui_actions)
+Orch -> DB : INSERT message (role=assistant)
+Orch --> API : AgentResult
+API --> FE : JSON ответ
+FE --> User : Рендер ответа + ui_actions\n(навигация / hi-lite)
+
+note over N2, LLM
+  Без LLM-ключа orchestrator
+  переходит в configuration_error
+  и возвращает ошибку конфигурации
+  (rule-based fallback отключен).
+end note
+
+@enduml
