@@ -15,6 +15,7 @@ from app.services.artifacts import ArtifactService
 from app.services.connections import DatabaseConnectionService
 from app.services.debug_sandbox import DebugSandboxClient
 from app.services.external_mcp import ExternalMCPGateway
+from app.services.guardrails import AgentGuardrails, GuardrailDecision
 from app.tools.airflow import AirflowTool
 from app.tools.base import ToolExecution
 from app.tools.catalog import CatalogTool
@@ -70,6 +71,7 @@ class AgentToolRegistry:
         self.artifacts = ArtifactService()
         self.debug_sandbox = DebugSandboxClient()
         self.external_mcp = ExternalMCPGateway()
+        self.guardrails = AgentGuardrails()
 
     def specs(self) -> list[dict[str, Any]]:
         return [
@@ -415,6 +417,10 @@ class AgentToolRegistry:
         ]
 
     async def execute(self, name: str, args: dict[str, Any]) -> ToolExecution:
+        guardrail = self.guardrails.validate_tool_call(name, args)
+        if not guardrail.allowed:
+            return self.guardrail_execution(name, args, guardrail)
+
         if name == "list_site_status":
             return await self.list_site_status()
         if name == "navigate_site":
@@ -565,6 +571,30 @@ class AgentToolRegistry:
             output={"error": f"Unknown tool: {name}"},
             latency_ms=1,
             error="unknown_tool",
+        )
+
+    def guardrail_execution(
+        self,
+        requested_tool: str,
+        args: dict[str, Any],
+        decision: GuardrailDecision,
+    ) -> ToolExecution:
+        return ToolExecution(
+            tool_name="GuardrailTool",
+            status="error",
+            input={
+                "requested_tool": requested_tool,
+                "category": decision.category,
+                "arguments": self._safe_args(args),
+            },
+            output={
+                "blocked": True,
+                "requested_tool": requested_tool,
+                "category": decision.category,
+                "reason": decision.reason,
+            },
+            latency_ms=1,
+            error=decision.category,
         )
 
     async def list_site_status(self) -> ToolExecution:
@@ -1145,6 +1175,24 @@ class AgentToolRegistry:
             ensure_ascii=False,
             default=str,
         )
+
+    @classmethod
+    def _safe_args(cls, value: Any) -> Any:
+        if isinstance(value, dict):
+            return {
+                key: "[redacted]" if cls._sensitive_key(key) else cls._safe_args(item)
+                for key, item in value.items()
+            }
+        if isinstance(value, list):
+            return [cls._safe_args(item) for item in value]
+        if isinstance(value, str) and len(value) > 2000:
+            return f"{value[:2000]}\n... truncated"
+        return value
+
+    @staticmethod
+    def _sensitive_key(key: str) -> bool:
+        lowered = key.lower()
+        return any(marker in lowered for marker in ["password", "token", "secret", "api_key", "apikey", "private_key"])
 
     def mcp_specs(self) -> list[dict[str, Any]]:
         return [

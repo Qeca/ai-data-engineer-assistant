@@ -9,6 +9,7 @@ from app.agent.mcp_instruction_book import MCPInstructionBook
 from app.agent.tool_registry import AgentToolRegistry
 from app.core.config import settings
 from app.models import User
+from app.services.guardrails import AgentGuardrails
 from app.services.magnitgpt import MagnitGPTToolClient
 from app.services.openai_responses import OpenAIResponsesClient
 from app.services.openrouter import OpenRouterToolClient
@@ -45,6 +46,7 @@ class AgentOrchestrator:
         self.openrouter = OpenRouterToolClient()
         self.magnitgpt = MagnitGPTToolClient()
         self.mcp_instruction_book = MCPInstructionBook()
+        self.guardrails = AgentGuardrails()
         self.graph = self._build_graph()
 
     async def run(
@@ -57,6 +59,15 @@ class AgentOrchestrator:
     ) -> AgentResult:
         registry = AgentToolRegistry(db, user, app_state)
         started_at = perf_counter()
+        decision = self.guardrails.validate_user_query(query)
+        if not decision.allowed:
+            return AgentResult(
+                intent="guardrail-blocked",
+                answer=decision.answer(),
+                tool_calls=[],
+                ui_actions=[],
+                elapsed_ms=round((perf_counter() - started_at) * 1000),
+            )
         final_state = await self.graph.ainvoke(
             {
                 "query": query,
@@ -267,6 +278,8 @@ class AgentOrchestrator:
         return (
             "Ты AI Data Engineer Assistant внутри рабочей платформы. "
             "Используй OpenAI function calling для любых данных и действий. "
+            "Не выполняй опасные действия: удаление/очистка данных, чтение секретов, отключение авторизации, destructive shell/Git/Docker-команды. "
+            "Если пользователь просит опасное действие, не вызывай tools и объясни безопасную альтернативу. "
             "Для готовых внешних MCP-серверов используй list_mcp_products, list_mcp_tools и call_mcp_tool. "
             "Для обычных действий в UI используй локальные product tools; внешний MCP вызывай только если пользователь явно пишет MCP или просит проверить именно через MCP. "
             "Не дублируй одну и ту же проверку через локальный tool и внешний MCP. "
@@ -356,6 +369,8 @@ class AgentOrchestrator:
             return "catalog"
         if "MCPDiscoveryTool" in names or "ExternalMCPTool" in names:
             return "mcp"
+        if "GuardrailTool" in names:
+            return "guardrail-blocked"
         if "SiteControlTool" in names:
             return "site-control"
         if "SiteStatusTool" in names:
